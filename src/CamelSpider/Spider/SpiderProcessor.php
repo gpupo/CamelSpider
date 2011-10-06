@@ -10,10 +10,10 @@ class SpiderProcessor
 	/**
 	* Recebe instância de https://github.com/fabpot/Goutte
 	**/
-    public function __construct(Goutte $goutte)
+    public function __construct($goutte)
     {
-        $this->gotte = $gotter;
-		$this->curl = $this->gotter->getNamedClient('curl');
+        $this->goutte = $goutte;
+		$this->curl = $this->goutte->getNamedClient('curl');
 		return $this;
     }
 
@@ -31,7 +31,7 @@ class SpiderProcessor
 	    $content = $crawler->getContent();
 		
 		
-		var_dump($content);
+		return $content;
 	
 	}
 	
