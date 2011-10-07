@@ -1,12 +1,14 @@
 <?php
 
 namespace CamelSpider\Spider;
-
+use Zend\Uri\Uri;
 class SpiderProcessor
 {
 	protected $goutte; 
     
 	protected $logger;
+	
+	protected $cache;
 	/**
 	* Recebe instância de https://github.com/fabpot/Goutte
 	* e do Monolog
@@ -15,6 +17,7 @@ class SpiderProcessor
     {
         $this->goutte = $goutte;
 	    $this->logger = $logger;
+		$this->cache  = new SpiderCache;
 		return $this;
     }
 
@@ -22,7 +25,10 @@ class SpiderProcessor
 	{
 		return $this->logger->$type('#CamelSpiderProcessor ' . $string);
 	}
-
+	public function debug()
+	{
+		var_dump($this->cache);
+	}
 	public function getCrawler($URI, $mode = 'GET')
 	{
 		
@@ -33,26 +39,63 @@ class SpiderProcessor
 		
 	}
 
-	protected function getLinks($crawler)
+	protected function getResponse()
 	{
+		return $this->goutte->getResponse();
+	}
+	protected function getDomain()
+	{
+		$server = $this->goutte->getRequest()->getServer();
+		return $server['HTTP_HOST'];
+	}
+	
+	protected function invalidLink($link)
+	{
+		return (
+			( 
+				substr($link, 0, 4) == 'http' && 
+		 	  	stripos($link, $this->getDomain()) === false
+		    ) ||
+		
+		 	empty($link) ||
+		 
+			substr($link, 0,10) == 'javascript' ||
+		 
+			substr($link, 0, 1) == '#'
+		);
+	}
+	protected function validLink($URI)
+	{
+		$zendUri = new Uri($URI);
+		if($zendUri->isValid()){
+			return true;
+		}
+		$this->logger('URL malformed:[' . $URI . ']', 'err');
+		return false;
+	}
+	protected function collectLinks($URI)
+	{
+		if(!$this->validLink($URI)){
+			return false;
+		}	
+		$crawler = $this->getCrawler($URI);
 		$aCollection = $crawler->filter('a');
 		
-		$this->logger( 'links:' . $aCollection->count());
+		$this->logger( 'Number og links in [' . $URI . ']:' . $aCollection->count());
 		
-		$aCollection->reduce(function ($node, $i)
-		{
-            $href = $node->getAttribute('href');
-			if (empty($href) || 
-			in_array($href,array('#', ""))) {
-        		return false;
-        	}
-	    });
 		
 		$links = $aCollection->each(function ($node, $i){
-		    return $node->getAttribute('href');
+		    return trim($node->getAttribute('href'));
 			});
 		
-		return $links;
+		foreach($links as $link)
+		{
+		  	if(!$this->invalidLink($link))					
+			{
+				$this->cache->append($link);
+			}
+		} 
+		
 		
 	}
     protected $recursive = 2;
@@ -60,15 +103,16 @@ class SpiderProcessor
 	{
 
 		$staticRecursive = $recursive + 1;
-		$crawler = $this->getCrawler($URI);
+		$this->collectLinks($URI) ;
+		
 		$data = '';
 
         //Instrospecção
         if($staticRecursive <= $this->recursive){
 
-		    foreach($this->getLinks($crawler) as $link)
+		    foreach($this->cache as $link)
 		    {
-				echo $link . "\n";
+				$this->collectLinks($link) ;
 		    	 //$this->goutte->insulate();	
 		    	 //$data .= $this->checkUpdates($link, $staticRecursive);
 		    }
@@ -79,7 +123,9 @@ class SpiderProcessor
 		//$client->getContainer();
 	    #$content = $crawler->getContent();
 		//var_dump($crawler->getResponse());
-		
+		//echo $this->getResponse();
+		//var_dump($this->goutte->getRequest()->getServer());
+		$this->debug();
 		return $data;
 	
 	}
