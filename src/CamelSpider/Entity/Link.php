@@ -18,4 +18,9 @@ class Link extends ArrayCollection
 		}
 		parent::__construct($link);
 	}
+
+	public function isWaiting()
+	{
+		return  ($this->indexOf('response')) ? false : true;
+	}
 }

@@ -16,13 +16,13 @@ class SpiderProcessor
 	* Recebe instância de https://github.com/fabpot/Goutte
 	* e do Monolog
 	**/
-    public function __construct($goutte, $logger)
-    {
-        $this->goutte = $goutte;
-	    $this->logger = $logger;
+    	public function __construct($goutte, $logger)
+    	{
+      		$this->goutte = $goutte;
+	    	$this->logger = $logger;
 		$this->cache  = new SpiderCache;
 		return $this;
-    }
+    	}	
 
 	protected function logger($string, $type = 'info')
 	{
@@ -107,7 +107,7 @@ class SpiderProcessor
 	}
 	
 	
-	protected function collectLinks(Link &$target)
+	protected function collectLinks(Link $target)
 	{
 		$URI = $target->get('href');
 		$this->logger( 'trying to collect links in [' . $URI . ']');
@@ -124,8 +124,10 @@ class SpiderProcessor
 			$aCollection = $crawler->filter('a');
 		
 			$this->logger( 'Number of links in [' . $URI . ']:' . $aCollection->count());
-		
-		
+			
+			$target->set('linksCount',$aCollection->count());	
+		  	$this->cache->set($target['href'], $target);
+			
 			foreach($aCollection as $node)
 			{
 				
@@ -152,17 +154,14 @@ class SpiderProcessor
 
         //Instrospecção
         if($staticRecursive <= $this->recursive){
+			
 
-		    foreach($this->cache as &$link)
-		    {
-				if($link->indexOf('response')){
-					$this->logger( 'already collected: [' . $link->get('href'). ']');	
-					continue;
-				}
-				$this->collectLinks($link) ;
+		foreach($this->cache->filter(function ($e) { return $e->isWaiting();}) as $link){
+				
+			$this->collectLinks($link) ;
 		    	 //$this->goutte->insulate();	
 		    	 //$data .= $this->checkUpdates($link, $staticRecursive);
-		    }
+		}
         }    
 
 		$this->debug();
