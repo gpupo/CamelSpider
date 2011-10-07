@@ -32,13 +32,27 @@ class SpiderProcessor
 	{
 		var_dump($this->cache);
 	}
+
+	public function getPool()
+	{
+		return $this->cache->filter(function ($e) { return $e->isWaiting();});
+	}
+
 	public function getCrawler($URI, $mode = 'GET')
 	{
 		
 		// reiniciar instancia ?
 		//$this->goutte->insulate();
 		$this->logger( 'created a Crawler for [' . $URI . ']');
-	   	return  $this->goutte->request($mode, $URI);
+	   	
+		try {
+			$client = $this->goutte->request($mode, $URI);
+		}
+		catch(\Zend\Http\Client\Adapter\Exception\TimeoutException $e)
+		{
+			$this->logger( 'faillure on create a crawler [' . $URI . ']', 'err');	
+		}
+		return $client;
 		
 	}
 
@@ -156,7 +170,7 @@ class SpiderProcessor
         if($staticRecursive <= $this->recursive){
 			
 
-		foreach($this->cache->filter(function ($e) { return $e->isWaiting();}) as $link){
+		foreach($this->getPool() as $link){
 				
 			$this->collectLinks($link) ;
 		    	 //$this->goutte->insulate();	
