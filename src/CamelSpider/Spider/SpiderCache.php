@@ -1,8 +1,9 @@
 <?php
 
 namespace CamelSpider\Spider;
+use Doctrine\Common\Collections\ArrayCollection;
 
-class SpiderCache extends \ArrayObject 
+class SpiderCache extends ArrayCollection 
 {
 
 }
