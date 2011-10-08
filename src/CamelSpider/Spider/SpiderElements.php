@@ -3,7 +3,7 @@
 namespace CamelSpider\Spider;
 use Doctrine\Common\Collections\ArrayCollection;
 
-class SpiderCache extends ArrayCollection 
+class SpiderElements extends ArrayCollection 
 {
     public function getPool()
     {

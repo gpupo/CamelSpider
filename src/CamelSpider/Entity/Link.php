@@ -17,9 +17,17 @@ class Link extends ArrayCollection
 				);
 		}
 		parent::__construct($link);
-	}
+    }
 
-	public function isWaiting()
+    /**
+     * Gera o hash para armazenar em cache
+     **/
+    public function getId()
+    {
+        return sha1($this->get('href'));
+    }
+
+    public function isWaiting()
 	{
 		return  ($this->indexOf('response')) ? false : true;
 	}

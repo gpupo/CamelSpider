@@ -14,6 +14,15 @@ Queremos que a Camel Spider seja uma Spider Web que supra necessidades de projet
 O [Camel Spider Bundle](http://github.com/gpupo/CamelSpiderBundle) integra a Camel Spider ao Symfony 2 e gerencia as assinaturas e o cache de informações.
 
 
+## Otimização e cache
+
+A cada requisição é consumido memória.
+Para evitar isso, os objetos são cacheados em disco, portanto é
+necessário informar um objeto cache onde seja possível gravar e
+recuperar informações a partir de um hash.
+
+
+O objeto gravado é serializado pelo componente (Symfony Serialize](https://github.com/symfony/Serializer}
 
 ## Você pode contribuir com o projeto!
 

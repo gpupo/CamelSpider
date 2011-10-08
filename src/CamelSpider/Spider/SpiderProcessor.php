@@ -11,7 +11,9 @@ class SpiderProcessor
     
 	protected $logger;
 	
-	protected $cache;
+    protected $elements;
+
+    protected $cache;
 
     private $requests = 0;
 
@@ -20,17 +22,19 @@ class SpiderProcessor
 	* Recebe instância de https://github.com/fabpot/Goutte
 	* e do Monolog
 	**/
-    public function __construct($goutte, $logger, $config = NULL)
+    public function __construct($goutte, $cache,  $logger, $config = NULL)
     {
         $this->goutte = $goutte;
         $this->logger = $logger;
-        $this->cache  = new SpiderCache;
+        $this->cache = $cache;
+        $this->elements  = new SpiderElements;
 
         if($config){
             $this->config = $config;
         }else{
             $this->config = array(
-                'limit'     =>      300,
+                'requests_limit'        =>      300,
+                'memory_limit'          =>      128,
             );
         }
         return $this;
@@ -41,18 +45,25 @@ class SpiderProcessor
 		return $this->logger->$type('#CamelSpiderProcessor ' . $string);
     }
 
+    /**
+     * return memory in MB
+     **/
     protected function getMemoryUsage()
     {
-        return (\memory_get_usage()/1024) / 1024;
+        return round((\memory_get_usage()/1024) / 1024);
     }
 
     protected function checkLimit()
     {
-        $this->logger('Current memory usage:' . $this->getMemoryUsage());
-        
-        if($this->requests >= $this->config['limit']){
+        $this->logger('Current memory usage:' . $this->getMemoryUsage() . 'Mb');
+
+        if($this->getMemoryUsage() >= $this->config['memory_limit']){
+           $this->logger('Limit of memory reached', 'err');
+           return false;
+        }
+        if($this->requests >= $this->config['requests_limit']){
             //throw new \Exception ('Limit reached');
-            $this->logger('Limit reached', 'err');
+            $this->logger('Limit of requests reached', 'err');
             return false;
         }
         
@@ -131,8 +142,9 @@ class SpiderProcessor
 	}
 	
 	protected function saveLink(Link $link)
-	{
-		return $this->cache->set($link->get('href'), $link);
+    {
+        $link->serialize();
+		return $this->cache->set($link->getId(), $link);
 	}
 	protected function isValidLink($href)
 	{
@@ -195,7 +207,7 @@ class SpiderProcessor
     protected function collect($target, $withLinks = false)
     {
         if(!$this->checkLimit()){
-            return fale;
+            return false;
         }
         
         $this->logger( '====== Request number #' . $this->requests . '======');
