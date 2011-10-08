@@ -56,6 +56,13 @@ class SpiderProcessor
 		
 	}
 
+
+    protected function getRelevancy($raw)
+    {
+        return 0;
+    }    
+
+
     /**
     * Processa o conteúdo do documento.
     * Neste momento são aplicados os filtros de conteúdo
@@ -63,13 +70,11 @@ class SpiderProcessor
     **/
 	protected function getResponse()
 	{
-		
-        $response = $this->goutte->getResponse();
-
-        
-        return array(
-            'raw'       =>      $response,
-        );
+	    $response = array();	
+        $response['raw'] = $this->goutte->getResponse();
+        $response['relevancy'] = $this->getRelevancy($response['raw']);
+           
+        return $response;
         
 
 	}
@@ -178,7 +183,7 @@ class SpiderProcessor
         }
         return  $aCollection->count();	
 	}
-    protected $recursive = 2;
+    protected $recursive = 1;
 
     protected function poolCollect($withLinks = false)
     {
