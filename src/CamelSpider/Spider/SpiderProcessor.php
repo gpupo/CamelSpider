@@ -20,8 +20,8 @@ class SpiderProcessor
     	{
       		$this->goutte = $goutte;
 	    	$this->logger = $logger;
-		$this->cache  = new SpiderCache;
-		return $this;
+		    $this->cache  = new SpiderCache;
+            return $this;
     	}	
 
 	protected function logger($string, $type = 'info')
@@ -35,7 +35,7 @@ class SpiderProcessor
 
 	public function getPool()
 	{
-		return $this->cache->filter(function ($e) { return $e->isWaiting();});
+		return $this->cache->getPool();
 	}
 
 	public function getCrawler($URI, $mode = 'GET')
@@ -56,16 +56,29 @@ class SpiderProcessor
 		
 	}
 
+    /**
+    * Processa o conteúdo do documento.
+    * Neste momento são aplicados os filtros de conteúdo
+    * e retornando flag se o conteúdo é relevante
+    **/
 	protected function getResponse()
 	{
-		return $this->goutte->getResponse();
+		
+        $response = $this->goutte->getResponse();
+
+        
+        return array(
+            'raw'       =>      $response,
+        );
+        
+
 	}
 	protected function getDomain()
 	{
 		return $this->subscription->get('domain');
 	}
 	
-	protected function addLink(Link $link)
+	protected function saveLink(Link $link)
 	{
 		return $this->cache->set($link->get('href'), $link);
 	}
@@ -117,13 +130,12 @@ class SpiderProcessor
 		    return false;
 		}
 		
-		return $this->addLink($link);
+		return $this->saveLink($link);
 	}
 	
-	
-	protected function collectLinks(Link $target)
-	{
-		$URI = $target->get('href');
+    protected function collect($target, $withLinks = false)
+    {
+        $URI = $target->get('href');
 		$this->logger( 'trying to collect links in [' . $URI . ']');
 		try{
 			if(!$this->isValidLink($URI)){
@@ -133,53 +145,63 @@ class SpiderProcessor
 			$crawler = $this->getCrawler($URI);
 			
 			$target->set('response', $this->getResponse());
-					
-						
-			$aCollection = $crawler->filter('a');
-		
-			$this->logger( 'Number of links in [' . $URI . ']:' . $aCollection->count());
-			
-			$target->set('linksCount',$aCollection->count());	
-		  	$this->cache->set($target['href'], $target);
-			
-			foreach($aCollection as $node)
-			{
-				
-				$link = new Link($node);
-				$this->processAddLink($link);
-				
-			} 
-		}
+		    
+            if($withLinks){
+                $target->set('linksCount', $this->collectLinks($crawler));
+            }
+
+            $this->saveLink($target);
+        }
 		catch(\Zend\Http\Exception\InvalidArgumentException $e)
 		{
-			$this->logger( 'faillure on [' . $URI . ']', 'err');
+			$this->logger( 'Invalid argumento on [' . $URI . ']', 'err');
 		}
-		
+        catch(\Zend\Http\Client\Adapter\Exception\RuntimeException $e)   
+        {
+			$this->logger( 'Http Client Runtime error on  [' . $URI . ']', 'err');
+		}
+    }
+    
+	protected function collectLinks($crawler)
+	{
+				
+        $aCollection = $crawler->filter('a');
+    
+        $this->logger( 'Number of links founded:' . $aCollection->count());
+        
+        foreach($aCollection as $node)
+        {
+            
+            $link = new Link($node);
+            $this->processAddLink($link);
+            
+        }
+        return  $aCollection->count();	
 	}
     protected $recursive = 2;
+
+    protected function poolCollect($withLinks = false)
+    {
+        foreach($this->getPool() as $link){
+            $this->collect($link, $withLinks) ;
+        }
+    }    
 	public function checkUpdates($subscription, $recursive = 0)
 	{
 
-		$staticRecursive = $recursive + 1;
 		$this->subscription = $subscription;
-		$this->collectLinks($this->subscription) ;
+		$this->collect($this->subscription, true);
 		
-		$data = '';
+        //coletando links e conteúdo
+        $i = 0;
+        while($i < $this->recursive){
+            $this->poolCollect(true);
+        }          
 
-        //Instrospecção
-        if($staticRecursive <= $this->recursive){
-			
-
-		foreach($this->getPool() as $link){
-				
-			$this->collectLinks($link) ;
-		    	 //$this->goutte->insulate();	
-		    	 //$data .= $this->checkUpdates($link, $staticRecursive);
-		}
-        }    
+        //agora somente o conteúdo
+		$this->poolCollect();	
 
 		$this->debug();
-		return $data;
 	
 	}
 	
