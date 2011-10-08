@@ -39,7 +39,28 @@ class SpiderProcessor
 	protected function logger($string, $type = 'info')
 	{
 		return $this->logger->$type('#CamelSpiderProcessor ' . $string);
-	}
+    }
+
+    protected function getMemoryUsage()
+    {
+        return (\memory_get_usage()/1024) / 1024;
+    }
+
+    protected function checkLimit()
+    {
+        $this->logger('Current memory usage:' . $this->getMemoryUsage());
+        
+        if($this->requests >= $this->config['limit']){
+            //throw new \Exception ('Limit reached');
+            $this->logger('Limit reached', 'err');
+            return false;
+        }
+        
+        
+        $this->requests++;    
+        return true;
+    }
+        
 	public function debug()
 	{
 		var_dump($this->cache);
@@ -53,8 +74,6 @@ class SpiderProcessor
 	public function getCrawler($URI, $mode = 'GET')
 	{
 		
-		// reiniciar instancia ?
-		//$this->goutte->insulate();
 		$this->logger( 'created a Crawler for [' . $URI . ']');
 	   	
 		try {
@@ -139,25 +158,33 @@ class SpiderProcessor
 		$this->logger('HREF malformed:[' . $href. ']', 'info');
 		return false;
 	}
-	
-	protected function processAddLink($link)
-	{
-		//Evita duplicidade
-		if($this->cache->containsKey($link->get('href'))){
-			$this->logger('cached:[' . $link->get('href') . ']');
-		    return false;
-		}
-		
+  protected function insideScope($link)
+  {
+
 		//Evita sair do escopo
 		if(substr($link->get('href'), 0, 4) == 'http' && 
 			stripos($link->get('href'), $this->getDomain()) === false
 		){
 			$this->logger('outside the scope of ['.$this->getDomain().']:[' . $link->get('href') . ']');
 		    return false;
+    }
+    return true;
+
+  }	
+	protected function processAddLink($link)
+	{
+		//Evita duplicidade
+		if($this->cache->containsKey($link->get('href'))){
+		    $this->logger('cached:[' . $link->get('href') . ']');
+		    return false;
 		}
 		
-		//Evita links inválidos
-	  	if(!$this->isValidLink($link->get('href')))					
+    if(!$this->insideScope($link)){
+        return false;
+    }
+    
+    //Evita links inválidos
+		if(!$this->isValidLink($link->get('href')))					
 		{
 		    return false;
 		}
@@ -167,11 +194,11 @@ class SpiderProcessor
 	
     protected function collect($target, $withLinks = false)
     {
-        if($this->requests >= $this->config['limit']){
-            throw new Exception ('Limit reached');
+        if(!$this->checkLimit()){
+            return fale;
         }
-        $this->requests++;    
-		$this->logger( '====== Request number #' . $this->requests . '======');
+        
+        $this->logger( '====== Request number #' . $this->requests . '======');
         
         $URI = $target->get('href');
 		$this->logger( 'trying to collect links in [' . $URI . ']');
