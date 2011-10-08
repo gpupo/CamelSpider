@@ -5,24 +5,36 @@ use CamelSpider\Entity\Link,
 Zend\Uri\Uri;
 class SpiderProcessor
 {
+    protected $config;
+
 	protected $goutte; 
     
 	protected $logger;
 	
 	protected $cache;
-	
+
+    private $requests = 0;
+
 	protected $subscription;
 	/**
 	* Recebe instância de https://github.com/fabpot/Goutte
 	* e do Monolog
 	**/
-    	public function __construct($goutte, $logger)
-    	{
-      		$this->goutte = $goutte;
-	    	$this->logger = $logger;
-		    $this->cache  = new SpiderCache;
-            return $this;
-    	}	
+    public function __construct($goutte, $logger, $config = NULL)
+    {
+        $this->goutte = $goutte;
+        $this->logger = $logger;
+        $this->cache  = new SpiderCache;
+
+        if($config){
+            $this->config = $config;
+        }else{
+            $this->config = array(
+                'limit'     =>      300,
+            );
+        }
+        return $this;
+    }	
 
 	protected function logger($string, $type = 'info')
 	{
@@ -47,16 +59,27 @@ class SpiderProcessor
 	   	
 		try {
 			$client = $this->goutte->request($mode, $URI);
+
+            return $client;
 		}
 		catch(\Zend\Http\Client\Adapter\Exception\TimeoutException $e)
 		{
 			$this->logger( 'faillure on create a crawler [' . $URI . ']', 'err');	
 		}
-		return $client;
 		
 	}
 
-
+    protected function getDocument($raw)
+    {
+    }
+    
+    
+    
+    /**
+    * Verificar data container se link já foi catalogado.
+    * Se sim, fazer idiff e rejeitar se a diferença for inferior a x%
+    * Aplicar filtros contidos em $this->subscription
+    **/
     protected function getRelevancy($raw)
     {
         return 0;
@@ -73,7 +96,12 @@ class SpiderProcessor
 	    $response = array();	
         $response['raw'] = $this->goutte->getResponse();
         $response['relevancy'] = $this->getRelevancy($response['raw']);
-           
+        
+        if($response['relevancy'] > 0){
+            $response['document'] = $this->getDocument($response['raw']);
+        } else {
+            unset($response['raw']); //free memory
+        }           
         return $response;
         
 
@@ -131,7 +159,6 @@ class SpiderProcessor
 		//Evita links inválidos
 	  	if(!$this->isValidLink($link->get('href')))					
 		{
-			$this->logger('invalid link:[' . $link->get('href') . ']');
 		    return false;
 		}
 		
@@ -140,6 +167,12 @@ class SpiderProcessor
 	
     protected function collect($target, $withLinks = false)
     {
+        if($this->requests >= $this->config['limit']){
+            throw new Exception ('Limit reached');
+        }
+        $this->requests++;    
+		$this->logger( '====== Request number #' . $this->requests . '======');
+        
         $URI = $target->get('href');
 		$this->logger( 'trying to collect links in [' . $URI . ']');
 		try{
@@ -147,7 +180,9 @@ class SpiderProcessor
 			    $this->logger('URI wrong:[' . $URI . ']', 'err');
 			    return false;
 			}	
-			$crawler = $this->getCrawler($URI);
+			if(!$crawler = $this->getCrawler($URI)){
+                return false;
+            }    
 			
 			$target->set('response', $this->getResponse());
 		    
@@ -183,7 +218,6 @@ class SpiderProcessor
         }
         return  $aCollection->count();	
 	}
-    protected $recursive = 1;
 
     protected function poolCollect($withLinks = false)
     {
@@ -199,7 +233,7 @@ class SpiderProcessor
 		
         //coletando links e conteúdo
         $i = 0;
-        while($i < $this->recursive){
+        while($i < $this->subscription->get('recursive')){
             $this->poolCollect(true);
         }          
 
