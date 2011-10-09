@@ -15,7 +15,8 @@ class Link extends ArrayCollection
 			$link = array(
 				'href' => $node->getAttribute('href'),
 				);
-		}
+        }
+        $link['status'] = 0;
 		parent::__construct($link);
     }
 
@@ -29,6 +30,21 @@ class Link extends ArrayCollection
 
     public function isWaiting()
 	{
-		return  ($this->indexOf('response')) ? false : true;
-	}
+		return  ($this->get('status') === 1) ? false : true;
+    }
+    public function isDone()
+    {
+		return  ($this->get('status') === 1) ? true : false;
+    }
+
+    /**
+     * reduce memory usage
+     */
+    public function getMinimal()
+    {
+        $elements = $this->toArray();
+        $this->clear();
+        $this->set('href', $elements['href']);
+        return $this;
+    }
 }

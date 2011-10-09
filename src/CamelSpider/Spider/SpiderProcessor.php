@@ -74,12 +74,32 @@ class SpiderProcessor
         
 	public function debug()
 	{
-		var_dump($this->cache);
+        //var_dump($this->elements);
+            
+        $template = <<<EOF
+
+
+======================RESUME===========================
+
+    - Memory usage:         %s Mb
+    - Number of Requests:   %s
+
+
+
+EOF;
+
+        return sprintf(
+            $template,
+            $this->getMemoryUsage(),
+            $this->requests
+        );
+
+
 	}
 
 	public function getPool()
 	{
-		return $this->cache->getPool();
+		return $this->elements->getPool();
 	}
 
 	public function getCrawler($URI, $mode = 'GET')
@@ -143,9 +163,15 @@ class SpiderProcessor
 	
 	protected function saveLink(Link $link)
     {
-        $link->serialize();
-		return $this->cache->set($link->getId(), $link);
-	}
+        if($link->isDone()){
+            $this->cache->save($link->getId(), $link);
+        }
+        
+        $this->elements->set($link->getId(), $link->getMinimal());
+
+    }
+
+
 	protected function isValidLink($href)
 	{
 		if(
@@ -184,9 +210,14 @@ class SpiderProcessor
 
   }	
 	protected function processAddLink($link)
-	{
-		//Evita duplicidade
-		if($this->cache->containsKey($link->get('href'))){
+    {
+
+
+		var_dump($this->cache->getObject($link->getId()));
+        //Evita duplicidade
+        $id = $link->getId() ;
+        var_dump($id);
+		if($this->cache->getObject($id !== false )){
 		    $this->logger('cached:[' . $link->get('href') . ']');
 		    return false;
 		}
@@ -219,16 +250,19 @@ class SpiderProcessor
 			    $this->logger('URI wrong:[' . $URI . ']', 'err');
 			    return false;
 			}	
-			if(!$crawler = $this->getCrawler($URI)){
+            if(!$crawler = $this->getCrawler($URI)){
+                $this->logger('Crawler broken', 'err');
                 return false;
             }    
-			
-			$target->set('response', $this->getResponse());
 		    
+            $this->logger('processing document');    
+			$target->set('response', $this->getResponse());
+		    $target->set('status', 1); //done!
             if($withLinks){
+                $this->logger('go to the scan of links!');
                 $target->set('linksCount', $this->collectLinks($crawler));
             }
-
+            $this->logger('saving object on cache');
             $this->saveLink($target);
         }
 		catch(\Zend\Http\Exception\InvalidArgumentException $e)
@@ -279,7 +313,7 @@ class SpiderProcessor
         //agora somente o conteúdo
 		$this->poolCollect();	
 
-		$this->debug();
+		echo $this->debug();
 	
 	}
 	
