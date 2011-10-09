@@ -42,9 +42,7 @@ class Link extends ArrayCollection
      */
     public function getMinimal()
     {
-        $elements = $this->toArray();
-        $this->clear();
-        $this->set('href', $elements['href']);
+        $this->remove('response');
         return $this;
     }
 }
