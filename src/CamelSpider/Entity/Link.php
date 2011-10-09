@@ -30,7 +30,7 @@ class Link extends ArrayCollection
 
     public function isWaiting()
 	{
-		return  ($this->get('status') === 1) ? false : true;
+		return  ($this->get('status') === 0) ? true : false;
     }
     public function isDone()
     {

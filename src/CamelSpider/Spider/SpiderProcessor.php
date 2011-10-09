@@ -17,13 +17,16 @@ class SpiderProcessor
 
     private $requests = 0;
 
-	protected $subscription;
+    protected $subscription;
+
+    private $timeStart;
 	/**
 	* Recebe instância de https://github.com/fabpot/Goutte
 	* e do Monolog
 	**/
     public function __construct($goutte, $cache,  $logger, $config = NULL)
     {
+        $this->timeStart = microtime(true);
         $this->goutte = $goutte;
         $this->logger = $logger;
         $this->cache = $cache;
@@ -34,7 +37,7 @@ class SpiderProcessor
         }else{
             $this->config = array(
                 'requests_limit'        =>      300,
-                'memory_limit'          =>      128,
+                'memory_limit'          =>      100,
             );
         }
         return $this;
@@ -52,7 +55,10 @@ class SpiderProcessor
     {
         return round((\memory_get_usage()/1024) / 1024);
     }
-
+    protected function getTimeUsage()
+    {
+        return microtime(true) - $this->timeStart;
+    }
     protected function checkLimit()
     {
         $this->logger('Current memory usage:' . $this->getMemoryUsage() . 'Mb');
@@ -74,8 +80,11 @@ class SpiderProcessor
         
 	public function debug()
 	{
-        //var_dump($this->elements);
-            
+        var_dump($this->elements);
+    }
+
+    public function getResume(){
+
         $template = <<<EOF
 
 
@@ -83,7 +92,7 @@ class SpiderProcessor
 
     - Memory usage:         %s Mb
     - Number of Requests:   %s
-
+    - Time:                 %s
 
 
 EOF;
@@ -91,7 +100,8 @@ EOF;
         return sprintf(
             $template,
             $this->getMemoryUsage(),
-            $this->requests
+            $this->requests,
+            $this->getTimeUsage()
         );
 
 
@@ -170,7 +180,12 @@ EOF;
         $this->elements->set($link->getId(), $link->getMinimal());
 
     }
-
+    protected function errLink($link, $cause = 'undefined')
+    {
+        $link->set('status', 3);
+        $this->elements->set($link->getId(), $link);
+        $this->logger($link->get('href')  . ' marked with error. Cause [' . $cause . ']');
+    }
 
 	protected function isValidLink($href)
 	{
@@ -212,19 +227,15 @@ EOF;
 	protected function processAddLink($link)
     {
 
-
-		var_dump($this->cache->getObject($link->getId()));
         //Evita duplicidade
-        $id = $link->getId() ;
-        var_dump($id);
-		if($this->cache->getObject($id !== false )){
+		if($this->cache->isObject($link->getId())){
 		    $this->logger('cached:[' . $link->get('href') . ']');
 		    return false;
 		}
 		
-    if(!$this->insideScope($link)){
-        return false;
-    }
+        if(!$this->insideScope($link)){
+            return false;
+        }
     
     //Evita links inválidos
 		if(!$this->isValidLink($link->get('href')))					
@@ -237,21 +248,18 @@ EOF;
 	
     protected function collect($target, $withLinks = false)
     {
-        if(!$this->checkLimit()){
-            return false;
-        }
-        
-        $this->logger( '====== Request number #' . $this->requests . '======');
         
         $URI = $target->get('href');
 		$this->logger( 'trying to collect links in [' . $URI . ']');
 		try{
 			if(!$this->isValidLink($URI)){
 			    $this->logger('URI wrong:[' . $URI . ']', 'err');
+                $this->errLink($target, 'invalid URL');
 			    return false;
 			}	
             if(!$crawler = $this->getCrawler($URI)){
                 $this->logger('Crawler broken', 'err');
+                $this->errLink($target, 'impossible crawler');
                 return false;
             }    
 		    
@@ -264,15 +272,21 @@ EOF;
             }
             $this->logger('saving object on cache');
             $this->saveLink($target);
+            return true;
         }
 		catch(\Zend\Http\Exception\InvalidArgumentException $e)
 		{
-			$this->logger( 'Invalid argumento on [' . $URI . ']', 'err');
+            $this->logger( 'Invalid argument on [' . $URI . ']', 'err');
+            $this->errLink($target, 'invalid argument on HTTP request');
+            throw new \Exception ('Invalid argument');
 		}
         catch(\Zend\Http\Client\Adapter\Exception\RuntimeException $e)   
         {
 			$this->logger( 'Http Client Runtime error on  [' . $URI . ']', 'err');
-		}
+            $this->errLink($target, 'Runtime error on Http Client Adaper');
+            return false;
+        }
+
     }
     
 	protected function collectLinks($crawler)
@@ -295,7 +309,25 @@ EOF;
     protected function poolCollect($withLinks = false)
     {
         foreach($this->getPool() as $link){
-            $this->collect($link, $withLinks) ;
+            
+            
+            if(!$this->checkLimit()){
+                $this->errLink($link, 'Limit reached');
+                return false;
+            }
+            $this->logger( '====== Request number #' . $this->requests . '======');
+            $this->logger('pool start new collect'); 
+            try{
+                $this->collect($link, $withLinks);
+            }
+            catch(\Exception $e){
+                $this->logger('Pool cant collect:' . $e->getMessage(), 'err');
+            }
+
+		    $this->logger($this->getResume());
+            $this->logger('====== Request end ======');
+
+            echo $this->debug();
         }
     }    
 	public function checkUpdates($subscription, $recursive = 0)
