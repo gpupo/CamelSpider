@@ -109,7 +109,14 @@ EOF;
 
 	public function getPool()
 	{
-		return $this->elements->getPool();
+        $pool =  $this->elements->getPool();
+        if($pool->count() < 1)
+        {
+            $this->logger('Pool empty');
+            return false;
+        }
+        $this->logger('Pool count:' . $pool->count());
+        return $pool;
 	}
 
 	public function getCrawler($URI, $mode = 'GET')
@@ -308,7 +315,11 @@ EOF;
 
     protected function poolCollect($withLinks = false)
     {
-        foreach($this->getPool() as $link){
+        if(!$pool = $this->getPool()){
+            return false;
+        }
+
+        foreach($pool as $link){
             
             
             if(!$this->checkLimit()){
