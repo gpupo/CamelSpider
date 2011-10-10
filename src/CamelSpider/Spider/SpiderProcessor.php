@@ -2,12 +2,15 @@
 
 namespace CamelSpider\Spider;
 use CamelSpider\Entity\Link,
-Zend\Uri\Uri;
+    CamelSpider\Entity\Document,
+    Zend\Uri\Uri;
+
+
 class SpiderProcessor
 {
     protected $config;
 
-	protected $goutte; 
+	protected $goutte;
     
 	protected $logger;
 	
@@ -17,9 +20,15 @@ class SpiderProcessor
 
     private $requests = 0;
 
+    private $cached = 0;
+
+    private $errors = 0;
+    
     protected $subscription;
 
     private $timeStart;
+
+
 	/**
 	* Recebe instância de https://github.com/fabpot/Goutte
 	* e do Monolog
@@ -48,6 +57,11 @@ class SpiderProcessor
 		return $this->logger->$type('#CamelSpiderProcessor ' . $string);
     }
 
+    protected function getSubscription()
+    {
+        return $this->subscription;
+    }
+
     /**
      * return memory in MB
      **/
@@ -73,7 +87,6 @@ class SpiderProcessor
             return false;
         }
         
-        
         $this->requests++;    
         return true;
     }
@@ -86,14 +99,13 @@ class SpiderProcessor
     public function getResume(){
 
         $template = <<<EOF
+ ======================RESUME===========================
 
-
-======================RESUME===========================
-
-    - Memory usage:         %s Mb
-    - Number of Requests:   %s
-    - Time:                 %s
-
+    - Memory usage...........................%s Mb
+    - Number of new requests.................%s
+    - Time...................................%s
+    - Objects in cache.......................%s
+    - Errors.................................%s
 
 EOF;
 
@@ -101,7 +113,9 @@ EOF;
             $template,
             $this->getMemoryUsage(),
             $this->requests,
-            $this->getTimeUsage()
+            $this->getTimeUsage(),
+            $this->cached,
+            $this->errors
         );
 
 
@@ -136,40 +150,14 @@ EOF;
 		
 	}
 
-    protected function getDocument($raw)
-    {
-    }
-    
-    
-    
-    /**
-    * Verificar data container se link já foi catalogado.
-    * Se sim, fazer idiff e rejeitar se a diferença for inferior a x%
-    * Aplicar filtros contidos em $this->subscription
-    **/
-    protected function getRelevancy($raw)
-    {
-        return 0;
-    }    
-
-
-    /**
+        /**
     * Processa o conteúdo do documento.
     * Neste momento são aplicados os filtros de conteúdo
     * e retornando flag se o conteúdo é relevante
     **/
 	protected function getResponse()
 	{
-	    $response = array();	
-        $response['raw'] = $this->goutte->getResponse();
-        $response['relevancy'] = $this->getRelevancy($response['raw']);
-        
-        if($response['relevancy'] > 0){
-            $response['document'] = $this->getDocument($response['raw']);
-        } else {
-            unset($response['raw']); //free memory
-        }           
-        return $response;
+        return $this->goutte->getResponse();
         
 
 	}
@@ -192,6 +180,7 @@ EOF;
         $link->set('status', 3);
         $this->elements->set($link->getId(), $link);
         $this->logger($link->get('href')  . ' marked with error. Cause [' . $cause . ']');
+        $this->errors++;
     }
 
 	protected function isValidLink($href)
@@ -234,16 +223,17 @@ EOF;
 	protected function processAddLink($link)
     {
 
-        //Evita duplicidade
-		if($this->cache->isObject($link->getId())){
-		    $this->logger('cached:[' . $link->get('href') . ']');
-		    return false;
-		}
-		
         if(!$this->insideScope($link)){
             return false;
         }
     
+        //Evita duplicidade
+		if($this->cache->isObject($link->getId())){
+            $this->logger('cached:[' . $link->get('href') . ']');
+            $this->cached++;
+		    return false;
+		}
+		
     //Evita links inválidos
 		if(!$this->isValidLink($link->get('href')))					
 		{
@@ -270,11 +260,11 @@ EOF;
                 return false;
             }    
 		    
-            $this->logger('processing document');    
-			$target->set('response', $this->getResponse());
+            $this->logger('processing document');
+			$target->setDocument($this->getResponse(), $this->getSubscription());
 		    $target->set('status', 1); //done!
             if($withLinks){
-                $this->logger('go to the scan of links!');
+                $this->logger('go to the scan more links!');
                 $target->set('linksCount', $this->collectLinks($crawler));
             }
             $this->logger('saving object on cache');
@@ -338,7 +328,6 @@ EOF;
 		    $this->logger($this->getResume());
             $this->logger('====== Request end ======');
 
-            echo $this->debug();
         }
     }    
 	public function checkUpdates($subscription, $recursive = 0)
@@ -349,14 +338,16 @@ EOF;
 		
         //coletando links e conteúdo
         $i = 0;
-        while($i < $this->subscription->get('recursive')){
+        while($i < $this->subscription->get('recursive') && $this->getPool()){
             $this->poolCollect(true);
         }          
 
         //agora somente o conteúdo
 		$this->poolCollect();	
 
-		echo $this->debug();
+        //echo $this->debug();
+        return $this->elements->toArray();
+
 	
 	}
 	

@@ -1,7 +1,8 @@
 <?php
 
 namespace CamelSpider\Entity;
-use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\ArrayCollection,
+    CamelSpider\Entity\Document;
 
 class Link extends ArrayCollection 
 {
@@ -36,13 +37,21 @@ class Link extends ArrayCollection
     {
 		return  ($this->get('status') === 1) ? true : false;
     }
+    public function setDocument($response, $subscription)
+    {
+        $this->set('document', new Document($response, $subscription));
+    }
+    public function getDocument()
+    {
+        return $this->get('document');
+    }
 
     /**
      * reduce memory usage
      */
     public function getMinimal()
     {
-        $this->remove('response');
+        $this->removeElement('document');
         return $this;
     }
 }

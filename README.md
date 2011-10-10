@@ -22,7 +22,15 @@ necessário informar um objeto cache onde seja possível gravar e
 recuperar informações a partir de um hash.
 
 
-O objeto gravado é serializado pelo componente (Symfony Serialize](https://github.com/symfony/Serializer}
+O objeto gravado é serializado pelo componente [Zend Cache](http://framework.zend.com/manual/en/zend.cache.html).
+Este objeto é passado ao construtor da Camel Spider (Dependency
+injection).
+
+Você pode implementar este serviço de cache mas também pode utilizar o  [Camel Spider Bundle](http://github.com/gpupo/CamelSpiderBundle) como referência de implementação.
+
+
+Os objetos capturados são retornados pela processamento inicial, e são
+acessados diretamente do cache, pela aplicação que os utilizarão.
 
 ## Você pode contribuir com o projeto!
 
