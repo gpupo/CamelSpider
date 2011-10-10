@@ -46,7 +46,7 @@ class SpiderProcessor
         }else{
             $this->config = array(
                 'requests_limit'        =>      100,
-                'memory_limit'          =>      100,
+                'memory_limit'          =>      60,
             );
         }
         return $this;
