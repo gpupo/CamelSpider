@@ -37,9 +37,9 @@ class Link extends ArrayCollection
     {
 		return  ($this->get('status') === 1) ? true : false;
     }
-    public function setDocument($response, $subscription)
+    public function setDocument($response, $subscription, $logger = NULL)
     {
-        $this->set('document', new Document($response, $subscription));
+        $this->set('document', new Document($response, $subscription, $logger));
     }
     public function getDocument()
     {
