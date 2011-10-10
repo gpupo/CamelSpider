@@ -32,6 +32,13 @@ Você pode implementar este serviço de cache mas também pode utilizar o  [Came
 Os objetos capturados são retornados pela processamento inicial, e são
 acessados diretamente do cache, pela aplicação que os utilizarão.
 
+## Dependências
+
+* Symfony Components: BrowserKit, ClassLoader, CssSelector, DomCrawler, Finder, and Process
+* Zend libraries: Cache, Date, Uri, Http, and Validate
+
+
+
 ## Você pode contribuir com o projeto!
 
 Este README precia de tradução e ainda temos muito trabalho pela frente e gostaríamos da sua ajuda.

@@ -45,7 +45,7 @@ class SpiderProcessor
             $this->config = $config;
         }else{
             $this->config = array(
-                'requests_limit'        =>      300,
+                'requests_limit'        =>      100,
                 'memory_limit'          =>      100,
             );
         }
@@ -165,11 +165,19 @@ EOF;
 	{
 		return $this->subscription->get('domain');
 	}
-	
+    protected function getLinkTags()
+    {
+        return array(
+            'subscription_' . $this->subscription['id'],
+            'crawler',
+            'processor'
+        );
+    }
+
 	protected function saveLink(Link $link)
     {
         if($link->isDone()){
-            $this->cache->save($link->getId(), $link);
+            $this->cache->save($link->getId(), $link, $this->getLinkTags());
         }
         
         $this->elements->set($link->getId(), $link->getMinimal());
@@ -228,7 +236,7 @@ EOF;
         }
     
         //Evita duplicidade
-		if($this->cache->isObject($link->getId())){
+		if($this->requests > 0 && $this->cache->isObject($link->getId())){
             $this->logger('cached:[' . $link->get('href') . ']');
             $this->cached++;
 		    return false;
@@ -261,7 +269,7 @@ EOF;
             }    
 		    
             $this->logger('processing document');
-			$target->setDocument($this->getResponse(), $this->getSubscription());
+			$target->setDocument(clone $crawler, $this->getSubscription(), $this->logger);
 		    $target->set('status', 1); //done!
             if($withLinks){
                 $this->logger('go to the scan more links!');
