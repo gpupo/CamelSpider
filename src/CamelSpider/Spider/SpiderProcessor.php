@@ -121,12 +121,12 @@ EOF;
 
 	}
 
-	public function getPool()
+	public function getPool($mode)
 	{
         $pool =  $this->elements->getPool();
         if($pool->count() < 1)
         {
-            $this->logger('Pool empty');
+            $this->logger('Pool empty on the ' . $mode);
             return false;
         }
         $this->logger('Pool count:' . $pool->count());
@@ -346,13 +346,15 @@ EOF;
 		
         //coletando links e conteúdo
         $i = 0;
-        while($i < $this->subscription->get('recursive') && $this->getPool()){
+        while($i < $this->subscription->get('recursive') && $this->getPool('looping')){
             $this->poolCollect(true);
         }          
 
-        //agora somente o conteúdo
-		$this->poolCollect();	
+        //agora somente o conteúdo se ainda existir algo na fila
 
+        if($this->getPool('conclusion')){
+            $this->poolCollect();	
+        }
         //echo $this->debug();
         return $this->elements->toArray();
 
