@@ -3,6 +3,8 @@
 namespace CamelSpider\Spider;
 use CamelSpider\Entity\Link,
     CamelSpider\Entity\Document,
+    CamelSpider\Entity\InterfaceSubscription,
+    CamelSpider\Spider\SpiderAsserts as a,
     Zend\Uri\Uri;
 
 
@@ -285,7 +287,9 @@ EOF;
             catch(\Exception $e){
                 $this->logger($e->getMessage(), 'err');
                 if($this->requests === 0){
+                    $this->errors++;
                     $this->debug();
+                    
                     throw new \Exception ('Error in the first request:' . $e->getMessage());
                 } 
             }
@@ -382,10 +386,19 @@ EOF;
 
         }
     }    
-	public function checkUpdates($subscription, $recursive = 0)
+    
+    protected function restart()
+    {
+        $this->goutte->restart();
+        $this->requests = $this->errors = 0;
+        $this->elements = new SpiderElements;
+    }
+
+    public function checkUpdates(InterfaceSubscription $subscription)
 	{
 
-		$this->subscription = $subscription;
+        $this->restart();
+        $this->subscription = $subscription;
 		$this->collect($this->subscription, true);
 		
         //coletando links e conteúdo
