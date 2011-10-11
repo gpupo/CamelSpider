@@ -94,6 +94,11 @@ class SpiderProcessor
 	public function debug()
 	{
         var_dump($this->elements);
+
+        //var_dump($this->goutte);
+        var_dump($this->getRequest());
+        var_dump($this->getResponse());
+        echo $this->getResume();
     }
 
     public function getResume(){
@@ -141,13 +146,22 @@ EOF;
 		try {
 			$client = $this->goutte->request($mode, $URI);
 
-            return $client;
 		}
 		catch(\Zend\Http\Client\Adapter\Exception\TimeoutException $e)
 		{
 			$this->logger( 'faillure on create a crawler [' . $URI . ']', 'err');	
-		}
-		
+        }
+
+        
+        //Error in request
+        $this->logger('Status Code: [' . $this->getResponse()->getStatus() . ']');
+        if($this->getResponse()->getStatus() >= 400){
+            throw new \Exception('Request with error: ' . $this->getResponse()->getStatus() 
+                . " - " . $client->text()
+            );
+        }
+
+        return $client;
 	}
 
         /**
@@ -158,8 +172,10 @@ EOF;
 	protected function getResponse()
 	{
         return $this->goutte->getResponse();
-        
-
+	}
+	protected function getRequest()
+	{
+        return $this->goutte->getRequest();
 	}
 	protected function getDomain()
 	{
@@ -261,19 +277,43 @@ EOF;
 			    $this->logger('URI wrong:[' . $URI . ']', 'err');
                 $this->errLink($target, 'invalid URL');
 			    return false;
-			}	
-            if(!$crawler = $this->getCrawler($URI)){
+            }
+
+            try{
+                $crawler = $this->getCrawler($URI);
+            }
+            catch(\Exception $e){
+                $this->logger($e->getMessage(), 'err');
+                if($this->requests === 0){
+                    $this->debug();
+                    throw new \Exception ('Error in the first request:' . $e->getMessage());
+                } 
+            }
+
+            if(!$crawler){
                 $this->logger('Crawler broken', 'err');
                 $this->errLink($target, 'impossible crawler');
                 return false;
             }    
-		    
+
+
+
             $this->logger('processing document');
 			$target->setDocument(clone $crawler, $this->getSubscription(), $this->logger);
 		    $target->set('status', 1); //done!
             if($withLinks){
                 $this->logger('go to the scan more links!');
-                $target->set('linksCount', $this->collectLinks($crawler));
+                try{
+                    $target->set('linksCount', $this->collectLinks($crawler));
+                }
+                catch(\Exception $e)
+                {
+
+                    $this->logger($e->getMessage(), 'err');
+                    $this->debug();
+                    die($e->getMessage() . "!\n");
+                }
+
             }
             $this->logger('saving object on cache');
             $this->saveLink($target);
@@ -299,7 +339,8 @@ EOF;
 				
         $aCollection = $crawler->filter('a');
     
-        $this->logger( 'Number of links founded:' . $aCollection->count());
+        $this->logger( 'Number of links founded in request #' 
+            . $this->requests . ':' . $aCollection->count());
         
         foreach($aCollection as $node)
         {
@@ -308,7 +349,10 @@ EOF;
             $this->processAddLink($link);
             
         }
-        return  $aCollection->count();	
+
+        if($aCollection->count() < 1 && $this->requests === 0){
+            throw new \Exception('Error on collect links in the index');
+        }
 	}
 
     protected function poolCollect($withLinks = false)
