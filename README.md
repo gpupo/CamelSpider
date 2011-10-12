@@ -1,5 +1,14 @@
 
-Camel Spider é uma [aranha](http://www.camel-spiders.net/) que coleta links e conteúdo de sites.
+CamelSpider é uma [aranha](http://www.camel-spiders.net/) que coleta links e conteúdo de sites.
+
+## Exemplo de uso da CamelSpider
+
+        Portal de notícias quer coletar novos documentos vindos de
+fontes conhecidas de notícias, então, a partir de um cadastro destas
+fontes, CamelSpider coleta estas novas notícias e armazena na base de
+dados do portal.
+
+## Filtros
 
 Esse conteúdo é filtrado a partir de palavras chaves.
 
@@ -9,9 +18,9 @@ A Camel Spider é um componente a ser utilizado por uma aplicação que gerencie
 
 A Camel Spider utiliza componentes do Zend Framework 2, Docrine Common e Goutte, e presume que será instânciada dentro de um projeto com o autoloading corretamente configurado de segundo a PRS-0.
 
-Queremos que a Camel Spider seja uma Spider Web que supra necessidades de projetos em PHP.
+Queremos que a Camel Spider seja uma Spider Web que supra necessidades de projetos em PHP 5.3.
 
-O [Camel Spider Bundle](http://github.com/gpupo/CamelSpiderBundle) integra a Camel Spider ao Symfony 2 e gerencia as assinaturas e o cache de informações.
+O [Camel Spider Bundle](http://github.com/gpupo/CamelSpiderBundle) integra a Camel Spider ao Symfony 2 e gerencia as assinaturas e o cache de informações e neste projeto complementar você pode visualizar a implementação de componentes que a CamelSpider utiliza como dependency injection mas não os implementa por ser fora de seu escopo.
 
 
 ## Otimização e cache
@@ -42,4 +51,7 @@ acessados diretamente do cache, pela aplicação que os utilizarão.
 ## Você pode contribuir com o projeto!
 
 Este README precia de tradução e ainda temos muito trabalho pela frente e gostaríamos da sua ajuda.
- 
+
+## License
+
+CamelSpider is licensed under the MIT license. 

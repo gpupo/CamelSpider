@@ -8,6 +8,15 @@ use CamelSpider\Entity\Link,
     CamelSpider\Spider\SpiderAsserts as a,
     Zend\Uri\Uri;
 
+/*
+* This file is part of the CamelSpider package.
+*
+* (c) Gilmar Pupo <g@g1mr.com>
+*
+* For the full copyright and license information, please view the LICENSE
+* file that was distributed with this source code.
+*/
+
 
 class SpiderProcessor
 {
@@ -309,8 +318,6 @@ EOF;
                 $this->logger($e->getMessage(), 'err');
                 if($this->requests === 0){
                     $this->errors++;
-                    $this->debug();
-                    
                     throw new \Exception ('Error in the first request:' . $e->getMessage());
                 } 
             }
@@ -359,21 +366,19 @@ EOF;
         }
 
     }
-    
+
 	protected function collectLinks($crawler)
 	{
-				
         $aCollection = $crawler->filter('a');
-    
-        $this->logger( 'Number of links founded in request #' 
-            . $this->requests . ':' . $aCollection->count());
-        
+        $this->logger(
+            'Number of links founded in request #' 
+            . $this->requests . ':' . $aCollection->count()
+        );
+
         foreach($aCollection as $node)
         {
-            
             $link = new Link($node);
             $this->processAddLink($link);
-            
         }
 
         if($aCollection->count() < 1 && $this->requests === 0){
@@ -416,21 +421,32 @@ EOF;
         $this->elements = new SpiderElements;
     }
 
+    protected function performLogin()
+    {
+        /**
+         * @todo Verifica se a assinatura precisa login
+         * Usa o Goutte para logar
+         * Verifica o tipo de login requerido
+         */
+    }
     public function checkUpdate(InterfaceSubscription $subscription)
 	{
 
         $this->restart();
         $this->subscription = $subscription;
+        $this->performLogin();
 		$this->collect($this->subscription, true);
 		
         //coletando links e conteúdo
         $i = 0;
-        while($i < $this->subscription->getMaxDepth() && $this->getPool('looping')){
+        while(
+            $i < $this->subscription->getMaxDepth()
+            && $this->getPool('looping')
+        ){
             $this->poolCollect(true);
-        }          
+        }
 
         //agora somente o conteúdo se ainda existir algo na fila
-
         if($this->getPool('conclusion')){
             $this->poolCollect();	
         }
@@ -439,10 +455,6 @@ EOF;
          * print resume on CLI 
          **/
         echo $this->getResume();
-        
         return $this->elements;
-
-	
 	}
-	
 }
