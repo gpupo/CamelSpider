@@ -14,8 +14,8 @@ class SpiderProcessor
     protected $config;
 
 	protected $goutte;
-    
-	protected $logger;
+
+    protected $logger;
 	
     protected $elements;
 
@@ -26,7 +26,7 @@ class SpiderProcessor
     private $cached = 0;
 
     private $errors = 0;
-    
+
     protected $subscription;
 
     private $timeStart;
