@@ -38,9 +38,9 @@ class Link extends ArrayCollection implements InterfaceLink
     {
 		return  ($this->get('status') === 1) ? true : false;
     }
-    public function setDocument($response, $subscription, $logger = NULL)
+    public function setDocument($response, $subscription, array $dependency = NULL)
     {
-        $this->set('document', new Document($response, $subscription, $logger));
+        $this->set('document', new Document($response, $subscription, $dependency));
     }
     public function getDocument()
     {

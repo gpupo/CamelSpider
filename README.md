@@ -60,6 +60,10 @@ A documentação dos componentes é feita com o [DocBlox](http://www.docblox-pro
 e é compilada no diretório doc/ utilizando-se do comando
 `./bin/generate-documentation`
 
+Este projeto utiliza idéias e conceitos de projetos existentes, sendo eles:
+
+* [Swish-e - Pearl](http://swish-e.org/docs/spider.html)
+
 
 ## License
 

@@ -83,7 +83,16 @@ class SpiderProcessor
 
         return $this->logger->$type('#CamelSpiderProcessor ' . $string);
     }
-
+    
+    private function transferDependency()
+    {
+        return array(
+            'logger' => $this->logger,
+            'cache'  => $this->cache,
+            'config' => $this->config,
+            'goutte' => $ths->goutte
+        );
+    }
     protected function getSubscription()
     {
         return $this->subscription;
@@ -341,7 +350,7 @@ EOF;
 
             if($target instanceof Link){
                 $this->logger('processing document');
-                $target->setDocument(clone $crawler, $this->getSubscription(), $this->logger);
+                $target->setDocument(clone $crawler, $this->getSubscription(), $this->transferDependency());
             }
 		    $target->set('status', 1); //done!
             if($withLinks){

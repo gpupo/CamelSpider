@@ -38,11 +38,19 @@ class Document extends ArrayCollection
      * conteúdo
      **/
 
-    public function __construct(Crawler $crawler, InterfaceSubscription $subscription, $logger = NULL)
+    public function __construct(Crawler $crawler, InterfaceSubscription $subscription, $dependency = NULL)
     {
         $this->crawler = $crawler;
-        $this->logger = $logger;
         $this->subscription = $subscription;
+
+        if($dependency){
+            foreach(array('logger', 'cache', 'config') as $k){
+                if(isset($dependency[$k])){
+                    $this->$k = $dependency[$k];
+                }
+            }
+        }
+        
         $this->set('relevancy',  0);
         $this->processResponse();
     }
@@ -50,11 +58,9 @@ class Document extends ArrayCollection
 	protected function logger($string, $type = 'info')
 	{
         if($this->logger){
-
             return $this->logger->$type('#CamelSpiderEntityDocument ' . $string);
         }
     }
-    
     protected function setTitle()
     {
         $title = $this->crawler->filter('title')->text();
@@ -66,7 +72,6 @@ class Document extends ArrayCollection
     {
         return $this->crawler->filter('body');
     }
-    
     /**
      * Faz uma query no documento,
      * de acordo com os parâmetros definidos 
@@ -90,27 +95,27 @@ class Document extends ArrayCollection
     {
         $this->set('relevancy', $this->get('relevancy') + 1);
     }
-/**
- * Compara documento atual com possível documento em DB
- * Se encontra, compara diferenças.
- * Se diferenças menores que 40%,
- * invalida.
- * @TODO metodo para consulta a DB ?
- * */
-
+    
+    /**
+     * Compara documento atual com possível documento em DB
+     * Se encontra, compara diferenças.
+     * Se diferenças menores que 40%,
+     * invalida.
+     *
+     * @TODO metodo para consulta a DB ?
+     **/
     protected function checkDiff()
     {
         $this->logger('validating diff');
         //$this->subscription->getLink($this->getId())
         return true;
     }
-/**
- * localiza a tag filha de body que possui maior
- * quantidade de texto
- */
-   protected function searchBiggerInTags($tag)
+    /**
+     * localiza a tag filha de body que possui maior
+     * quantidade de texto
+     */
+    protected function searchBiggerInTags($tag)
     {
-
         $data = $this->crawler->filter($tag);
 
         foreach($data as $node)
@@ -140,10 +145,16 @@ class Document extends ArrayCollection
             return false;
         }
     }
+
+    /**
+     * Converte o elemento com maior probabilidade de
+     * ser o container do conteúdo em plain text
+     */
     protected function setText()
     {
-        echo "\n" .'========================' . "\n";
-        echo strip_tags(SpiderDom::toHtml($this->bigger), '<javascript><style>');
+        $this->cache->saveDomToHtmlFile($this->bigger, $this->get('slug'));
+        $this->set('text', SpiderDom::toText($this->bigger));
+
     }
     protected function setSlug()
     {
@@ -157,6 +168,9 @@ class Document extends ArrayCollection
             return false;
         }
 
+        $this->setTitle();
+        $this->setSlug();
+
         $this->getBiggerTag();
 
         $this->setRelevancy();
@@ -164,7 +178,6 @@ class Document extends ArrayCollection
         if($this->getRelevancy() > 0)
         {
             $this->setText();   
-            $this->setTitle();
         }
 
         //printf("body: %d\n", $this->crawler->filter('body')->text());
