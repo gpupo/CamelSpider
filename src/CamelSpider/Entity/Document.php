@@ -6,7 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection,
     Symfony\Component\DomCrawler\Crawler,
     Symfony\Component\BrowserKit\Response,
     CamelSpider\Spider\SpiderAsserts,
-    CamelSider\Spider\SpiderDom,
+    CamelSpider\Spider\SpiderDom,
     CamelSpider\Entity\InterfaceSubscription,
     CamelSpider\Tools\Urlizer;
 

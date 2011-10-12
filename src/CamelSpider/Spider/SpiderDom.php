@@ -2,7 +2,7 @@
 
 namespace CamelSpider\Spider;
 
-class SpideDom
+class SpiderDom
 {
 
     public static function toHtml(\DOMElement $node)

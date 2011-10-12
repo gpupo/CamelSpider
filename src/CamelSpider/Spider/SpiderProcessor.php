@@ -1,14 +1,5 @@
 <?php
 
-namespace CamelSpider\Spider;
-use CamelSpider\Entity\Link,
-    CamelSpider\Entity\InterfaceLink,
-    CamelSpider\Entity\Document,
-    CamelSpider\Entity\InterfaceSubscription,
-    CamelSpider\Spider\SpiderAsserts as a,
-    CamelSpider\Spider\InterfaceCache,
-    Zend\Uri\Uri;
-
 /*
 * This file is part of the CamelSpider package.
 *
@@ -18,6 +9,14 @@ use CamelSpider\Entity\Link,
 * file that was distributed with this source code.
 */
 
+namespace CamelSpider\Spider;
+use CamelSpider\Entity\Link,
+    CamelSpider\Entity\InterfaceLink,
+    CamelSpider\Entity\Document,
+    CamelSpider\Entity\InterfaceSubscription,
+    CamelSpider\Spider\SpiderAsserts as a,
+    CamelSpider\Spider\InterfaceCache,
+    Zend\Uri\Uri;
 
 /**
  * Process every subscription
