@@ -6,7 +6,18 @@ use Doctrine\Common\Collections\ArrayCollection,
     Symfony\Component\DomCrawler\Crawler,
     Symfony\Component\BrowserKit\Response,
     CamelSpider\Spider\SpiderAsserts,
+    CamelSider\Spider\SpiderDom,
+    CamelSpider\Entity\InterfaceSubscription,
     CamelSpider\Tools\Urlizer;
+
+/**
+ * Contain formated response
+ *
+ * @package     CamelSpider
+ * @subpackage  Entity
+ * @author      Gilmar Pupo <g@g1mr.com>
+ *
+ */
 
 
 class Document extends ArrayCollection
@@ -27,20 +38,13 @@ class Document extends ArrayCollection
      * conteúdo
      **/
 
-    public function __construct(Crawler $crawler, $subscription, $logger = NULL)
+    public function __construct(Crawler $crawler, InterfaceSubscription $subscription, $logger = NULL)
     {
         $this->crawler = $crawler;
-        
         $this->logger = $logger;
-
         $this->subscription = $subscription;
-        
-        $this->asserts = new SpiderAsserts;
-
         $this->set('relevancy',  0);
-        
         $this->processResponse();
-
     }
 
 	protected function logger($string, $type = 'info')
@@ -97,43 +101,31 @@ class Document extends ArrayCollection
     protected function checkDiff()
     {
         $this->logger('validating diff');
+        //$this->subscription->getLink($this->getId())
         return true;
     }
 /**
  * localiza a tag filha de body que possui maior
  * quantidade de texto
  */
-
-    protected function toInnerHtml(\DOMElement $node)
-    {
-        return $node->ownerDocument->saveXML($node);
-    }
-
-    protected function countInnerTags(\DOMElement $node, $tag)
-    {
-        $a = $node->getElementsByTagName($tag);
-        return $a->length;
-    }
-    protected function searchBiggerInTags($tag)
+   protected function searchBiggerInTags($tag)
     {
 
         $data = $this->crawler->filter($tag);
 
-            
         foreach($data as $node)
         {
             $a = $node->getElementsByTagName('a');
             if(!$this->bigger ||
                 (
                     strlen($node->nodeValue) > strlen($this->bigger->nodeValue) &&
-                    $this->countInnerTags($node, 'a') < 15 && //limit number of links 
-                    $this->countInnerTags($node, 'javascript') < 2
+                    SpiderDom::countInnerTags($node, 'a') < 15 && //limit number of links 
+                    SpiderDom::countInnerTags($node, 'javascript') < 2
                 )
             ){
                 $this->bigger = $node;
             }
         }
-    
     }
 
     private $bigger = NULL;
@@ -148,14 +140,11 @@ class Document extends ArrayCollection
             return false;
         }
     }
-    
     protected function setText()
     {
         echo "\n" .'========================' . "\n";
-        echo strip_tags($this->toInnerHtml($this->bigger), '<javascript><style>');
+        echo strip_tags(SpiderDom::toHtml($this->bigger), '<javascript><style>');
     }
-    
-    
     protected function setSlug()
     {
         $this->set('slug', Urlizer::urlize($this->get('title')));

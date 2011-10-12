@@ -1,12 +1,14 @@
 
 CamelSpider é uma [aranha](http://www.camel-spiders.net/) que coleta links e conteúdo de sites.
 
-## Exemplo de uso da CamelSpider
-
+        *Exemplo de uso da CamelSpider*
         Portal de notícias quer coletar novos documentos vindos de
         fontes conhecidas de notícias, então, a partir de um cadastro destas
         fontes, CamelSpider coleta estas novas notícias e armazena na base de
         dados do portal.
+
+Um diferencial da CamelSpider, é oferecer um documento tem texto plano
+que reflete o conteúdo principal de cada conteúdo indexado.
 
 ## Filtros
 
@@ -51,6 +53,13 @@ acessados diretamente do cache, pela aplicação que os utilizarão.
 ## Você pode contribuir com o projeto!
 
 Este README precia de tradução e ainda temos muito trabalho pela frente e gostaríamos da sua ajuda.
+
+## Documentação
+
+A documentação dos componentes é feita com o [DocBlox](http://www.docblox-project.org/) 
+e é compilada no diretório doc/ utilizando-se do comando
+`./bin/generate-documentation`
+
 
 ## License
 

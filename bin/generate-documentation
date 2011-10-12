@@ -1,0 +1,4 @@
+#!/bin/sh
+docblox run -d src/ -t doc/
+
+

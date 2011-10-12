@@ -6,6 +6,7 @@ use CamelSpider\Entity\Link,
     CamelSpider\Entity\Document,
     CamelSpider\Entity\InterfaceSubscription,
     CamelSpider\Spider\SpiderAsserts as a,
+    CamelSpider\Spider\InterfaceCache,
     Zend\Uri\Uri;
 
 /*
@@ -18,6 +19,14 @@ use CamelSpider\Entity\Link,
 */
 
 
+/**
+ * Process every subscription
+ *
+ * @package     CamelSpider
+ * @subpackage  Spider
+ * @author      Gilmar Pupo <g@g1mr.com>
+ *
+*/
 class SpiderProcessor
 {
     protected $config;
@@ -43,10 +52,12 @@ class SpiderProcessor
     private $timeParcial;
 
 	/**
-	* Recebe instância de https://github.com/fabpot/Goutte
-	* e do Monolog
+	* @param \Goutte\Client Goutte $goutte Crawler Goutte
+    * @param InterfaceCache $cache A class facade for Zend Cache
+    * @param Monolog $logger Object to write logs (in realtime with low memory usage!)
+    * @param array $config Overload of default configurations in the constructor
 	**/
-    public function __construct($goutte, $cache,  $logger = NULL, $config = NULL)
+    public function __construct(\Goutte\Client $goutte, InterfaceCache $cache, $logger = NULL, array $config = NULL)
     {
         $this->timeStart = $this->timeParcial = microtime(true);
         $this->goutte = $goutte;

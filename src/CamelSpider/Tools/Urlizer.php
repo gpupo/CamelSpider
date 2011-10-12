@@ -1,6 +1,6 @@
 <?php
 
-namespace Gedmo\Sluggable\Util;
+namespace CamelSpider\Tools;
 
 /**
  * This is the part taken from Doctrine 1.2.3
@@ -13,7 +13,7 @@ namespace Gedmo\Sluggable\Util;
  * Uses 3rd party libraries and functions:
  *         http://sourceforge.net/projects/phputf8
  *
- * @package     Gedmo.Sluggable.Util
+ * @package     Doctrine
  * @subpackage  Urlizer
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link        www.doctrine-project.org
@@ -22,7 +22,9 @@ namespace Gedmo\Sluggable\Util;
  * @author      Konsta Vesterinen <kvesteri@cc.hut.fi>
  * @author      Jonathan H. Wage <jonwage@gmail.com>
  * @author         <hsivonen@iki.fi>
+ * @see         https://github.com/l3pp4rd/DoctrineExtensions/blob/master/lib/Gedmo/Sluggable/Util/Urlizer.php
  */
+
 class Urlizer
 {
     /**
