@@ -13,10 +13,10 @@ class SpiderProcessor
 {
     protected $config;
 
-	protected $goutte;
+    protected $goutte;
 
     protected $logger;
-	
+
     protected $elements;
 
     protected $cache;
