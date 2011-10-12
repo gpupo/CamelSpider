@@ -4,9 +4,9 @@ CamelSpider é uma [aranha](http://www.camel-spiders.net/) que coleta links e co
 ## Exemplo de uso da CamelSpider
 
         Portal de notícias quer coletar novos documentos vindos de
-fontes conhecidas de notícias, então, a partir de um cadastro destas
-fontes, CamelSpider coleta estas novas notícias e armazena na base de
-dados do portal.
+        fontes conhecidas de notícias, então, a partir de um cadastro destas
+        fontes, CamelSpider coleta estas novas notícias e armazena na base de
+        dados do portal.
 
 ## Filtros
 
