@@ -89,8 +89,7 @@ class SpiderProcessor
         return array(
             'logger' => $this->logger,
             'cache'  => $this->cache,
-            'config' => $this->config,
-            'goutte' => $ths->goutte
+            'config' => $this->config
         );
     }
     protected function getSubscription()
@@ -142,7 +141,7 @@ class SpiderProcessor
 
         $template = <<<EOF
  ====================RESUME=========================
-    * %s
+    %s
     - Memory usage...........................%s Mb
     - Number of new requests.................%s 
     - Time...................................%s Seg
@@ -153,7 +152,7 @@ EOF;
 
         return sprintf(
             $template,
-            $this->subscription->getDomain(),
+            $this->subscription,
             $this->getMemoryUsage(),
             $this->requests,
             $this->getTimeUsage(),
@@ -275,30 +274,19 @@ EOF;
 		return false;
     }
 
-    protected function insideScope($link)
-    {
-		//Evita sair do escopo
-        if(
-            substr($link->get('href'), 0, 4) == 'http' && 
-			stripos($link->get('href'), $this->getDomain()) === false
-		){
-            $this->logger('outside the scope of ['
-                .$this->getDomain()
-                .']:[' 
-                . $link->get('href') 
-                . ']');
-            
-            return false;
-        }
-        
-        return true;
-
-    }
-
     protected function processAddLink($link)
     {
 
-        if(!$this->insideScope($link)){
+        if(!$this->subscription->insideScope($link)){
+            
+            $this->logger(
+                'outside the scope of ['
+                . $this->subscription->getDomain()
+                . ']:[' 
+                . $link->get('href') 
+                . ']'
+            );
+
             return false;
         }
     
@@ -416,7 +404,8 @@ EOF;
             
             if(!$this->checkLimit()){
                 $this->errLink($link, 'Limit reached');
-                return false;
+                break;
+                //return false;
             }
             $this->logger( '====== Request number #' . $this->requests . '======');
             $this->logger('pool start new collect'); 

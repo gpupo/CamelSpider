@@ -88,7 +88,8 @@ class Document extends ArrayCollection
         {
             $this->addRelevancy();
         }
-
+        
+        $this->addRelevancy(); //esperando implementação!!
         //$v = $this->asserts->assertRegExp('/Hello Fabien/', $this->goutte->getResponse()->getContent());
     }
     protected function addRelevancy()
@@ -158,7 +159,7 @@ class Document extends ArrayCollection
     }
     protected function setSlug()
     {
-        $this->set('slug', Urlizer::urlize($this->get('title')));
+        $this->set('slug', substr(Urlizer::urlize($this->get('title')), 0, 30));
     } 
     protected function processResponse()
     {

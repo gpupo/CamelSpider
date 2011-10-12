@@ -3,7 +3,8 @@
 namespace CamelSpider\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection,
-    CamelSpider\Entity\InterfaceLink;
+    CamelSpider\Entity\InterfaceLink,
+    CamelSpider\Entity\Link;
 
 abstract class AbstractSubscription extends ArrayCollection implements InterfaceSubscription
 {
@@ -15,7 +16,13 @@ abstract class AbstractSubscription extends ArrayCollection implements Interface
 
     public function getDomain()
     {
-        return $this->get('domain');
+        if(strpos(',', $this->get('domain')) === true){
+            return explode(',', $this->get('domain'));
+        }
+        else
+        {
+            return array($this->get('domain'));
+        }
     }
     public function getHref()
     {
@@ -26,7 +33,12 @@ abstract class AbstractSubscription extends ArrayCollection implements Interface
     {
         return $this->get('filters');
     }
-    
+
+    public function __toString()
+    {
+        return implode(',', $this->getDomain());
+    }
+
     public function getMaxDepth()
     {
         return $this->get('max_depth');
@@ -51,7 +63,27 @@ abstract class AbstractSubscription extends ArrayCollection implements Interface
     {
         return $this;
     }
+    protected function inDomain($str)
+    {
+        foreach($this->getDomain() as $domain)
+        {
+            if(stripos($str, $domain))
+            {
+                    return true;
+            }
+        }
+    }
 
+    public function insideScope(Link $link)
+    {
+        if(
+            substr($link->get('href'), 0, 4) == 'http' && 
+            !$this->inDomain($link->get('href'))
+		){
+            return false;
+        }
+        return true;
+    }
 
 }
 

@@ -22,14 +22,50 @@ class AbstractCache implements InterfaceCache
     protected $logger;
     protected $cache;
 
+    public function checkDir()
+    {
+        $this->mkdir($this->cache_dir);
+        $this->mkdir($this->cache_dir . '/html');
+    }
+
     protected function logger($string, $type = 'info')
     {
         if($this->logger){
             return $this->logger->$type('#CamelSpiderCache ' . $string);
         }
     }
+
+    protected function mkdir($dir)
+    {
+        if (!is_dir($dir)) {
+            $this->logger('Creating the directory [' . $dir . ']');
+            if (false === @mkdir($dir, 0777, true)) {
+                throw new \RuntimeException(sprintf('Unable to create the %s directory', $dir));
+            }
+        } elseif (!is_writable($dir)) {
+            throw new \RuntimeException(sprintf('Unable to write in the %s directory', $dir));
+        }
+    }
+
+    /**
+     * Remove directory
+     *
+     * @todo Extender métodos de Zend Cache para remoção de arquivos
+     */
+    protected function rmdir($dir)
+    {
+        return true; //temporary
+        if (is_dir($dir)) {
+            $this->logger('Removing the directory [' . $dir . ']');
+            if (false === @rmdir($dir)) {
+                throw new \RuntimeException(sprintf('Unable to remove the %s directory', $dir));
+            }
+        }
+    }
+
     public function clean($mode = Zend_Cache::CLEANING_MODE_ALL)
     {
+        $this->rmdir($this->cache_dir . '/html');
         return $this->cache->clean($mode);
     }
 
@@ -59,7 +95,7 @@ class AbstractCache implements InterfaceCache
     
     public function saveDomToHtmlFile(\DOMElement $e, $slug)
     {
-        $file = $this->cache_dir . '/' . $slug . '.html';
+        $file = $this->cache_dir . '/html/' . $slug . '-' . sha1(microtime(true)) . '.html';
         $this->logger('saving DomElement as HTML in file ' . $file);
         SpiderDom::saveHtmlToFile($e, $file);
     }
