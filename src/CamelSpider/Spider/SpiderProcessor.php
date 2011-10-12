@@ -37,7 +37,7 @@ class SpiderProcessor
 	* Recebe instância de https://github.com/fabpot/Goutte
 	* e do Monolog
 	**/
-    public function __construct($goutte, $cache,  $logger, $config = NULL)
+    public function __construct($goutte, $cache,  $logger = NULL, $config = NULL)
     {
         $this->timeStart = $this->timeParcial = microtime(true);
         $this->goutte = $goutte;
@@ -54,11 +54,15 @@ class SpiderProcessor
             );
         }
         return $this;
-    }	
+    }
 
-	protected function logger($string, $type = 'info')
-	{
-		return $this->logger->$type('#CamelSpiderProcessor ' . $string);
+    protected function logger($string, $type = 'info')
+    {
+        if(!$this->logger){
+            return false;
+        }
+
+        return $this->logger->$type('#CamelSpiderProcessor ' . $string);
     }
 
     protected function getSubscription()
@@ -73,10 +77,12 @@ class SpiderProcessor
     {
         return round((\memory_get_usage()/1024) / 1024);
     }
+
     protected function getTimeUsage()
     {
         return round(microtime(true) - $this->timeParcial);
     }
+
     protected function checkLimit()
     {
         $this->logger('Current memory usage:' . $this->getMemoryUsage() . 'Mb');
@@ -90,13 +96,12 @@ class SpiderProcessor
             $this->logger('Limit of requests reached', 'err');
             return false;
         }
-        
-        $this->requests++;    
+        $this->requests++;
         return true;
     }
-        
-	public function debug()
-	{
+
+    public function debug()
+    {
         //var_dump($this->elements);
         //var_dump($this->goutte);
         //var_dump($this->getRequest());
@@ -104,10 +109,11 @@ class SpiderProcessor
         echo $this->getResume();
     }
 
-    public function getResume(){
+    public function getResume()
+    {
 
         $template = <<<EOF
- ======================RESUME===========================
+ ====================RESUME=========================
     * %s
     - Memory usage...........................%s Mb
     - Number of new requests.................%s 
@@ -419,7 +425,7 @@ EOF;
 		
         //coletando links e conteúdo
         $i = 0;
-        while($i < $this->subscription->get('recursive') && $this->getPool('looping')){
+        while($i < $this->subscription->getMaxDepth() && $this->getPool('looping')){
             $this->poolCollect(true);
         }          
 

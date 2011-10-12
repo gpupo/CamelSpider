@@ -27,9 +27,9 @@ abstract class AbstractSubscription extends ArrayCollection implements Interface
         return $this->get('filters');
     }
     
-    public function getRecursive()
+    public function getMaxDepth()
     {
-        return $this->get('recursive');
+        return $this->get('max_depth');
     }
 
     
