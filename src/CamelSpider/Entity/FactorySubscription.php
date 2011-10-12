@@ -16,7 +16,7 @@ class FactorySubscription
     {
         $array = array(
             'domain'      =>   $domain,
-            'href'        =>   'http://'. $domain,
+            'href'        =>   'http://'. $domain . '/',
             'recursive'   =>   1,
             'filters'     =>   array('contain' => 'tecnologia', 'notContain' => 'agrícola'),
             'id'          =>   sha1($domain)

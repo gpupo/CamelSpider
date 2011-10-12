@@ -2,7 +2,8 @@
 
 namespace CamelSpider\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\ArrayCollection,
+    CamelSpider\Entity\InterfaceLink;
 
 abstract class AbstractSubscription extends ArrayCollection implements InterfaceSubscription
 {
@@ -36,6 +37,19 @@ abstract class AbstractSubscription extends ArrayCollection implements Interface
     {
         //make somethin cool with your DB!
         return false;
+    }
+    public function isDone()
+    {
+        return true;
+    }
+    public function isWaiting()
+    {
+        return false;
+    }
+
+    public function getMinimal()
+    {
+        return $this;
     }
 
 

@@ -2,6 +2,7 @@
 
 namespace CamelSpider\Spider;
 use CamelSpider\Entity\Link,
+    CamelSpider\Entity\InterfaceLink,
     CamelSpider\Entity\Document,
     CamelSpider\Entity\InterfaceSubscription,
     CamelSpider\Spider\SpiderAsserts as a,
@@ -30,6 +31,7 @@ class SpiderProcessor
 
     private $timeStart;
 
+    private $timeParcial;
 
 	/**
 	* Recebe instância de https://github.com/fabpot/Goutte
@@ -37,7 +39,7 @@ class SpiderProcessor
 	**/
     public function __construct($goutte, $cache,  $logger, $config = NULL)
     {
-        $this->timeStart = microtime(true);
+        $this->timeStart = $this->timeParcial = microtime(true);
         $this->goutte = $goutte;
         $this->logger = $logger;
         $this->cache = $cache;
@@ -73,7 +75,7 @@ class SpiderProcessor
     }
     protected function getTimeUsage()
     {
-        return microtime(true) - $this->timeStart;
+        return round(microtime(true) - $this->timeParcial);
     }
     protected function checkLimit()
     {
@@ -95,11 +97,10 @@ class SpiderProcessor
         
 	public function debug()
 	{
-        var_dump($this->elements);
-
+        //var_dump($this->elements);
         //var_dump($this->goutte);
-        var_dump($this->getRequest());
-        var_dump($this->getResponse());
+        //var_dump($this->getRequest());
+        //var_dump($this->getResponse());
         echo $this->getResume();
     }
 
@@ -107,10 +108,10 @@ class SpiderProcessor
 
         $template = <<<EOF
  ======================RESUME===========================
-
+    * %s
     - Memory usage...........................%s Mb
-    - Number of new requests.................%s
-    - Time...................................%s
+    - Number of new requests.................%s 
+    - Time...................................%s Seg
     - Objects in cache.......................%s
     - Errors.................................%s
 
@@ -118,6 +119,7 @@ EOF;
 
         return sprintf(
             $template,
+            $this->subscription->getDomain(),
             $this->getMemoryUsage(),
             $this->requests,
             $this->getTimeUsage(),
@@ -147,14 +149,12 @@ EOF;
 	   	
 		try {
 			$client = $this->goutte->request($mode, $URI);
-
 		}
 		catch(\Zend\Http\Client\Adapter\Exception\TimeoutException $e)
 		{
 			$this->logger( 'faillure on create a crawler [' . $URI . ']', 'err');	
         }
 
-        
         //Error in request
         $this->logger('Status Code: [' . $this->getResponse()->getStatus() . ']');
         if($this->getResponse()->getStatus() >= 400){
@@ -166,7 +166,7 @@ EOF;
         return $client;
 	}
 
-        /**
+    /**
     * Processa o conteúdo do documento.
     * Neste momento são aplicados os filtros de conteúdo
     * e retornando flag se o conteúdo é relevante
@@ -175,14 +175,17 @@ EOF;
 	{
         return $this->goutte->getResponse();
 	}
-	protected function getRequest()
+    
+    protected function getRequest()
 	{
         return $this->goutte->getRequest();
 	}
-	protected function getDomain()
+    
+    protected function getDomain()
 	{
 		return $this->subscription->get('domain');
 	}
+    
     protected function getLinkTags()
     {
         return array(
@@ -192,7 +195,10 @@ EOF;
         );
     }
 
-	protected function saveLink(Link $link)
+    /**
+     * @TODO: passar saveLink para Elements
+     */
+	protected function saveLink(InterfaceLink $link)
     {
         if($link->isDone()){
             $this->cache->save($link->getId(), $link, $this->getLinkTags());
@@ -201,6 +207,7 @@ EOF;
         $this->elements->set($link->getId(), $link->getMinimal());
 
     }
+
     protected function errLink($link, $cause = 'undefined')
     {
         $link->set('status', 3);
@@ -232,21 +239,29 @@ EOF;
 		}
 		$this->logger('HREF malformed:[' . $href. ']', 'info');
 		return false;
-	}
-  protected function insideScope($link)
-  {
+    }
 
+    protected function insideScope($link)
+    {
 		//Evita sair do escopo
-		if(substr($link->get('href'), 0, 4) == 'http' && 
+        if(
+            substr($link->get('href'), 0, 4) == 'http' && 
 			stripos($link->get('href'), $this->getDomain()) === false
 		){
-			$this->logger('outside the scope of ['.$this->getDomain().']:[' . $link->get('href') . ']');
-		    return false;
-    }
-    return true;
+            $this->logger('outside the scope of ['
+                .$this->getDomain()
+                .']:[' 
+                . $link->get('href') 
+                . ']');
+            
+            return false;
+        }
+        
+        return true;
 
-  }	
-	protected function processAddLink($link)
+    }
+
+    protected function processAddLink($link)
     {
 
         if(!$this->insideScope($link)){
@@ -301,9 +316,10 @@ EOF;
             }    
 
 
-
-            $this->logger('processing document');
-			$target->setDocument(clone $crawler, $this->getSubscription(), $this->logger);
+            if($target instanceof Link){
+                $this->logger('processing document');
+                $target->setDocument(clone $crawler, $this->getSubscription(), $this->logger);
+            }
 		    $target->set('status', 1); //done!
             if($withLinks){
                 $this->logger('go to the scan more links!');
@@ -361,7 +377,7 @@ EOF;
 
     protected function poolCollect($withLinks = false)
     {
-        if(!$pool = $this->getPool()){
+        if(!$pool = $this->getPool('test')){
             return false;
         }
 
@@ -394,7 +410,7 @@ EOF;
         $this->elements = new SpiderElements;
     }
 
-    public function checkUpdates(InterfaceSubscription $subscription)
+    public function checkUpdate(InterfaceSubscription $subscription)
 	{
 
         $this->restart();
@@ -412,8 +428,13 @@ EOF;
         if($this->getPool('conclusion')){
             $this->poolCollect();	
         }
-        //echo $this->debug();
-        return $this->elements->toArray();
+
+        /**
+         * print resume on CLI 
+         **/
+        echo $this->getResume();
+        
+        return $this->elements;
 
 	
 	}

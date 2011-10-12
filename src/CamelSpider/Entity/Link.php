@@ -2,9 +2,10 @@
 
 namespace CamelSpider\Entity;
 use Doctrine\Common\Collections\ArrayCollection,
-    CamelSpider\Entity\Document;
+    CamelSpider\Entity\Document,
+    CamelSpider\Entity\InterfaceLink;
 
-class Link extends ArrayCollection 
+class Link extends ArrayCollection implements InterfaceLink
 {
 	
 	
