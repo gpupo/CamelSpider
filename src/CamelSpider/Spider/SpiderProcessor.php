@@ -50,12 +50,12 @@ class SpiderProcessor
 
     private $timeParcial;
 
-	/**
-	* @param \Goutte\Client Goutte $goutte Crawler Goutte
+    /**
+    * @param \Goutte\Client Goutte $goutte Crawler Goutte
     * @param InterfaceCache $cache A class facade for Zend Cache
     * @param Monolog $logger Object to write logs (in realtime with low memory usage!)
     * @param array $config Overload of default configurations in the constructor
-	**/
+    **/
     public function __construct(\Goutte\Client $goutte, InterfaceCache $cache, $logger = NULL, array $config = NULL)
     {
         $this->timeStart = $this->timeParcial = microtime(true);
@@ -83,7 +83,7 @@ class SpiderProcessor
 
         return $this->logger->$type('#CamelSpiderProcessor ' . $string);
     }
-    
+
     private function transferDependency()
     {
         return array(
@@ -161,10 +161,10 @@ EOF;
         );
 
 
-	}
+    }
 
-	public function getPool($mode)
-	{
+    public function getPool($mode)
+    {
         $pool =  $this->elements->getPool();
         if($pool->count() < 1)
         {
@@ -173,19 +173,19 @@ EOF;
         }
         $this->logger('Pool count:' . $pool->count());
         return $pool;
-	}
+    }
 
-	public function getCrawler($URI, $mode = 'GET')
-	{
-		
-		$this->logger( 'created a Crawler for [' . $URI . ']');
-	   	
-		try {
-			$client = $this->goutte->request($mode, $URI);
-		}
-		catch(\Zend\Http\Client\Adapter\Exception\TimeoutException $e)
-		{
-			$this->logger( 'faillure on create a crawler [' . $URI . ']', 'err');	
+    public function getCrawler($URI, $mode = 'GET')
+    {
+
+        $this->logger( 'created a Crawler for [' . $URI . ']');
+
+        try {
+            $client = $this->goutte->request($mode, $URI);
+        }
+        catch(\Zend\Http\Client\Adapter\Exception\TimeoutException $e)
+        {
+            $this->logger( 'faillure on create a crawler [' . $URI . ']', 'err');	
         }
 
         //Error in request
@@ -197,28 +197,28 @@ EOF;
         }
 
         return $client;
-	}
+    }
 
     /**
     * Processa o conteúdo do documento.
     * Neste momento são aplicados os filtros de conteúdo
     * e retornando flag se o conteúdo é relevante
     **/
-	protected function getResponse()
-	{
+    protected function getResponse()
+    {
         return $this->goutte->getResponse();
-	}
-    
+    }
+
     protected function getRequest()
-	{
+    {
         return $this->goutte->getRequest();
-	}
-    
+    }
+
     protected function getDomain()
-	{
-		return $this->subscription->get('domain');
-	}
-    
+    {
+        return $this->subscription->get('domain');
+    }
+
     protected function getLinkTags()
     {
         return array(
@@ -231,12 +231,12 @@ EOF;
     /**
      * @TODO: passar saveLink para Elements
      */
-	protected function saveLink(InterfaceLink $link)
+    protected function saveLink(InterfaceLink $link)
     {
         if($link->isDone()){
             $this->cache->save($link->getId(), $link, $this->getLinkTags());
         }
-        
+
         $this->elements->set($link->getId(), $link->getMinimal());
 
     }

@@ -90,9 +90,7 @@ class Document extends ArrayCollection
         {
             $this->addRelevancy();
         }
-        
         $this->addRelevancy(); //esperando implementação!!
-        //$v = $this->asserts->assertRegExp('/Hello Fabien/', $this->goutte->getResponse()->getContent());
     }
     protected function addRelevancy()
     {

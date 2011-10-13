@@ -25,6 +25,12 @@ class SpiderDom
         if(self::textLen($node) < 500)
             return false;
 
+        if(self::substr_count($node, '				') > 5)
+            return false;
+
+        if(self::substr_count($node, '"') > 30)
+            return false;
+
         if(self::countInnerTags($node, 'a') > 5)
             return false;
 
@@ -63,6 +69,11 @@ class SpiderDom
     public static function textLen($node)
     {
         return strlen(self::toText($node));
+    }
+
+    public static function substr_count($node, $substring)
+    {
+        return substr_count(self::toText($node), $substring);
     }
 
     public static function saveHtmlToFile(\DOMElement $node, $file)
