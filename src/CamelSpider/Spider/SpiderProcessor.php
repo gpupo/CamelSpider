@@ -27,28 +27,22 @@ use CamelSpider\Entity\Link,
 */
 class SpiderProcessor extends AbstractSpider
 {
-    protected $config;
+
+    protected $name = 'Processor';
 
     protected $goutte;
-
-    protected $logger;
 
     protected $elements;
 
     protected $cache;
 
-    private $requests = 0;
+    protected $requests = 0;
 
-    private $cached = 0;
+    protected $cached = 0;
 
-    private $errors = 0;
+    protected $errors = 0;
 
     protected $subscription;
-
-    private $timeStart;
-
-    private $timeParcial;
-
     /**
     * @param \Goutte\Client Goutte $goutte Crawler Goutte
     * @param InterfaceCache $cache A class facade for Zend Cache
@@ -62,25 +56,8 @@ class SpiderProcessor extends AbstractSpider
         $this->logger = $logger;
         $this->cache = $cache;
         $this->elements  = new SpiderElements;
-
-        if($config){
-            $this->config = $config;
-        }else{
-            $this->config = array(
-                'requests_limit'        =>      100,
-                'memory_limit'          =>      60,
-            );
-        }
+        parent::__construct(array(), $config);
         return $this;
-    }
-
-    protected function logger($string, $type = 'info')
-    {
-        if(!$this->logger){
-            return false;
-        }
-
-        return $this->logger->$type('#CamelSpiderProcessor ' . $string);
     }
 
     private function transferDependency()
@@ -91,20 +68,15 @@ class SpiderProcessor extends AbstractSpider
             'config' => $this->config
         );
     }
-    protected function getSubscription()
-    {
-        return $this->subscription;
-    }
-
     protected function checkLimit()
     {
         $this->logger('Current memory usage:' . $this->getMemoryUsage() . 'Mb');
 
-        if($this->getMemoryUsage() >= $this->config['memory_limit']){
+        if($this->getMemoryUsage() >= $this->getConfig('memory_limit', 80)){
            $this->logger('Limit of memory reached', 'err');
            return false;
         }
-        if($this->requests >= $this->config['requests_limit']){
+        if($this->requests >= $this->getConfig('requests_limit', 300)){
             //throw new \Exception ('Limit reached');
             $this->logger('Limit of requests reached', 'err');
             return false;
@@ -183,20 +155,6 @@ EOF;
         }
 
         return $client;
-    }
-
-   protected function getDomain()
-    {
-        return $this->subscription->get('domain');
-    }
-
-    protected function getLinkTags()
-    {
-        return array(
-            'subscription_' . $this->subscription['id'],
-            'crawler',
-            'processor'
-        );
     }
 
     /**

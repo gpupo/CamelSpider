@@ -2,8 +2,15 @@
 
 namespace CamelSpider\Spider;
 
-abstract class AbstractSpider
+use CamelSpider\Entity\AbstractSpiderEgg;
+
+abstract class AbstractSpider extends AbstractSpiderEgg
 {
+
+    protected $timeStart;
+
+    protected $timeParcial;
+
 
     protected function getBody()
     {
@@ -19,7 +26,27 @@ abstract class AbstractSpider
     {
         return $this->goutte->getResponse();
     }
- 
+
+    protected function getSubscription()
+    {
+        return $this->subscription;
+    }
+
+   protected function getDomain()
+    {
+        return $this->subscription->get('domain');
+    }
+
+    protected function getLinkTags()
+    {
+        return array(
+            'subscription_' . $this->subscription['id'],
+            'crawler',
+            'processor'
+        );
+    }
+
+
     /**
      * return memory in MB
      **/

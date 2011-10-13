@@ -29,7 +29,7 @@ class AbstractSpiderEgg extends ArrayCollection
 
     protected function getConfig($key, $defaultValue = NULL)
     {
-        if($config = $this->config->get($key)){
+        if($this->config instanceof ArrayCollection && $config = $this->config->get($key)){
             return $config;
         }
         return $defaultValue;
@@ -38,7 +38,7 @@ class AbstractSpiderEgg extends ArrayCollection
     protected function logger($string, $type = 'info')
     {
         if($this->logger){
-            return $this->logger->$type('#CamelSpider ' . $name . ':'  . $string);
+            return $this->logger->$type('#CamelSpider ' . $this->name . ':'  . $string);
         }
     }
 
