@@ -190,7 +190,7 @@
 <div>
 <a id="\CamelSpider\Entity\Document::__construct()" class="anchor"></a><div class="method public">
 <a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_public.png" style="margin-right: 5px" alt="public"><span class="highlight">__construct</span><span class="nb-faded-text">(
-           $crawler,  $subscription,  $logger
+           $crawler,  $subscription,  $dependency
               =
               NULL
           )
@@ -219,7 +219,7 @@ conteúdo</p></div>
 <td><em></em></td>
 </tr>
 <tr>
-<th>$logger</th>
+<th>$dependency</th>
 <td></td>
 <td><em></em></td>
 </tr>
@@ -330,6 +330,16 @@ Aplicar filtros contidos em $this->subscription</p>
 <div class="code-tabs"></div>
 <div class="clear"></div>
 </div>
+<a id="\CamelSpider\Entity\Document::saveBiggerToHtml()" class="anchor"></a><div class="method protected">
+<a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_protected.png" style="margin-right: 5px" alt="protected"><span class="highlight">saveBiggerToHtml</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+          void</code><div class="description"><p class="short_description"></p></div>
+<div class="code-tabs"></div>
+<div class="clear"></div>
+</div>
 <a id="\CamelSpider\Entity\Document::searchBiggerInTags()" class="anchor"></a><div class="method protected">
 <a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_protected.png" style="margin-right: 5px" alt="protected"><span class="highlight">searchBiggerInTags</span><span class="nb-faded-text">(
            $tag
@@ -385,8 +395,10 @@ na assinatura</p></div>
           )
         </span>
         :
-          void</code><div class="description"><p class="short_description"></p></div>
-<div class="code-tabs"></div>
+          void</code><div class="description"><p class="short_description">Converte o elemento com maior probabilidade de
+ser o container do conteúdo em plain text</p></div>
+<div class="code-tabs"><div class="long-description">
+</div></div>
 <div class="clear"></div>
 </div>
 <a id="\CamelSpider\Entity\Document::setTitle()" class="anchor"></a><div class="method protected">

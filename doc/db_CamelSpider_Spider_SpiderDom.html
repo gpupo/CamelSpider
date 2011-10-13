@@ -88,7 +88,7 @@
 <ul id="file-nav"><li>
 <a href="#classes"><img src="images/icons/class.png" height="14">
                           Classes
-                      </a><ul><li><a href="#%5CCamelSpider%5CSpider%5CSpideDom">\CamelSpider\Spider\SpideDom</a></li></ul>
+                      </a><ul><li><a href="#%5CCamelSpider%5CSpider%5CSpiderDom">\CamelSpider\Spider\SpiderDom</a></li></ul>
 </li></ul>
 <div style="clear: left;"></div>
 </div>
@@ -96,13 +96,26 @@
               Table of Contents
           </div>
 </div>
-<a xmlns:dbx="http://docblox-project.org/xsl/functions" name="top" class="anchor"></a><a name="classes" class="anchor"></a><a xmlns:dbx="http://docblox-project.org/xsl/functions" id="\CamelSpider\Spider\SpideDom" class="anchor"></a><h2 xmlns:dbx="http://docblox-project.org/xsl/functions" class="class">\CamelSpider\Spider\SpideDom<div class="to-top"><a href="#top">jump to top</a></div>
+<a xmlns:dbx="http://docblox-project.org/xsl/functions" name="top" class="anchor"></a><a name="classes" class="anchor"></a><a xmlns:dbx="http://docblox-project.org/xsl/functions" id="\CamelSpider\Spider\SpiderDom" class="anchor"></a><h2 xmlns:dbx="http://docblox-project.org/xsl/functions" class="class">\CamelSpider\Spider\SpiderDom<div class="to-top"><a href="#top">jump to top</a></div>
 </h2>
 <div xmlns:dbx="http://docblox-project.org/xsl/functions" class="class">
-<small class="package"><b>Package: </b>Default</small><dl class="class-info"></dl>
+<small class="package"><b>Package: </b>CamelSpider\Spider</small><p class="short-description">Methods for DOMElements</p>
+<div class="long-description">
+</div>
+<dl class="class-info">
+<dt>See</dt>
+<dd>\CamelSpider\Spider\http://www.php.net/manual/en/class.domelement.php
+         
+    </dd>
+<dt>Author</dt>
+<dd>
+<a href="mailto:g@g1mr.com">Gilmar Pupo</a>
+         
+    </dd>
+</dl>
 <h3>Methods</h3>
 <div>
-<a id="\CamelSpider\Spider\SpideDom::countInnerTags()" class="anchor"></a><div class="method public">
+<a id="\CamelSpider\Spider\SpiderDom::countInnerTags()" class="anchor"></a><div class="method public">
 <a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_public.png" style="margin-right: 5px" alt="public"><span class="highlight">countInnerTags</span><span class="nb-faded-text">(
            $node,  $tag
           )
@@ -132,7 +145,37 @@
 </div>
 <div class="clear"></div>
 </div>
-<a id="\CamelSpider\Spider\SpideDom::toHtml()" class="anchor"></a><div class="method public">
+<a id="\CamelSpider\Spider\SpiderDom::saveHtmlToFile()" class="anchor"></a><div class="method public">
+<a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_public.png" style="margin-right: 5px" alt="public"><span class="highlight">saveHtmlToFile</span><span class="nb-faded-text">(
+           $node,  $file
+          )
+        </span>
+        :
+          void</code><div class="description">
+<span class="attribute">static</span><p class="short_description"></p>
+</div>
+<div class="code-tabs">
+<strong>Parameters</strong><table class="argument-info">
+<thead><tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tr>
+<th>$node</th>
+<td></td>
+<td><em></em></td>
+</tr>
+<tr>
+<th>$file</th>
+<td></td>
+<td><em></em></td>
+</tr>
+</table>
+</div>
+<div class="clear"></div>
+</div>
+<a id="\CamelSpider\Spider\SpiderDom::toHtml()" class="anchor"></a><div class="method public">
 <a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_public.png" style="margin-right: 5px" alt="public"><span class="highlight">toHtml</span><span class="nb-faded-text">(
            $node
           )
@@ -142,6 +185,33 @@
 <span class="attribute">static</span><p class="short_description"></p>
 </div>
 <div class="code-tabs">
+<strong>Parameters</strong><table class="argument-info">
+<thead><tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tr>
+<th>$node</th>
+<td></td>
+<td><em></em></td>
+</tr>
+</table>
+</div>
+<div class="clear"></div>
+</div>
+<a id="\CamelSpider\Spider\SpiderDom::toText()" class="anchor"></a><div class="method public">
+<a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_public.png" style="margin-right: 5px" alt="public"><span class="highlight">toText</span><span class="nb-faded-text">(
+           $node
+          )
+        </span>
+        :
+          void</code><div class="description">
+<span class="attribute">static</span><p class="short_description">Convert HTML to plain text</p>
+</div>
+<div class="code-tabs">
+<div class="long-description">
+</div>
 <strong>Parameters</strong><table class="argument-info">
 <thead><tr>
 <th>Name</th>

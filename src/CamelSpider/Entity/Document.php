@@ -32,12 +32,14 @@ class Document extends ArrayCollection
     private $logger;
 
     private $asserts;
+
+    private $bigger = NULL;
+
     /**
      * Recebe a response HTTP e também dados da assinatura,
      * para alimentar os filtros que definem a relevânca do
      * conteúdo
      **/
-
     public function __construct(Crawler $crawler, InterfaceSubscription $subscription, $dependency = NULL)
     {
         $this->crawler = $crawler;
@@ -50,7 +52,6 @@ class Document extends ArrayCollection
                 }
             }
         }
-        
         $this->set('relevancy',  0);
         $this->processResponse();
     }
@@ -76,6 +77,7 @@ class Document extends ArrayCollection
      * Faz uma query no documento,
      * de acordo com os parâmetros definidos 
      * na assinatura
+     * @todo implementar!
      **/
     protected function setRelevancy()
     {
@@ -96,14 +98,14 @@ class Document extends ArrayCollection
     {
         $this->set('relevancy', $this->get('relevancy') + 1);
     }
-    
+
     /**
      * Compara documento atual com possível documento em DB
      * Se encontra, compara diferenças.
      * Se diferenças menores que 40%,
      * invalida.
      *
-     * @TODO metodo para consulta a DB ?
+     * @todo metodo para consulta a DB ?
      **/
     protected function checkDiff()
     {
@@ -111,6 +113,7 @@ class Document extends ArrayCollection
         //$this->subscription->getLink($this->getId())
         return true;
     }
+
     /**
      * localiza a tag filha de body que possui maior
      * quantidade de texto
@@ -119,22 +122,15 @@ class Document extends ArrayCollection
     {
         $data = $this->crawler->filter($tag);
 
-        foreach($data as $node)
+        foreach(clone $data as $node)
         {
-            $a = $node->getElementsByTagName('a');
-            if(!$this->bigger ||
-                (
-                    strlen($node->nodeValue) > strlen($this->bigger->nodeValue) &&
-                    SpiderDom::countInnerTags($node, 'a') < 15 && //limit number of links 
-                    SpiderDom::countInnerTags($node, 'javascript') < 2
-                )
-            ){
-                $this->bigger = $node;
+            if(SpiderDom::containerCandidate($node)){
+                $this->bigger = SpiderDom::getGreater($node, $this->bigger);
+                $this->saveBiggerToFile();
             }
         }
     }
 
-    private $bigger = NULL;
 
     protected function getBiggerTag()
     {
@@ -147,20 +143,25 @@ class Document extends ArrayCollection
         }
     }
 
+    protected function saveBiggerToFile()
+    {
+        $this->cache->saveDomToHtmlFile($this->bigger, $this->get('slug'));
+        $this->cache->saveDomToTxtFile($this->bigger, $this->get('slug'));
+    }
     /**
      * Converte o elemento com maior probabilidade de
      * ser o container do conteúdo em plain text
      */
     protected function setText()
     {
-        $this->cache->saveDomToHtmlFile($this->bigger, $this->get('slug'));
+        $this->saveBiggerToFile();
         $this->set('text', SpiderDom::toText($this->bigger));
 
     }
     protected function setSlug()
     {
         $this->set('slug', substr(Urlizer::urlize($this->get('title')), 0, 30));
-    } 
+    }
     protected function processResponse()
     {
         $this->logger('processing');
@@ -171,20 +172,14 @@ class Document extends ArrayCollection
 
         $this->setTitle();
         $this->setSlug();
-
         $this->getBiggerTag();
-
         $this->setRelevancy();
-        
+
         if($this->getRelevancy() > 0)
         {
             $this->setText();   
         }
-
-        //printf("body: %d\n", $this->crawler->filter('body')->text());
     }
-
-
 
     /**
     * Verificar data container se link já foi catalogado.
@@ -194,7 +189,7 @@ class Document extends ArrayCollection
     protected function getRelevancy()
     {
         return $this->get('relevancy');
-    }    
+    }
 
 
 }

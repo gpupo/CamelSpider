@@ -14,19 +14,65 @@ namespace CamelSpider\Spider;
 class SpiderDom
 {
 
+
+    /**
+     * Verifica se um DomElement é candidato a ser o container
+     * de conteúdo
+     * @todo utilizar configuracões injetadas
+     */
+    public static function containerCandidate($node)
+    {
+        if(self::textLen($node) < 500)
+            return false;
+
+        if(self::countInnerTags($node, 'a') > 5)
+            return false;
+
+        if(self::countInnerTags($node, 'javascript') > 2)
+            return false;
+
+        return true;
+    }
+
+    public static function getGreater(\DOMElement $a, \DOMElement $b = NULL)
+    {
+
+        if(!$b)
+            return $a;
+
+        if(self::textLen($a) < self::textLen($b))
+            return $b;
+
+        return $a;
+   }
+
+
     public static function toHtml(\DOMElement $node)
     {
         return $node->ownerDocument->saveXML($node);
     }
     /**
      * Convert HTML to plain text
+     * @see http://www.php.net/manual/en/class.domtext.php
      */
     public static function toText(\DOMElement $node)
     {
+        return trim($node->textContent);
     }
+
+    public static function textLen($node)
+    {
+        return strlen(self::toText($node));
+    }
+
     public static function saveHtmlToFile(\DOMElement $node, $file)
     {
         return $node->ownerDocument->saveHTMLFile($file);
+    }
+
+    public static function saveTxtToFile(\DOMElement $node, $file)
+    {
+        return file_put_contents($file, self::toText($node));
     }
 
 

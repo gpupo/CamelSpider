@@ -25,7 +25,9 @@ class AbstractCache implements InterfaceCache
     public function checkDir()
     {
         $this->mkdir($this->cache_dir);
-        $this->mkdir($this->cache_dir . '/html');
+        foreach(array('/html', '/txt') as $subdir){
+            $this->mkdir($this->cache_dir . $subdir);
+        }
     }
 
     protected function logger($string, $type = 'info')
@@ -92,12 +94,32 @@ class AbstractCache implements InterfaceCache
             return true;
         }
     }
-    
+
+    public function getFileRandomPath($slug, $format)
+    {
+        return $this->cache_dir
+            . '/' 
+            . $format 
+            . '/' 
+            . $slug 
+            . '-' 
+            . sha1(microtime(true)) 
+            . '.'
+            . $format;
+    }
+
     public function saveDomToHtmlFile(\DOMElement $e, $slug)
     {
-        $file = $this->cache_dir . '/html/' . $slug . '-' . sha1(microtime(true)) . '.html';
-        $this->logger('saving DomElement as HTML in file ' . $file);
-        SpiderDom::saveHtmlToFile($e, $file);
+        $file = $this->getFileRandomPath($slug, 'html');
+        $this->logger('saving DomElement as HTML file ' . $file);
+        return SpiderDom::saveHtmlToFile($e, $file);
+    }
+
+    public function saveDomToTxtFile(\DOMElement $e, $slug)
+    {
+        $file = $this->getFileRandomPath($slug, 'txt');
+        $this->logger('saving DomElement as TXT file ' . $file);
+        return SpiderDom::saveTxtToFile($e, $file);
     }
 }
 
