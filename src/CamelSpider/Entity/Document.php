@@ -2,7 +2,7 @@
 
 namespace CamelSpider\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection,
+use CamelSpider\Entity\AbstractSpiderEgg,
     Symfony\Component\DomCrawler\Crawler,
     Symfony\Component\BrowserKit\Response,
     CamelSpider\Spider\SpiderAsserts,
@@ -20,16 +20,15 @@ use Doctrine\Common\Collections\ArrayCollection,
  */
 
 
-class Document extends ArrayCollection
+class Document extends AbstractSpiderEgg
 {
+    protected $name = 'Document';
 
     private $crawler;
 
     private $response;
 
     private $subscription;
-
-    private $logger;
 
     private $asserts;
 
@@ -39,6 +38,12 @@ class Document extends ArrayCollection
      * Recebe a response HTTP e também dados da assinatura,
      * para alimentar os filtros que definem a relevânca do
      * conteúdo
+     *
+     * Config:
+     *
+     *
+     * @param array $dependency Logger, Cache, array Config
+     *
      **/
     public function __construct(Crawler $crawler, InterfaceSubscription $subscription, $dependency = NULL)
     {
@@ -46,23 +51,18 @@ class Document extends ArrayCollection
         $this->subscription = $subscription;
 
         if($dependency){
-            foreach(array('logger', 'cache', 'config') as $k){
+            foreach(array('logger', 'cache') as $k){
                 if(isset($dependency[$k])){
                     $this->$k = $dependency[$k];
                 }
             }
         }
-        $this->set('relevancy',  0);
+        $config = isset($dependency['config']) ? $dependency['config'] : NULL;
+        parent::__construct(array('relevancy'=>0), $config);
         $this->processResponse();
     }
 
-	protected function logger($string, $type = 'info')
-	{
-        if($this->logger){
-            return $this->logger->$type('#CamelSpiderEntityDocument ' . $string);
-        }
-    }
-    protected function setTitle()
+	    protected function setTitle()
     {
         $title = $this->crawler->filter('title')->text();
         $this->set('title', trim($title));
@@ -86,7 +86,6 @@ class Document extends ArrayCollection
      **/
     protected function setRelevancy()
     {
-
         if(!$this->bigger)
         {
             $this->logger('Content too short');
@@ -102,19 +101,9 @@ class Document extends ArrayCollection
         $this->set('relevancy', $this->get('relevancy') + 1);
     }
 
-    /**
-     * Compara documento atual com possível documento em DB
-     * Se encontra, compara diferenças.
-     * Se diferenças menores que 40%,
-     * invalida.
-     *
-     * @todo metodo para consulta a DB ?
-     **/
-    protected function checkDiff()
+    protected function diffValue($a, $b)
     {
-        $this->logger('validating diff');
-        //$this->subscription->getLink($this->getId())
-        return true;
+
     }
 
     /**
@@ -174,11 +163,6 @@ class Document extends ArrayCollection
     protected function processResponse()
     {
         $this->logger('processing');
-
-        if(!$this->checkDiff()){
-            return false;
-        }
-
         $this->setTitle();
         $this->setSlug();
         $this->getBiggerTag();

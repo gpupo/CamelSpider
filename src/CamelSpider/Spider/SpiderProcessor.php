@@ -15,7 +15,6 @@ use CamelSpider\Entity\Link,
     CamelSpider\Entity\Document,
     CamelSpider\Entity\InterfaceSubscription,
     CamelSpider\Spider\SpiderAsserts as a,
-    CamelSpider\Spider\InterfaceCache,
     Zend\Uri\Uri;
 
 /**
@@ -26,7 +25,7 @@ use CamelSpider\Entity\Link,
  * @author      Gilmar Pupo <g@g1mr.com>
  *
 */
-class SpiderProcessor
+class SpiderProcessor extends AbstractSpider
 {
     protected $config;
 
@@ -95,19 +94,6 @@ class SpiderProcessor
     protected function getSubscription()
     {
         return $this->subscription;
-    }
-
-    /**
-     * return memory in MB
-     **/
-    protected function getMemoryUsage()
-    {
-        return round((\memory_get_usage()/1024) / 1024);
-    }
-
-    protected function getTimeUsage()
-    {
-        return round(microtime(true) - $this->timeParcial);
     }
 
     protected function checkLimit()
@@ -199,22 +185,7 @@ EOF;
         return $client;
     }
 
-    /**
-    * Processa o conteúdo do documento.
-    * Neste momento são aplicados os filtros de conteúdo
-    * e retornando flag se o conteúdo é relevante
-    **/
-    protected function getResponse()
-    {
-        return $this->goutte->getResponse();
-    }
-
-    protected function getRequest()
-    {
-        return $this->goutte->getRequest();
-    }
-
-    protected function getDomain()
+   protected function getDomain()
     {
         return $this->subscription->get('domain');
     }
@@ -338,7 +309,14 @@ EOF;
 
             if($target instanceof Link){
                 $this->logger('processing document');
-                $target->setDocument(clone $crawler, $this->getSubscription(), $this->transferDependency());
+
+                //Verifica se a diff do documento coletado com o documento
+                //existente em DB é maior que X %
+
+                $this->logger('validating if document is fresh');
+                if(DocumentManager::isFresh($this->getBody(), $link, $this->getSubscription())){
+                    $target->setDocument(clone $crawler, $this->getSubscription(), $this->transferDependency());
+                }
             }
 		    $target->set('status', 1); //done!
             if($withLinks){

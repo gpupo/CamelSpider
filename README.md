@@ -47,8 +47,7 @@ acessados diretamente do cache, pela aplicação que os utilizarão.
 
 * Symfony Components: BrowserKit, ClassLoader, CssSelector, DomCrawler, Finder, and Process
 * Zend libraries: Cache, Date, Uri, Http, and Validate
-
-
+* PEAR [Text_Diff](http://pear.php.net/package/Text_Diff)
 
 ## Você pode contribuir com o projeto!
 
