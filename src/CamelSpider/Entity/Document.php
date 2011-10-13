@@ -65,8 +65,13 @@ class Document extends ArrayCollection
     protected function setTitle()
     {
         $title = $this->crawler->filter('title')->text();
-        $this->set('title', $title);
-        $this->logger('setting Title as [' . $title . ']');
+        $this->set('title', trim($title));
+        $this->logger('setting Title as [' . $this->getTitle() . ']');
+    }
+
+    public function getTitle()
+    {
+        return $this->get('title');
     }
 
     protected function getBody()
@@ -82,7 +87,7 @@ class Document extends ArrayCollection
     protected function setRelevancy()
     {
 
-        if(!$this->bigger || strlen($this->bigger->nodeValue) < 200)
+        if(!$this->bigger)
         {
             $this->logger('Content too short');
         }
@@ -143,8 +148,9 @@ class Document extends ArrayCollection
 
     protected function saveBiggerToFile()
     {
+        $title = '# '. $this->getTitle() . "\n\n";
         $this->cache->saveDomToHtmlFile($this->bigger, $this->get('slug'));
-        $this->cache->saveDomToTxtFile($this->bigger, $this->get('slug'));
+        $this->cache->saveDomToTxtFile($this->bigger, $this->get('slug'), $title);
     }
     /**
      * Converte o elemento com maior probabilidade de
@@ -152,10 +158,15 @@ class Document extends ArrayCollection
      */
     protected function setText()
     {
-        $this->saveBiggerToFile();
-        $this->set('text', SpiderDom::toText($this->bigger));
-
+        if($this->bigger){
+            $this->set('text', SpiderDom::toText($this->bigger));
+        }
+        else
+        {
+            $this->set('text', NULL);
+        }
     }
+
     protected function setSlug()
     {
         $this->set('slug', substr(Urlizer::urlize($this->get('title')), 0, 30));

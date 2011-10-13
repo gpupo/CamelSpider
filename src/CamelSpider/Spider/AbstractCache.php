@@ -115,11 +115,11 @@ class AbstractCache implements InterfaceCache
         return SpiderDom::saveHtmlToFile($e, $file);
     }
 
-    public function saveDomToTxtFile(\DOMElement $e, $slug)
+    public function saveDomToTxtFile(\DOMElement $e, $slug, $title = NULL)
     {
         $file = $this->getFileRandomPath($slug, 'txt');
         $this->logger('saving DomElement as TXT file ' . $file);
-        return SpiderDom::saveTxtToFile($e, $file);
+        return SpiderDom::saveTxtToFile($e, $file, $title);
     }
 }
 

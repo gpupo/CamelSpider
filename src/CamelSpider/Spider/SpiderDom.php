@@ -81,9 +81,9 @@ class SpiderDom
         return $node->ownerDocument->saveHTMLFile($file);
     }
 
-    public static function saveTxtToFile(\DOMElement $node, $file)
+    public static function saveTxtToFile(\DOMElement $node, $file, $title = NULL)
     {
-        return file_put_contents($file, self::toText($node));
+        return file_put_contents($file, $title . self::toText($node));
     }
 
 
