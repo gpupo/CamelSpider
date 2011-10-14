@@ -30,19 +30,6 @@ class SpiderProcessor extends AbstractSpider
 
     protected $name = 'Processor';
 
-    protected $goutte;
-
-    protected $elements;
-
-    protected $cache;
-
-    protected $requests = 0;
-
-    protected $cached = 0;
-
-    protected $errors = 0;
-
-    protected $subscription;
     /**
     * @param \Goutte\Client Goutte $goutte Crawler Goutte
     * @param InterfaceCache $cache A class facade for Zend Cache
@@ -60,37 +47,8 @@ class SpiderProcessor extends AbstractSpider
         return $this;
     }
 
-    private function transferDependency()
-    {
-        return array(
-            'logger' => $this->logger,
-            'cache'  => $this->cache,
-            'config' => $this->config
-        );
-    }
-    protected function checkLimit()
-    {
-        $this->logger('Current memory usage:' . $this->getMemoryUsage() . 'Mb');
-
-        if($this->getMemoryUsage() >= $this->getConfig('memory_limit', 80)){
-           $this->logger('Limit of memory reached', 'err');
-           return false;
-        }
-        if($this->requests >= $this->getConfig('requests_limit', 300)){
-            //throw new \Exception ('Limit reached');
-            $this->logger('Limit of requests reached', 'err');
-            return false;
-        }
-        $this->requests++;
-        return true;
-    }
-
     public function debug()
     {
-        //var_dump($this->elements);
-        //var_dump($this->goutte);
-        //var_dump($this->getRequest());
-        //var_dump($this->getResponse());
         echo $this->getResume();
     }
 
@@ -108,15 +66,16 @@ class SpiderProcessor extends AbstractSpider
 
 EOF;
 
-        return sprintf(
-            $template,
-            $this->subscription,
-            $this->getMemoryUsage(),
-            $this->requests,
-            $this->getTimeUsage(),
-            $this->cached,
-            $this->errors
-        );
+        return "\n\n"
+            . sprintf(
+                $template,
+                $this->subscription,
+                $this->getMemoryUsage(),
+                $this->requests,
+                $this->getTimeUsage(),
+                $this->cached,
+                $this->errors
+            );
 
 
     }
@@ -131,30 +90,6 @@ EOF;
         }
         $this->logger('Pool count:' . $pool->count());
         return $pool;
-    }
-
-    public function getCrawler($URI, $mode = 'GET')
-    {
-
-        $this->logger( 'created a Crawler for [' . $URI . ']');
-
-        try {
-            $client = $this->goutte->request($mode, $URI);
-        }
-        catch(\Zend\Http\Client\Adapter\Exception\TimeoutException $e)
-        {
-            $this->logger( 'faillure on create a crawler [' . $URI . ']', 'err');	
-        }
-
-        //Error in request
-        $this->logger('Status Code: [' . $this->getResponse()->getStatus() . ']');
-        if($this->getResponse()->getStatus() >= 400){
-            throw new \Exception('Request with error: ' . $this->getResponse()->getStatus() 
-                . " - " . $client->text()
-            );
-        }
-
-        return $client;
     }
 
     /**
@@ -210,7 +145,7 @@ EOF;
             
             $this->logger(
                 'outside the scope of ['
-                . $this->subscription->getDomain()
+                . $this->subscription->getDomainString()
                 . ']:[' 
                 . $link->get('href') 
                 . ']'
@@ -218,9 +153,9 @@ EOF;
 
             return false;
         }
-    
+
         //Evita duplicidade
-		if($this->requests > 0 && $this->cache->isObject($link->getId())){
+        if($this->requests > 0 && $this->cache->isObject($link->getId())){
             $this->logger('cached:[' . $link->get('href') . ']');
             $this->cached++;
 		    return false;
@@ -237,9 +172,7 @@ EOF;
 	
     protected function collect($target, $withLinks = false)
     {
-        
         $URI = $target->get('href');
-		$this->logger( 'trying to collect links in [' . $URI . ']');
 		try{
 			if(!$this->isValidLink($URI)){
 			    $this->logger('URI wrong:[' . $URI . ']', 'err');
@@ -266,14 +199,14 @@ EOF;
 
 
             if($target instanceof Link){
-                $this->logger('processing document');
-
                 //Verifica se a diff do documento coletado com o documento
                 //existente em DB é maior que X %
-
-                $this->logger('validating if document is fresh');
-                if(DocumentManager::isFresh($this->getBody(), $link, $this->getSubscription())){
+                if(DocumentManager::isFresh($this->getBody(), $target, $this->getSubscription())){
                     $target->setDocument(clone $crawler, $this->getSubscription(), $this->transferDependency());
+                    $this->logger('document IS fresh');
+                }
+                else{
+                    $this->logger('document isnt fresh');
                 }
             }
 		    $target->set('status', 1); //done!
@@ -344,7 +277,6 @@ EOF;
                 //return false;
             }
             $this->logger( '====== Request number #' . $this->requests . '======');
-            $this->logger('pool start new collect'); 
             try{
                 $this->collect($link, $withLinks);
             }
@@ -353,11 +285,9 @@ EOF;
             }
 
 		    $this->logger($this->getResume());
-            $this->logger('====== Request end ======');
-
         }
-    }    
-    
+    }
+
     protected function restart()
     {
         $this->goutte->restart();

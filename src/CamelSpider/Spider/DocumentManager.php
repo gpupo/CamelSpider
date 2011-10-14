@@ -15,12 +15,11 @@ class DocumentManager
 {
     /**
      * Verifica se o documento é novo
-     * @todo implementar
+     * @todo implementar get Raw
      */
-    public static function isFresh(string $body, InterfaceLink $link, InterfaceSubscription $subscription)
+    public static function isFresh($body, InterfaceLink $link, InterfaceSubscription $subscription)
     {
-
-        if($existent = $subscription->getLink($this->getId()))
+        if($existent = $subscription->getLink($link->getId()))
         {
             if(
                 SpiderText::diffPercentage(

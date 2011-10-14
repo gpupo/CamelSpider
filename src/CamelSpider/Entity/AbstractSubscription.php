@@ -34,9 +34,13 @@ abstract class AbstractSubscription extends ArrayCollection implements Interface
         return $this->get('filters');
     }
 
-    public function __toString()
+    public function getDomainString()
     {
         return implode(',', $this->getDomain());
+    }
+    public function __toString()
+    {
+        return $this->getDomainString();
     }
 
     public function getMaxDepth()
