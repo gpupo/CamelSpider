@@ -93,6 +93,7 @@ abstract class AbstractSpider extends AbstractSpiderEgg
          * Verifica o tipo de login requerido
          */
     }
+
     /**
      * return memory in MB
      **/
@@ -105,7 +106,9 @@ abstract class AbstractSpider extends AbstractSpiderEgg
     {
         return round(microtime(true) - $this->timeParcial);
     }
+
     protected $limitReached = false;
+
     protected function checkLimit()
     {
         if($this->limitReached){
@@ -127,7 +130,5 @@ abstract class AbstractSpider extends AbstractSpiderEgg
         }
         return true;
     }
-
-
 
 }
