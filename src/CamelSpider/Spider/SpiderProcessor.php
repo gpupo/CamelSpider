@@ -85,10 +85,10 @@ EOF;
         $pool =  $this->elements->getPool();
         if($pool->count() < 1)
         {
-            $this->logger('Pool empty on the ' . $mode);
+            $this->logger('Pool empty on the ' . $mode, 'info', 5);
             return false;
         }
-        $this->logger('Pool count:' . $pool->count());
+        $this->logger('Pool count:' . $pool->count(), 'info', 5);
         return $pool;
     }
 
@@ -126,7 +126,7 @@ EOF;
 			substr($href, 0, 1) == '#'
 		)
 		{
-			$this->logger('HREF descarted:[' . $href. ']', 'info');
+			$this->logger('HREF descarted:[' . $href. ']', 'info', 5);
 			return false;
 		}
 		
@@ -144,12 +144,14 @@ EOF;
         if(!$this->subscription->insideScope($link)){
             
             $this->logger(
-                'outside the scope of ['
+                'outside the scope'
+                . "\n"
+                . '['
                 . $this->subscription->getDomainString()
-                . ']:[' 
+                . "]\n[" 
                 . $link->get('href') 
                 . ']'
-            );
+            ,'info', 5);
 
             return false;
         }
@@ -173,6 +175,12 @@ EOF;
     protected function collect($target, $withLinks = false)
     {
         $URI = $target->get('href');
+
+        if($target instanceof InterfaceSubscription)
+        {
+            //check format1
+            
+        }
 		try{
 			if(!$this->isValidLink($URI)){
 			    $this->logger('URI wrong:[' . $URI . ']', 'err');
@@ -211,20 +219,19 @@ EOF;
             }
 		    $target->set('status', 1); //done!
             if($withLinks){
-                $this->logger('go to the scan more links!');
+                $this->logger('go to the scan more links!', 'info', 5);
                 try{
                     $target->set('linksCount', $this->collectLinks($crawler));
                 }
                 catch(\Exception $e)
                 {
-
                     $this->logger($e->getMessage(), 'err');
                     $this->debug();
                     die($e->getMessage() . "!\n");
                 }
 
             }
-            $this->logger('saving object on cache');
+            $this->logger('saving object on cache', 'info', 5);
             $this->saveLink($target);
             return true;
         }
@@ -253,8 +260,10 @@ EOF;
 
         foreach($aCollection as $node)
         {
-            $link = new Link($node);
-            $this->processAddLink($link);
+            if($this->checkLimit()){
+                $link = new Link($node);
+                $this->processAddLink($link);
+            }
         }
 
         if($aCollection->count() < 1 && $this->requests === 0){
@@ -269,12 +278,9 @@ EOF;
         }
 
         foreach($pool as $link){
-            
-            
             if(!$this->checkLimit()){
                 $this->errLink($link, 'Limit reached');
                 break;
-                //return false;
             }
             $this->logger( '====== Request number #' . $this->requests . '======');
             try{
@@ -295,14 +301,6 @@ EOF;
         $this->elements = new SpiderElements;
     }
 
-    protected function performLogin()
-    {
-        /**
-         * @todo Verifica se a assinatura precisa login
-         * Usa o Goutte para logar
-         * Verifica o tipo de login requerido
-         */
-    }
     public function checkUpdate(InterfaceSubscription $subscription)
 	{
 
@@ -325,9 +323,6 @@ EOF;
             $this->poolCollect();	
         }
 
-        /**
-         * print resume on CLI 
-         **/
         echo $this->getResume();
         return $this->elements;
 	}

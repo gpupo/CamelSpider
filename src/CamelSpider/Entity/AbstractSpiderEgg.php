@@ -50,7 +50,7 @@ class AbstractSpiderEgg extends ArrayCollection
      */
     protected function logger($string, $type = 'info', $level = 1)
     {
-        if($this->logger){
+        if($this->logger && $this->getConfig('log_level', 1) >= $level){
             return $this->logger->$type('#CamelSpider ' . $this->name . ':'  . $string);
         }
     }

@@ -14,12 +14,13 @@ namespace CamelSpider\Spider;
 use Zend\Cache\Cache as Zend_Cache,
     CamelSpider\Spider\InterfaceCache,
     CamelSpider\Spider\AbstractSpiderCache,
-    CamelSpider\Spider\SpiderDom;
+    CamelSpider\Spider\SpiderDom,
+    CamelSpider\Entity\AbstractSpiderEgg;
 
-class AbstractCache implements InterfaceCache
+class AbstractCache extends AbstractSpiderEgg implements InterfaceCache
 {
+    protected $name = 'Cache';
     protected $cache_dir;
-    protected $logger;
     protected $cache;
 
     public function checkDir()
@@ -29,14 +30,6 @@ class AbstractCache implements InterfaceCache
             $this->mkdir($this->cache_dir . $subdir);
         }
     }
-
-    protected function logger($string, $type = 'info')
-    {
-        if($this->logger){
-            return $this->logger->$type('#CamelSpiderCache ' . $string);
-        }
-    }
-
     protected function mkdir($dir)
     {
         if (!is_dir($dir)) {
@@ -77,19 +70,18 @@ class AbstractCache implements InterfaceCache
             $this->logger('Object id Empty!', 'err');
             return false;
         }
-        $this->logger('Saving object ['. $id .']');
+        $this->logger('Saving object');
         return $this->cache->save($data, $id, $tags);
     }
 
     public function getObject($id)
     {
-        $this->logger('Get object ['. $id .']');
+        $this->logger('Using from the cache');
         return $this->cache->load($id);
     }
     
     public function isObject($id)
     {
-        $this->logger('Check object ['. $id .']');
         if($this->getObject($id) !== false){
             return true;
         }

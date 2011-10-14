@@ -40,8 +40,8 @@ injection).
 Você pode implementar este serviço de cache mas também pode utilizar o  [Camel Spider Bundle](http://github.com/gpupo/CamelSpiderBundle) como referência de implementação.
 
 
-Os objetos capturados são retornados pela processamento inicial, e são
-acessados diretamente do cache, pela aplicação que os utilizarão.
+Os objetos capturados são retornados pelo processamento inicial, e são
+acessados diretamente do cache, pela aplicação que os utiliza.
 
 ## Dependências
 

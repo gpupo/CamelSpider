@@ -29,7 +29,7 @@ abstract class AbstractSpider extends AbstractSpiderEgg
     {
 
         $this->logger( 'created a Crawler for [' . $URI . ']');
-
+        $this->requests++;
         try {
             $client = $this->goutte->request($mode, $URI);
         }
@@ -85,33 +85,46 @@ abstract class AbstractSpider extends AbstractSpiderEgg
     }
 
 
+    protected function performLogin()
+    {
+        /**
+         * @todo Verifica se a assinatura precisa login
+         * Usa o Goutte para logar
+         * Verifica o tipo de login requerido
+         */
+    }
     /**
      * return memory in MB
      **/
     protected function getMemoryUsage()
     {
-        return round((\memory_get_usage()/1024) / 1024);
+        return round((\memory_get_usage(true)/1024) / 1024);
     }
 
     protected function getTimeUsage()
     {
         return round(microtime(true) - $this->timeParcial);
     }
-
+    protected $limitReached = false;
     protected function checkLimit()
     {
-        $this->logger('Current memory usage:' . $this->getMemoryUsage() . 'Mb');
+        if($this->limitReached){
+            return false;
+        }
 
-        if($this->getMemoryUsage() >= $this->getConfig('memory_limit', 80)){
-           $this->logger('Limit of memory reached', 'err');
+        $this->logger('Current memory usage:' . $this->getMemoryUsage() . 'Mb', 'info', 5);
+
+        if($this->getMemoryUsage() > $this->getConfig('memory_limit', 80)){
+            $this->logger('Limit of memory reached', 'err');
+            $this->limitReached = true;
            return false;
         }
         if($this->requests >= $this->getConfig('requests_limit', 300)){
             //throw new \Exception ('Limit reached');
+            $this->limitReached = true;
             $this->logger('Limit of requests reached', 'err');
             return false;
         }
-        $this->requests++;
         return true;
     }
 
