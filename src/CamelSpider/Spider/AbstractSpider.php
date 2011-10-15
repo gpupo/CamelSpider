@@ -7,9 +7,9 @@ use CamelSpider\Entity\AbstractSpiderEgg;
 abstract class AbstractSpider extends AbstractSpiderEgg
 {
 
-    protected $timeStart;
+    protected $time = array('total' => 0, 'parcial' => 0);
 
-    protected $elements;
+    protected $pool;
 
     protected $requests = 0;
 
@@ -23,7 +23,7 @@ abstract class AbstractSpider extends AbstractSpiderEgg
 
     protected $goutte;
 
-
+    protected $limitReached = false;
 
     public function getCrawler($URI, $mode = 'GET')
     {
@@ -52,7 +52,7 @@ abstract class AbstractSpider extends AbstractSpiderEgg
 
     protected function getBody()
     {
-        return $this->goutte->getResponse()->getContent();
+        return $this->getResponse()->getContent();
     }
 
     protected function getRequest()
@@ -72,7 +72,7 @@ abstract class AbstractSpider extends AbstractSpiderEgg
 
    protected function getDomain()
     {
-        return $this->subscription->get('domain');
+        return $this->getSubscription()->get('domain');
     }
 
     protected function getLinkTags()
@@ -84,6 +84,48 @@ abstract class AbstractSpider extends AbstractSpiderEgg
         );
     }
 
+    protected function getResumeTemplate()
+    {
+        $template = <<<EOF
+ ====================RESUME=========================
+    %s
+    - Memory usage...........................%s Mb
+    - Number of new requests.................%s 
+    - Time parcial...........................%s Seg
+    - Time total.............................%s Seg
+    - Objects in cache.......................%s
+    - Errors.................................%s
+
+EOF;
+
+        return $template;
+    }
+
+    /**
+     * Retorna o resumo de operações até o momento
+     * @return string
+     */
+    public function getResume()
+    {
+
+        return "\n\n"
+            . sprintf(
+                $this->getResumeTemplate(),
+                $this->subscription,
+                $this->getMemoryUsage(),
+                $this->requests,
+                $this->getTimeUsage('parcial'),
+                $this->getTimeUsage('total'),
+                $this->cached,
+                $this->errors
+            );
+    }
+
+
+    public function debug()
+    {
+        echo $this->getResume();
+    }
 
     protected function performLogin()
     {
@@ -95,19 +137,22 @@ abstract class AbstractSpider extends AbstractSpiderEgg
     }
 
     /**
-     * return memory in MB
+     * Get Memory usage in MB
+     * @return int
      **/
     protected function getMemoryUsage()
     {
         return round((\memory_get_usage(true)/1024) / 1024);
     }
 
-    protected function getTimeUsage()
+    /**
+     * @return int
+     */
+    protected function getTimeUsage($type = 'total')
     {
-        return round(microtime(true) - $this->timeParcial);
+        return round(microtime(true) - $this->time[$type]);
     }
 
-    protected $limitReached = false;
 
     protected function checkLimit()
     {
@@ -131,4 +176,8 @@ abstract class AbstractSpider extends AbstractSpiderEgg
         return true;
     }
 
+    protected function setTime($type = 'total')
+    {
+        $this->time[$type] = microtime(true);
+    }
 }

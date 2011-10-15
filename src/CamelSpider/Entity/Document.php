@@ -78,6 +78,7 @@ class Document extends AbstractSpiderEgg
     {
         return $this->crawler->filter('body');
     }
+
     protected function getRaw()
     {
         return SpiderDom::toHtml($this->getBody());
@@ -116,7 +117,6 @@ class Document extends AbstractSpiderEgg
         } else {
             $this->logger('Document contain bad keywords');
         }
-
     }
 
     protected function addRelevancy()
