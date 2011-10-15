@@ -2,7 +2,8 @@
 
 namespace CamelSpider\Spider;
 
-use CamelSpider\Entity\AbstractSpiderEgg;
+use CamelSpider\Entity\AbstractSpiderEgg,
+    CamelSpider\Entity\Pool;
 
 abstract class AbstractSpider extends AbstractSpiderEgg
 {
@@ -16,6 +17,8 @@ abstract class AbstractSpider extends AbstractSpiderEgg
     protected $cached = 0;
 
     protected $errors = 0;
+
+    protected $success = 0;
 
     protected $subscription;
 
@@ -135,6 +138,20 @@ EOF;
          * Verifica o tipo de login requerido
          */
     }
+
+    protected function restart()
+    {
+        $this->goutte->restart();
+        $this->start();
+    }
+
+    protected function start()
+    {
+        $this->requests = $this->errors = 0;
+        $this->setTime('parcial');
+        $this->pool = new Pool($this->transferDependency());
+    }
+
 
     /**
      * Get Memory usage in MB

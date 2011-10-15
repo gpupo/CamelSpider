@@ -2,18 +2,12 @@
 
 namespace CamelSpider\Spider;
 
-use Respect\Validation\Validator as v;
+use Respect\Validation\Validator as v,
+    CamelSpider\Entity\InterfaceLink,
+    Zend\Uri\Uri;
 
 class SpiderAsserts 
 {
-
-    public static function respect()
-    {
-        $validUsername = v::alnum()
-            ->noWhitespace()
-            ->length(1,15);
-        return $validUsername->validate('alganet');
-    }
 
     public static function containKeywords($txt, array $keywords = null)
     {
@@ -28,5 +22,29 @@ class SpiderAsserts
 
         return false;
     }
+
+    public static function isDocumentHref($href)
+    {
+        if(
+            stripos($href, 'mail') == true ||
+            empty($href) ||
+            substr($href, 0,10) == 'javascript' ||
+            substr($href, 0, 1) == '#'
+        ) {
+            return false;
+        }
+        $zendUri = new Uri($href);
+        if ($zendUri->isValid()) {
+            return true;
+        }
+        return false;
+    }
+
+
+    public static function isDocumentLink(InterfaceLink $link)
+    {
+        return self::isDocumentHref($link->getHref());
+    }
+
 }
 

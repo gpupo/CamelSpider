@@ -62,7 +62,6 @@ abstract class AbstractSubscription extends ArrayCollection implements Interface
         return $this->get('max_depth');
     }
 
-    
     public function getLink($sha1)
     {
         //make somethin cool with your DB!
@@ -77,10 +76,11 @@ abstract class AbstractSubscription extends ArrayCollection implements Interface
         return false;
     }
 
-    public function getMinimal()
+    public function toMinimal()
     {
         return $this;
     }
+
     protected function inDomain($str)
     {
         foreach($this->getDomain() as $domain)
@@ -94,12 +94,13 @@ abstract class AbstractSubscription extends ArrayCollection implements Interface
 
     public function insideScope(Link $link)
     {
-        if(
+        if (
             substr($link->get('href'), 0, 4) == 'http' && 
             !$this->inDomain($link->get('href'))
-		){
+        ) {
             return false;
         }
+
         return true;
     }
 

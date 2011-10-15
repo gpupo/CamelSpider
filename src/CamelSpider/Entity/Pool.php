@@ -1,6 +1,6 @@
 <?php
 
-namespace CamelSpider\Spider;
+namespace CamelSpider\Entity;
 
 use CamelSpider\Entity\AbstractSpiderEgg,
     CamelSpider\Entity\InterfaceLink;
@@ -36,7 +36,16 @@ class Pool extends AbstractSpiderEgg
      */
     public function getWaiting()
     {
-       return $this->filter(function ($e) { return $e->isWaiting();}); 
+        return $this->filter(
+            function ($link) {
+
+                if ($link instanceof Link) {
+                    return $link->isWaiting();
+                }
+
+                return false;
+            }
+        );
     }
 
     public function getPool($mode)

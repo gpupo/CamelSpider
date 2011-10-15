@@ -15,8 +15,7 @@ use CamelSpider\Entity\Link,
     CamelSpider\Entity\Document,
     CamelSpider\Entity\Pool,
     CamelSpider\Entity\InterfaceSubscription,
-    CamelSpider\Spider\SpiderAsserts as a,
-    Zend\Uri\Uri;
+    CamelSpider\Spider\SpiderAsserts as a;
 
 /**
  * Process every subscription
@@ -26,10 +25,10 @@ use CamelSpider\Entity\Link,
  * @author      Gilmar Pupo <g@g1mr.com>
  *
 */
-class SpiderProcessor extends AbstractSpider
+class Indexer extends AbstractSpider
 {
 
-    protected $name = 'Processor';
+    protected $name = 'Indexer';
 
     /**
     * @param \Goutte\Client Goutte $goutte Crawler Goutte
@@ -48,34 +47,8 @@ class SpiderProcessor extends AbstractSpider
         return $this;
     }
 
-	protected function isValidLink($href)
-	{
-		if(
-			
-			stripos($href, 'mail') == true ||
-			
-		 	empty($href) ||
-		 
-			substr($href, 0,10) == 'javascript' ||
-		 
-			substr($href, 0, 1) == '#'
-		)
-		{
-			$this->logger('HREF descarted:[' . $href. ']', 'info', 5);
-			return false;
-		}
-		
-		$zendUri = new Uri($href);
-		if($zendUri->isValid()){
-			return true;
-		}
-		$this->logger('HREF malformed:[' . $href. ']', 'info');
-		return false;
-    }
-
-    protected function processAddLink($link)
+    protected function addLink(Link $link)
     {
-
         if (!$this->subscription->insideScope($link)) {
 
             $this->logger(
@@ -92,15 +65,13 @@ class SpiderProcessor extends AbstractSpider
         }
 
         //Evita links inválidos
-        if (!$this->isValidLink($link->get('href'))) {
+        if (!SpiderAsserts::isDocumentLink($link)) {
+            $this->logger('Href refused', 'info', 5);
             return false;
         }
 
         //Evita duplicidade
-        if (
-            $this->requests > 0 &&
-            $this->cache->isObject($link->getId())
-        ){
+        if ($this->requests > 0 && $this->cache->isObject($link->getId())) {
             $this->logger('cached:[' . $link->get('href') . ']');
             $this->cached++;
             return false;
@@ -109,7 +80,7 @@ class SpiderProcessor extends AbstractSpider
         return $this->pool->save($link);
     }
 
-    protected function collect($target, $withLinks = false)
+    protected function collect(InterfaceLink $target, $withLinks = false)
     {
         $URI = $target->get('href');
 
@@ -118,7 +89,7 @@ class SpiderProcessor extends AbstractSpider
             //check format1
         }
 		try{
-			if(!$this->isValidLink($URI)){
+			if(!SpiderAsserts::isDocumentHref($URI)){
 			    $this->logger('URI wrong:[' . $URI . ']', 'err');
                 $this->pool->errLink($target, 'invalid URL');
 			    return false;
@@ -166,7 +137,8 @@ class SpiderProcessor extends AbstractSpider
             }
 
             $this->logger('saving object on cache', 'info', 5);
-            $this->saveLink($target);
+            $this->pool->save($target);
+            $this->success++;
 
             return true;
         }
@@ -196,7 +168,7 @@ class SpiderProcessor extends AbstractSpider
         {
             if($this->checkLimit()){
                 $link = new Link($node);
-                $this->processAddLink($link);
+                $this->addLink($link);
             }
         }
 
@@ -210,7 +182,7 @@ class SpiderProcessor extends AbstractSpider
         if (!$pool = $this->pool->getPool('test')) {
             return false;
         }
-
+var_dump($pool);
         foreach ($pool as $link) {
             if(!$this->checkLimit()){
                 $this->pool->errLink($link, 'Limit reached');
@@ -221,6 +193,7 @@ class SpiderProcessor extends AbstractSpider
                 $this->collect($link, $withLinks);
             }
             catch(\Exception $e){
+                $this->errors++;
                 $this->logger('Can\'t collect:' . $e->getMessage(), 'err');
             }
 
@@ -228,20 +201,10 @@ class SpiderProcessor extends AbstractSpider
         }
     }
 
-    protected function restart()
-    {
-        $this->goutte->restart();
-        $this->start();
-    }
-
-    protected function start()
-    {
-        $this->requests = $this->errors = 0;
-        $this->setTime('parcial');
-        $this->pool = new Pool($this->transferDependency());
-    }
-
-    public function checkUpdate(InterfaceSubscription $subscription)
+    /**
+     * Método principal que faz indexação
+     */
+    public function run(InterfaceSubscription $subscription)
     {
 
         $this->restart();
@@ -249,19 +212,18 @@ class SpiderProcessor extends AbstractSpider
         $this->performLogin();
         $this->collect($this->subscription, true);
 
-        //coletando links e conteúdo
         $i = 0;
         while (
             $i < $this->subscription->getMaxDepth()
-            && $this->getPool('looping')
+            && $this->pool->getPool('looping')
         ) {
             $this->poolCollect(true);
         }
 
-        //agora somente o conteúdo se ainda existir algo na fila
         if ($this->pool->getPool('conclusion')) {
             $this->poolCollect();	
         }
+
         echo $this->getResume();
 
         return $this->elements;

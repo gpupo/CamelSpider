@@ -7,19 +7,17 @@ use Doctrine\Common\Collections\ArrayCollection,
 
 class Link extends ArrayCollection implements InterfaceLink
 {
-	
-	
-	public function __construct($node = NULL)
-	{
-		$link = array();
-		
-		if($node){
-			$link = array(
-				'href' => $node->getAttribute('href'),
-				);
+    public function __construct($node = NULL)
+    {
+        $link = array();
+
+        if ($node) {
+            $link = array(
+                'href' => $node->getAttribute('href'),
+            );
         }
         $link['status'] = 0;
-		parent::__construct($link);
+        parent::__construct($link);
     }
 
     /**
@@ -30,13 +28,18 @@ class Link extends ArrayCollection implements InterfaceLink
         return sha1($this->get('href'));
     }
 
+    public function getHref()
+    {
+        return $this->get('href');
+    }
+
     public function isWaiting()
-	{
-		return  ($this->get('status') === 0) ? true : false;
+    {
+        return  ($this->get('status') === 0) ? true : false;
     }
     public function isDone()
     {
-		return  ($this->get('status') === 1) ? true : false;
+        return  ($this->get('status') === 1) ? true : false;
     }
     public function setDocument($response, $subscription, array $dependency = NULL)
     {
@@ -52,8 +55,11 @@ class Link extends ArrayCollection implements InterfaceLink
      */
     public function toMinimal()
     {
-        $this->removeElement('document');
-        $this->set('document', $this->getDocument()->toArray());
+        //$this->removeElement('document');
+
+        if ($this->getDocument() instanceof Document) {
+            $this->set('document', $this->getDocument()->toArray());
+        }
 
         return $this;
     }

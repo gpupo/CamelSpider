@@ -8,7 +8,6 @@ interface InterfaceLink
     public function getId();
     public function isDone();
     public function isWaiting();
-    public function getMinimal();
-    
+    public function toMinimal();
 
 }
