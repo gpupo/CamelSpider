@@ -18,7 +18,7 @@ class FactorySubscription
             'domain'      =>   $domain,
             'href'        =>   'http://'. $domain . '/',
             'max_depth'   =>   1,
-            'filters'     =>   array('contain' => 'tecnologia', 'notContain' => 'agrícola'),
+            'filters'     =>   array('contain' => 'jova', 'notContain' => 'agrícola'),
             'id'          =>   sha1($domain)
         );
 

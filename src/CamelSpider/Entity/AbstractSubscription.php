@@ -13,17 +13,22 @@ abstract class AbstractSubscription extends ArrayCollection implements Interface
     {
         return $this->get('id');
     }
-
-    public function getDomain()
+    private function _explode($x)
     {
-        if(strpos(',', $this->get('domain')) === true){
-            return explode(',', $this->get('domain'));
+        if(strpos(',', $x) === true){
+            return explode(',', $x);
         }
         else
         {
-            return array($this->get('domain'));
+            return array($x);
         }
     }
+
+    public function getDomain()
+    {
+        return $this->_explode($this->get('domain'));
+    }
+
     public function getHref()
     {
         return $this->get('href');
@@ -32,6 +37,15 @@ abstract class AbstractSubscription extends ArrayCollection implements Interface
     public function getFilters()
     {
         return $this->get('filters');
+    }
+
+    /**
+     * @param string $type contain|notContain
+     */
+    public function getFilter($type)
+    {
+        $filters = $this->getFilters();
+        return $this->_explode($filters[$type]);
     }
 
     public function getDomainString()

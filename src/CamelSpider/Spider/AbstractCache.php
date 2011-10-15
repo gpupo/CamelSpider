@@ -100,17 +100,27 @@ class AbstractCache extends AbstractSpiderEgg implements InterfaceCache
             . $format;
     }
 
+    /**
+     * @todo fix
+     */
     public function saveDomToHtmlFile(\DOMElement $e, $slug)
     {
         $file = $this->getFileRandomPath($slug, 'html');
-        $this->logger('saving DomElement as HTML file ' . $file);
-        return SpiderDom::saveHtmlToFile($e, $file);
+        $this->logger('saving DomElement as HTML file ');
+        return SpiderDom::saveDomToHtmlFile($e, $file);
+    }
+
+    public function saveToHtmlFile($html, $slug)
+    {
+        $file = $this->getFileRandomPath($slug, 'html');
+        $this->logger('saving HTML file ');
+        return file_put_contents($file, $html);
     }
 
     public function saveDomToTxtFile(\DOMElement $e, $slug, $title = NULL)
     {
         $file = $this->getFileRandomPath($slug, 'txt');
-        $this->logger('saving DomElement as TXT file ' . $file);
+        $this->logger('saving DomElement as TXT file');
         return SpiderDom::saveTxtToFile($e, $file, $title);
     }
 }

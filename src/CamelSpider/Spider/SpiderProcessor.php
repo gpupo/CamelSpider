@@ -156,6 +156,11 @@ EOF;
             return false;
         }
 
+        //Evita links inválidos
+		if(!$this->isValidLink($link->get('href'))) {
+		    return false;
+		}
+
         //Evita duplicidade
         if($this->requests > 0 && $this->cache->isObject($link->getId())){
             $this->logger('cached:[' . $link->get('href') . ']');
@@ -163,11 +168,6 @@ EOF;
 		    return false;
 		}
 		
-    //Evita links inválidos
-		if(!$this->isValidLink($link->get('href')))					
-		{
-		    return false;
-		}
 		
 		return $this->saveLink($link);
 	}
@@ -179,7 +179,6 @@ EOF;
         if($target instanceof InterfaceSubscription)
         {
             //check format1
-            
         }
 		try{
 			if(!$this->isValidLink($URI)){
@@ -203,8 +202,7 @@ EOF;
                 $this->logger('Crawler broken', 'err');
                 $this->errLink($target, 'impossible crawler');
                 return false;
-            }    
-
+            }
 
             if($target instanceof Link){
                 //Verifica se a diff do documento coletado com o documento
@@ -282,7 +280,7 @@ EOF;
                 $this->errLink($link, 'Limit reached');
                 break;
             }
-            $this->logger( '====== Request number #' . $this->requests . '======');
+            $this->logger("\n" . '====== Request number #' . $this->requests . '======');
             try{
                 $this->collect($link, $withLinks);
             }

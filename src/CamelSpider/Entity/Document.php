@@ -79,31 +79,45 @@ class Document extends AbstractSpiderEgg
         return $this->crawler->filter('body');
     }
     /**
-     * Faz uma query no documento,
-     * de acordo com os parâmetros definidos 
-     * na assinatura
-     * @todo implementar!
+     * Faz query no documento, de acordo com os parâmetros definidos
+     * na assinatura e define a relevância, sendo que esta relevância 
+     * pode ser:
+     *  1) Possivelmente contém conteúdo
+     *  2) Contém conteúdo e contém uma ou mais palavras chave desejadas 
+     *  pela assinatura ou não contém palavras indesejadas
+     *  3) Contém conteúdo, contém palavras indesejadas e não contém 
+     *  palavras indesejadas
      **/
     protected function setRelevancy()
     {
         if(!$this->bigger)
         {
             $this->logger('Content too short');
+            return false;
         }
-        else
-        {
+        $this->addRelevancy();
+
+        $txt = $this->getTitle() . "\n"  . $this->getText();
+
+        //Contain?
+        if(SpiderAsserts::containKeywords($txt, $this->subscription->getFilter('contain'))) {
             $this->addRelevancy();
+        } else {
+            $this->logger('Document not contain keywords');
         }
-        $this->addRelevancy(); //esperando implementação!!
+        //Not Contain?
+        if(!SpiderAsserts::containKeywords($txt, $this->subscription->getFilter('notContain'))) {
+            $this->addRelevancy();
+        } else {
+            $this->logger('Document contain bad keywords');
+        }
+
     }
+
     protected function addRelevancy()
     {
         $this->set('relevancy', $this->get('relevancy') + 1);
-    }
-
-    protected function diffValue($a, $b)
-    {
-
+        $this->logger('Current relevancy:'. $this->getRelevancy());
     }
 
     /**
@@ -123,7 +137,6 @@ class Document extends AbstractSpiderEgg
         }
     }
 
-
     protected function getBiggerTag()
     {
         foreach(array('div', 'td', 'span') as $tag){
@@ -138,9 +151,10 @@ class Document extends AbstractSpiderEgg
     protected function saveBiggerToFile()
     {
         $title = '# '. $this->getTitle() . "\n\n";
-        $this->cache->saveDomToHtmlFile($this->bigger, $this->get('slug'));
+        $this->cache->saveToHtmlFile(SpiderDom::toHtml($this->bigger), $this->get('slug'));
         $this->cache->saveDomToTxtFile($this->bigger, $this->get('slug'), $title);
     }
+
     /**
      * Converte o elemento com maior probabilidade de
      * ser o container do conteúdo em plain text
@@ -156,22 +170,24 @@ class Document extends AbstractSpiderEgg
         }
     }
 
+    public function getText()
+    {
+        return $this->get('text');
+    }
+
     protected function setSlug()
     {
         $this->set('slug', substr(Urlizer::urlize($this->get('title')), 0, 30));
     }
+
     protected function processResponse()
     {
         $this->logger('processing');
         $this->setTitle();
         $this->setSlug();
         $this->getBiggerTag();
+        $this->setText();
         $this->setRelevancy();
-
-        if($this->getRelevancy() > 0)
-        {
-            $this->setText();   
-        }
     }
 
     /**
@@ -179,7 +195,7 @@ class Document extends AbstractSpiderEgg
     * Se sim, fazer idiff e rejeitar se a diferença for inferior a x%
     * Aplicar filtros contidos em $this->subscription
     **/
-    protected function getRelevancy()
+    public function getRelevancy()
     {
         return $this->get('relevancy');
     }

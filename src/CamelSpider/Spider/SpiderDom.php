@@ -52,11 +52,29 @@ class SpiderDom
         return $a;
    }
 
-
-    public static function toHtml(\DOMElement $node)
+    /**
+     * @deprecated
+     */
+    public static function oldToHtml(\DOMElement $node)
     {
         return $node->ownerDocument->saveXML($node);
     }
+
+    /**
+     * Save an isolated node as html
+     *
+     * @return string HTML
+     */
+    public static function toHtml(\DOMElement $node)
+    {
+        $doc = new \DOMDocument;
+        $doc->loadXML("<html></html>");
+        $docNode = $doc->importNode($node, true);
+        $doc->documentElement->appendChild($docNode);
+        
+        return str_replace('<?xml version="1.0"?>', '', $doc->saveXML());
+    }
+
     /**
      * Convert HTML to plain text
      * @see http://www.php.net/manual/en/class.domtext.php
@@ -76,9 +94,12 @@ class SpiderDom
         return substr_count(self::toText($node), $substring);
     }
 
-    public static function saveHtmlToFile(\DOMElement $node, $file)
+    public static function saveDomToHtmlFile(\DOMElement $node, $file)
     {
         return $node->ownerDocument->saveHTMLFile($file);
+    }
+    public static function saveHtmlToFile(\DOMElement $node, $file)
+    {
     }
 
     public static function saveTxtToFile(\DOMElement $node, $file, $title = NULL)
