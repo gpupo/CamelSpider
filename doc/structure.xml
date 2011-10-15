@@ -1,21 +1,122 @@
 <?xml version="1.0"?>
 <project version="0.15.1" title="">
-  <file path="CamelSpider/Entity/AbstractSubscription.php" hash="89c01395091b7a9666cd2ec8cf575c88" package="Default">
+  <file path="CamelSpider/Entity/AbstractSpiderEgg.php" hash="af8865c78d1fbe13980067d5481f3f21" package="Default">
+    <parse_markers>
+      <error line="1">No DocBlock was found for File CamelSpider/Entity/AbstractSpiderEgg.php</error>
+      <error line="16">No DocBlock was found for Property $config</error>
+      <error line="17">No DocBlock was found for Property $logger</error>
+      <error line="18">No DocBlock was found for Property $cache</error>
+      <error line="19">No DocBlock was found for Property $name</error>
+      <error line="21">No DocBlock was found for Method __construct</error>
+      <error line="31">No DocBlock was found for Method transferDependency</error>
+      <error line="40">No DocBlock was found for Method getConfig</error>
+      <critical line="48">No short description for method logger</critical>
+      <notice line="51">Argument $string is missing from the function Docblock</notice>
+      <notice line="51">Argument $type is missing from the function Docblock</notice>
+      <notice line="51">Argument $level is missing from the function Docblock</notice>
+    </parse_markers>
+    <namespace-alias name="ArrayCollection">Doctrine\Common\Collections\ArrayCollection</namespace-alias>
+    <class final="false" abstract="false" line="14" namespace="CamelSpider\Entity" package="Default">
+      <name>AbstractSpiderEgg</name>
+      <extends>\Doctrine\Common\Collections\ArrayCollection</extends>
+      <full_name>\CamelSpider\Entity\AbstractSpiderEgg</full_name>
+      <docblock>
+        <description>Este &#xE9; um ovo :)
+Ele abstrai m&#xE9;todos reus&#xE1;veis entre a maior
+parte dos objetos do projeto</description>
+        <long-description>
+</long-description>
+      </docblock>
+      <property final="false" static="false" visibility="protected" line="16" package="Default">
+        <name>$config</name>
+        <default/>
+      </property>
+      <property final="false" static="false" visibility="protected" line="17" package="Default">
+        <name>$logger</name>
+        <default/>
+      </property>
+      <property final="false" static="false" visibility="protected" line="18" package="Default">
+        <name>$cache</name>
+        <default/>
+      </property>
+      <property final="false" static="false" visibility="protected" line="19" package="Default">
+        <name>$name</name>
+        <default/>
+      </property>
+      <method final="false" abstract="false" static="false" visibility="public" line="21" package="Default">
+        <name>__construct</name>
+        <argument line="21">
+          <name>$array</name>
+          <default/>
+          <type>array</type>
+        </argument>
+        <argument line="21">
+          <name>$config</name>
+          <default>NULL</default>
+          <type>array</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" line="31" package="Default">
+        <name>transferDependency</name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" line="40" package="Default">
+        <name>getConfig</name>
+        <argument line="40">
+          <name>$key</name>
+          <default/>
+          <type/>
+        </argument>
+        <argument line="40">
+          <name>$defaultValue</name>
+          <default>NULL</default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" line="51" package="Default">
+        <name>logger</name>
+        <docblock>
+          <description/>
+          <long-description>
+</long-description>
+          <tag line="48" name="todo" description="Lidar com n&#xED;veis da configura&#xE7;&#xE3;o de cada componente"/>
+        </docblock>
+        <argument line="51">
+          <name>$string</name>
+          <default/>
+          <type/>
+        </argument>
+        <argument line="51">
+          <name>$type</name>
+          <default>'info'</default>
+          <type/>
+        </argument>
+        <argument line="51">
+          <name>$level</name>
+          <default>1</default>
+          <type/>
+        </argument>
+      </method>
+    </class>
+  </file>
+  <file path="CamelSpider/Entity/AbstractSubscription.php" hash="5d7bf127c8e57e036426853ba6417912" package="Default">
     <parse_markers>
       <error line="1">No DocBlock was found for File CamelSpider/Entity/AbstractSubscription.php</error>
       <error line="9">No DocBlock was found for Class AbstractSubscription</error>
       <error line="12">No DocBlock was found for Method getId</error>
-      <error line="17">No DocBlock was found for Method getDomain</error>
-      <error line="27">No DocBlock was found for Method getHref</error>
-      <error line="32">No DocBlock was found for Method getFilters</error>
-      <error line="37">No DocBlock was found for Method __toString</error>
-      <error line="42">No DocBlock was found for Method getMaxDepth</error>
-      <error line="48">No DocBlock was found for Method getLink</error>
-      <error line="53">No DocBlock was found for Method isDone</error>
-      <error line="57">No DocBlock was found for Method isWaiting</error>
-      <error line="62">No DocBlock was found for Method getMinimal</error>
-      <error line="66">No DocBlock was found for Method inDomain</error>
-      <error line="77">No DocBlock was found for Method insideScope</error>
+      <error line="16">No DocBlock was found for Method _explode</error>
+      <error line="27">No DocBlock was found for Method getDomain</error>
+      <error line="32">No DocBlock was found for Method getHref</error>
+      <error line="37">No DocBlock was found for Method getFilters</error>
+      <critical line="42">No short description for method getFilter</critical>
+      <error line="51">No DocBlock was found for Method getDomainString</error>
+      <error line="55">No DocBlock was found for Method __toString</error>
+      <error line="60">No DocBlock was found for Method getMaxDepth</error>
+      <error line="66">No DocBlock was found for Method getLink</error>
+      <error line="71">No DocBlock was found for Method isDone</error>
+      <error line="75">No DocBlock was found for Method isWaiting</error>
+      <error line="80">No DocBlock was found for Method getMinimal</error>
+      <error line="84">No DocBlock was found for Method inDomain</error>
+      <error line="95">No DocBlock was found for Method insideScope</error>
     </parse_markers>
     <namespace-alias name="ArrayCollection">Doctrine\Common\Collections\ArrayCollection</namespace-alias>
     <namespace-alias name="InterfaceLink">CamelSpider\Entity\InterfaceLink</namespace-alias>
@@ -28,49 +129,76 @@
       <method final="false" abstract="false" static="false" visibility="public" line="12" package="Default">
         <name>getId</name>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" line="17" package="Default">
-        <name>getDomain</name>
+      <method final="false" abstract="false" static="false" visibility="private" line="16" package="Default">
+        <name>_explode</name>
+        <argument line="16">
+          <name>$x</name>
+          <default/>
+          <type/>
+        </argument>
       </method>
       <method final="false" abstract="false" static="false" visibility="public" line="27" package="Default">
-        <name>getHref</name>
+        <name>getDomain</name>
       </method>
       <method final="false" abstract="false" static="false" visibility="public" line="32" package="Default">
-        <name>getFilters</name>
+        <name>getHref</name>
       </method>
       <method final="false" abstract="false" static="false" visibility="public" line="37" package="Default">
+        <name>getFilters</name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" line="45" package="Default">
+        <name>getFilter</name>
+        <docblock>
+          <description/>
+          <long-description>
+</long-description>
+          <tag line="42" name="param" description="contain|notContain" type="string" variable="$type">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+        <argument line="45">
+          <name>$type</name>
+          <default/>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" line="51" package="Default">
+        <name>getDomainString</name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" line="55" package="Default">
         <name>__toString</name>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" line="42" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" line="60" package="Default">
         <name>getMaxDepth</name>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" line="48" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" line="66" package="Default">
         <name>getLink</name>
-        <argument line="48">
+        <argument line="66">
           <name>$sha1</name>
           <default/>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" line="53" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" line="71" package="Default">
         <name>isDone</name>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" line="57" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" line="75" package="Default">
         <name>isWaiting</name>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" line="62" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" line="80" package="Default">
         <name>getMinimal</name>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" line="66" package="Default">
+      <method final="false" abstract="false" static="false" visibility="protected" line="84" package="Default">
         <name>inDomain</name>
-        <argument line="66">
+        <argument line="84">
           <name>$str</name>
           <default/>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" line="77" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" line="95" package="Default">
         <name>insideScope</name>
-        <argument line="77">
+        <argument line="95">
           <name>$link</name>
           <default/>
           <type>Link</type>
@@ -78,29 +206,33 @@
       </method>
     </class>
   </file>
-  <file path="CamelSpider/Entity/Document.php" hash="9cc0d3fde34056e0b32e817c2055f710" package="Default">
+  <file path="CamelSpider/Entity/Document.php" hash="20553360a699356ef88fdbe17af6c48a" package="Default">
     <parse_markers>
       <error line="1">No DocBlock was found for File CamelSpider/Entity/Document.php</error>
-      <error line="26">No DocBlock was found for Property $crawler</error>
-      <error line="28">No DocBlock was found for Property $response</error>
-      <error line="30">No DocBlock was found for Property $subscription</error>
-      <error line="32">No DocBlock was found for Property $logger</error>
-      <error line="34">No DocBlock was found for Property $asserts</error>
-      <notice line="41">Argument $crawler is missing from the function Docblock</notice>
-      <notice line="41">Argument $subscription is missing from the function Docblock</notice>
-      <notice line="41">Argument $dependency is missing from the function Docblock</notice>
-      <error line="58">No DocBlock was found for Method logger</error>
-      <error line="64">No DocBlock was found for Method setTitle</error>
-      <error line="71">No DocBlock was found for Method getBody</error>
-      <error line="95">No DocBlock was found for Method addRelevancy</error>
-      <notice line="118">Argument $tag is missing from the function Docblock</notice>
-      <error line="129">No DocBlock was found for Property $bigger</error>
-      <error line="131">No DocBlock was found for Method getBiggerTag</error>
-      <error line="142">No DocBlock was found for Method saveBiggerToHtml</error>
-      <error line="156">No DocBlock was found for Method setSlug</error>
-      <error line="160">No DocBlock was found for Method processResponse</error>
+      <error line="25">No DocBlock was found for Property $name</error>
+      <error line="27">No DocBlock was found for Property $crawler</error>
+      <error line="29">No DocBlock was found for Property $response</error>
+      <error line="31">No DocBlock was found for Property $subscription</error>
+      <error line="33">No DocBlock was found for Property $asserts</error>
+      <error line="35">No DocBlock was found for Property $bigger</error>
+      <notice line="48">Name of argument $crawler does not match with function Docblock</notice>
+      <notice line="48">Argument $subscription is missing from the function Docblock</notice>
+      <notice line="48">Argument $dependency is missing from the function Docblock</notice>
+      <error line="65">No DocBlock was found for Method setTitle</error>
+      <error line="72">No DocBlock was found for Method getTitle</error>
+      <error line="77">No DocBlock was found for Method getBody</error>
+      <error line="81">No DocBlock was found for Method getRaw</error>
+      <error line="122">No DocBlock was found for Method addRelevancy</error>
+      <notice line="132">Argument $tag is missing from the function Docblock</notice>
+      <error line="144">No DocBlock was found for Method getBiggerTag</error>
+      <error line="155">No DocBlock was found for Method saveBiggerToFile</error>
+      <error line="162">No DocBlock was found for Method getHtml</error>
+      <error line="182">No DocBlock was found for Method getText</error>
+      <error line="187">No DocBlock was found for Method setSlug</error>
+      <error line="192">No DocBlock was found for Method processResponse</error>
+      <critical line="217">No short description for method toArray</critical>
     </parse_markers>
-    <namespace-alias name="ArrayCollection">Doctrine\Common\Collections\ArrayCollection</namespace-alias>
+    <namespace-alias name="AbstractSpiderEgg">CamelSpider\Entity\AbstractSpiderEgg</namespace-alias>
     <namespace-alias name="Crawler">Symfony\Component\DomCrawler\Crawler</namespace-alias>
     <namespace-alias name="Response">Symfony\Component\BrowserKit\Response</namespace-alias>
     <namespace-alias name="SpiderAsserts">CamelSpider\Spider\SpiderAsserts</namespace-alias>
@@ -109,7 +241,7 @@
     <namespace-alias name="Urlizer">CamelSpider\Tools\Urlizer</namespace-alias>
     <class final="false" abstract="false" line="23" namespace="CamelSpider\Entity" package="CamelSpider\Entity">
       <name>Document</name>
-      <extends>\Doctrine\Common\Collections\ArrayCollection</extends>
+      <extends>\CamelSpider\Entity\AbstractSpiderEgg</extends>
       <full_name>\CamelSpider\Entity\Document</full_name>
       <docblock>
         <description>Contain formated response</description>
@@ -119,99 +251,89 @@
         <tag line="13" name="subpackage" description="Entity"/>
         <tag line="13" name="author" description="Gilmar Pupo &lt;g@g1mr.com&gt;"/>
       </docblock>
-      <property final="false" static="false" visibility="private" line="26" package="Default">
+      <property final="false" static="false" visibility="protected" line="25" package="Default">
+        <name>$name</name>
+        <default>'Document'</default>
+      </property>
+      <property final="false" static="false" visibility="private" line="27" package="Default">
         <name>$crawler</name>
         <default/>
       </property>
-      <property final="false" static="false" visibility="private" line="28" package="Default">
+      <property final="false" static="false" visibility="private" line="29" package="Default">
         <name>$response</name>
         <default/>
       </property>
-      <property final="false" static="false" visibility="private" line="30" package="Default">
+      <property final="false" static="false" visibility="private" line="31" package="Default">
         <name>$subscription</name>
         <default/>
       </property>
-      <property final="false" static="false" visibility="private" line="32" package="Default">
-        <name>$logger</name>
-        <default/>
-      </property>
-      <property final="false" static="false" visibility="private" line="34" package="Default">
+      <property final="false" static="false" visibility="private" line="33" package="Default">
         <name>$asserts</name>
         <default/>
       </property>
-      <property final="false" static="false" visibility="private" line="129" package="Default">
+      <property final="false" static="false" visibility="private" line="35" package="Default">
         <name>$bigger</name>
         <default>NULL</default>
       </property>
-      <method final="false" abstract="false" static="false" visibility="public" line="41" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" line="48" package="Default">
         <name>__construct</name>
         <docblock>
           <description>Recebe a response HTTP e tamb&#xE9;m dados da assinatura,
 para alimentar os filtros que definem a relev&#xE2;nca do
 conte&#xFA;do</description>
-          <long-description>
+          <long-description>&lt;p&gt;Config:&lt;/p&gt;
 </long-description>
+          <tag line="37" name="param" description="Logger, Cache, array Config" type="array" variable="$dependency">
+            <type by_reference="false">array</type>
+          </tag>
         </docblock>
-        <argument line="41">
+        <argument line="48">
           <name>$crawler</name>
           <default/>
           <type>Crawler</type>
         </argument>
-        <argument line="41">
+        <argument line="48">
           <name>$subscription</name>
           <default/>
           <type>InterfaceSubscription</type>
         </argument>
-        <argument line="41">
+        <argument line="48">
           <name>$dependency</name>
           <default>NULL</default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" line="58" package="Default">
-        <name>logger</name>
-        <argument line="58">
-          <name>$string</name>
-          <default/>
-          <type/>
-        </argument>
-        <argument line="58">
-          <name>$type</name>
-          <default>'info'</default>
-          <type/>
-        </argument>
-      </method>
-      <method final="false" abstract="false" static="false" visibility="protected" line="64" package="Default">
+      <method final="false" abstract="false" static="false" visibility="protected" line="65" package="Default">
         <name>setTitle</name>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" line="71" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" line="72" package="Default">
+        <name>getTitle</name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" line="77" package="Default">
         <name>getBody</name>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" line="80" package="Default">
+      <method final="false" abstract="false" static="false" visibility="protected" line="81" package="Default">
+        <name>getRaw</name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" line="96" package="Default">
         <name>setRelevancy</name>
         <docblock>
-          <description>Faz uma query no documento,
-de acordo com os par&#xE2;metros definidos
-na assinatura</description>
+          <description>Faz query no documento, de acordo com os par&#xE2;metros definidos
+na assinatura e define a relev&#xE2;ncia, sendo que esta relev&#xE2;ncia
+pode ser:
+ 1) Possivelmente cont&#xE9;m conte&#xFA;do
+ 2) Cont&#xE9;m conte&#xFA;do e cont&#xE9;m uma ou mais palavras chave desejadas
+ pela assinatura ou n&#xE3;o cont&#xE9;m palavras indesejadas
+ 3) Cont&#xE9;m conte&#xFA;do, cont&#xE9;m palavras desejadas e n&#xE3;o cont&#xE9;m
+ palavras indesejadas</description>
           <long-description>
 </long-description>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" line="95" package="Default">
+      <method final="false" abstract="false" static="false" visibility="protected" line="122" package="Default">
         <name>addRelevancy</name>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" line="108" package="Default">
-        <name>checkDiff</name>
-        <docblock>
-          <description>Compara documento atual com poss&#xED;vel documento em DB
-Se encontra, compara diferen&#xE7;as.</description>
-          <long-description>&lt;p&gt;Se diferen&#xE7;as menores que 40%,
-invalida.&lt;/p&gt;
-</long-description>
-          <tag line="100" name="TODO" description="metodo para consulta a DB ?"/>
-        </docblock>
-      </method>
-      <method final="false" abstract="false" static="false" visibility="protected" line="118" package="Default">
+      <method final="false" abstract="false" static="false" visibility="protected" line="132" package="Default">
         <name>searchBiggerInTags</name>
         <docblock>
           <description>localiza a tag filha de body que possui maior
@@ -219,19 +341,22 @@ quantidade de texto</description>
           <long-description>
 </long-description>
         </docblock>
-        <argument line="118">
+        <argument line="132">
           <name>$tag</name>
           <default/>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" line="131" package="Default">
+      <method final="false" abstract="false" static="false" visibility="protected" line="144" package="Default">
         <name>getBiggerTag</name>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" line="142" package="Default">
-        <name>saveBiggerToHtml</name>
+      <method final="false" abstract="false" static="false" visibility="protected" line="155" package="Default">
+        <name>saveBiggerToFile</name>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" line="150" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" line="162" package="Default">
+        <name>getHtml</name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" line="171" package="Default">
         <name>setText</name>
         <docblock>
           <description>Converte o elemento com maior probabilidade de
@@ -240,13 +365,16 @@ ser o container do conte&#xFA;do em plain text</description>
 </long-description>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" line="156" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" line="182" package="Default">
+        <name>getText</name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" line="187" package="Default">
         <name>setSlug</name>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" line="160" package="Default">
+      <method final="false" abstract="false" static="false" visibility="protected" line="192" package="Default">
         <name>processResponse</name>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" line="190" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" line="212" package="Default">
         <name>getRelevancy</name>
         <docblock>
           <description>Verificar data container se link j&#xE1; foi catalogado.</description>
@@ -255,9 +383,20 @@ Aplicar filtros contidos em $this-&gt;subscription&lt;/p&gt;
 </long-description>
         </docblock>
       </method>
+      <method final="false" abstract="false" static="false" visibility="public" line="220" package="Default">
+        <name>toArray</name>
+        <docblock>
+          <description/>
+          <long-description>
+</long-description>
+          <tag line="217" name="return" description="$array" type="array">
+            <type by_reference="false">array</type>
+          </tag>
+        </docblock>
+      </method>
     </class>
   </file>
-  <file path="CamelSpider/Entity/FactorySubscription.php" hash="3f20da0583b10e8b2eaa1c7719808d4d" package="Default">
+  <file path="CamelSpider/Entity/FactorySubscription.php" hash="78b5821b20f145624e5b805cd361b715" package="Default">
     <parse_markers>
       <error line="1">No DocBlock was found for File CamelSpider/Entity/FactorySubscription.php</error>
       <error line="8">No DocBlock was found for Class FactorySubscription</error>
@@ -359,7 +498,7 @@ Aplicar filtros contidos em $this-&gt;subscription&lt;/p&gt;
       </method>
     </interface>
   </file>
-  <file path="CamelSpider/Entity/Link.php" hash="6f2b3b5a8c31bc51b17a3c5cc009ee38" package="Default">
+  <file path="CamelSpider/Entity/Link.php" hash="5c44e1c922f708e6f176aec4613fc6e4" package="Default">
     <parse_markers>
       <error line="1">No DocBlock was found for File CamelSpider/Entity/Link.php</error>
       <error line="8">No DocBlock was found for Class Link</error>
@@ -421,7 +560,7 @@ Aplicar filtros contidos em $this-&gt;subscription&lt;/p&gt;
         <name>getDocument</name>
       </method>
       <method final="false" abstract="false" static="false" visibility="public" line="53" package="Default">
-        <name>getMinimal</name>
+        <name>toArray</name>
         <docblock>
           <description>reduce memory usage</description>
           <long-description>
@@ -441,135 +580,337 @@ Aplicar filtros contidos em $this-&gt;subscription&lt;/p&gt;
       <full_name>\CamelSpider\Entity\Subscription</full_name>
     </class>
   </file>
-  <file path="CamelSpider/Spider/AbstractCache.php" hash="fc6d4216d10d762550b08b5cd11bd91d" package="Default">
+  <file path="CamelSpider/Spider/AbstractCache.php" hash="648f9ffd1cd252ab4a3c18dafc8cc28f" package="Default">
     <parse_markers>
       <error line="1">No DocBlock was found for File CamelSpider/Spider/AbstractCache.php</error>
-      <error line="19">No DocBlock was found for Class AbstractCache</error>
-      <error line="21">No DocBlock was found for Property $cache_dir</error>
-      <error line="22">No DocBlock was found for Property $logger</error>
-      <error line="23">No DocBlock was found for Property $cache</error>
-      <error line="25">No DocBlock was found for Method checkDir</error>
-      <error line="31">No DocBlock was found for Method logger</error>
-      <error line="38">No DocBlock was found for Method mkdir</error>
-      <notice line="55">Argument $dir is missing from the function Docblock</notice>
-      <error line="66">No DocBlock was found for Method clean</error>
-      <error line="72">No DocBlock was found for Method save</error>
-      <error line="82">No DocBlock was found for Method getObject</error>
-      <error line="88">No DocBlock was found for Method isObject</error>
-      <error line="96">No DocBlock was found for Method saveDomToHtmlFile</error>
+      <error line="20">No DocBlock was found for Class AbstractCache</error>
+      <error line="22">No DocBlock was found for Property $name</error>
+      <error line="23">No DocBlock was found for Property $cache_dir</error>
+      <error line="24">No DocBlock was found for Property $cache</error>
+      <error line="26">No DocBlock was found for Method checkDir</error>
+      <error line="33">No DocBlock was found for Method mkdir</error>
+      <notice line="50">Argument $dir is missing from the function Docblock</notice>
+      <error line="61">No DocBlock was found for Method clean</error>
+      <error line="67">No DocBlock was found for Method save</error>
+      <error line="77">No DocBlock was found for Method getObject</error>
+      <error line="83">No DocBlock was found for Method isObject</error>
+      <error line="90">No DocBlock was found for Method getFileRandomPath</error>
+      <critical line="103">No short description for method saveDomToHtmlFile</critical>
+      <notice line="106">Argument $e is missing from the function Docblock</notice>
+      <notice line="106">Argument $slug is missing from the function Docblock</notice>
+      <error line="113">No DocBlock was found for Method saveToHtmlFile</error>
+      <error line="120">No DocBlock was found for Method saveDomToTxtFile</error>
     </parse_markers>
     <namespace-alias name="Zend_Cache">Zend\Cache\Cache</namespace-alias>
     <namespace-alias name="InterfaceCache">CamelSpider\Spider\InterfaceCache</namespace-alias>
     <namespace-alias name="AbstractSpiderCache">CamelSpider\Spider\AbstractSpiderCache</namespace-alias>
     <namespace-alias name="SpiderDom">CamelSpider\Spider\SpiderDom</namespace-alias>
-    <class final="false" abstract="false" line="19" namespace="CamelSpider\Spider" package="Default">
+    <namespace-alias name="AbstractSpiderEgg">CamelSpider\Entity\AbstractSpiderEgg</namespace-alias>
+    <class final="false" abstract="false" line="20" namespace="CamelSpider\Spider" package="Default">
       <name>AbstractCache</name>
-      <extends/>
+      <extends>\CamelSpider\Entity\AbstractSpiderEgg</extends>
       <full_name>\CamelSpider\Spider\AbstractCache</full_name>
       <implements>\CamelSpider\Spider\InterfaceCache</implements>
-      <property final="false" static="false" visibility="protected" line="21" package="Default">
+      <property final="false" static="false" visibility="protected" line="22" package="Default">
+        <name>$name</name>
+        <default>'Cache'</default>
+      </property>
+      <property final="false" static="false" visibility="protected" line="23" package="Default">
         <name>$cache_dir</name>
         <default/>
       </property>
-      <property final="false" static="false" visibility="protected" line="22" package="Default">
-        <name>$logger</name>
-        <default/>
-      </property>
-      <property final="false" static="false" visibility="protected" line="23" package="Default">
+      <property final="false" static="false" visibility="protected" line="24" package="Default">
         <name>$cache</name>
         <default/>
       </property>
-      <method final="false" abstract="false" static="false" visibility="public" line="25" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" line="26" package="Default">
         <name>checkDir</name>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" line="31" package="Default">
-        <name>logger</name>
-        <argument line="31">
-          <name>$string</name>
-          <default/>
-          <type/>
-        </argument>
-        <argument line="31">
-          <name>$type</name>
-          <default>'info'</default>
-          <type/>
-        </argument>
-      </method>
-      <method final="false" abstract="false" static="false" visibility="protected" line="38" package="Default">
+      <method final="false" abstract="false" static="false" visibility="protected" line="33" package="Default">
         <name>mkdir</name>
-        <argument line="38">
+        <argument line="33">
           <name>$dir</name>
           <default/>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" line="55" package="Default">
+      <method final="false" abstract="false" static="false" visibility="protected" line="50" package="Default">
         <name>rmdir</name>
         <docblock>
           <description>Remove directory</description>
           <long-description>
 </long-description>
-          <tag line="50" name="todo" description="Extender m&#xE9;todos de Zend Cache para remo&#xE7;&#xE3;o de arquivos"/>
+          <tag line="45" name="todo" description="Extender m&#xE9;todos de Zend Cache para remo&#xE7;&#xE3;o de arquivos"/>
         </docblock>
-        <argument line="55">
+        <argument line="50">
           <name>$dir</name>
           <default/>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" line="66" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" line="61" package="Default">
         <name>clean</name>
-        <argument line="66">
+        <argument line="61">
           <name>$mode</name>
           <default>Zend_Cache::CLEANING_MODE_ALL</default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" line="72" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" line="67" package="Default">
         <name>save</name>
-        <argument line="72">
+        <argument line="67">
           <name>$id</name>
           <default/>
           <type/>
         </argument>
-        <argument line="72">
+        <argument line="67">
           <name>$data</name>
           <default/>
           <type/>
         </argument>
-        <argument line="72">
+        <argument line="67">
           <name>$tags</name>
           <default>array('undefined')</default>
           <type>array</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" line="82" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" line="77" package="Default">
         <name>getObject</name>
-        <argument line="82">
+        <argument line="77">
           <name>$id</name>
           <default/>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" line="88" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" line="83" package="Default">
         <name>isObject</name>
-        <argument line="88">
+        <argument line="83">
           <name>$id</name>
           <default/>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" line="96" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" line="90" package="Default">
+        <name>getFileRandomPath</name>
+        <argument line="90">
+          <name>$slug</name>
+          <default/>
+          <type/>
+        </argument>
+        <argument line="90">
+          <name>$format</name>
+          <default/>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" line="106" package="Default">
         <name>saveDomToHtmlFile</name>
-        <argument line="96">
+        <docblock>
+          <description/>
+          <long-description>
+</long-description>
+          <tag line="103" name="todo" description="fix"/>
+        </docblock>
+        <argument line="106">
           <name>$e</name>
           <default/>
           <type>DOMElement</type>
         </argument>
-        <argument line="96">
+        <argument line="106">
           <name>$slug</name>
           <default/>
           <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" line="113" package="Default">
+        <name>saveToHtmlFile</name>
+        <argument line="113">
+          <name>$html</name>
+          <default/>
+          <type/>
+        </argument>
+        <argument line="113">
+          <name>$slug</name>
+          <default/>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" line="120" package="Default">
+        <name>saveDomToTxtFile</name>
+        <argument line="120">
+          <name>$e</name>
+          <default/>
+          <type>DOMElement</type>
+        </argument>
+        <argument line="120">
+          <name>$slug</name>
+          <default/>
+          <type/>
+        </argument>
+        <argument line="120">
+          <name>$title</name>
+          <default>NULL</default>
+          <type/>
+        </argument>
+      </method>
+    </class>
+  </file>
+  <file path="CamelSpider/Spider/AbstractSpider.php" hash="cf591e43e6b4156faaa4eefdb3b030c7" package="Default">
+    <parse_markers>
+      <error line="1">No DocBlock was found for File CamelSpider/Spider/AbstractSpider.php</error>
+      <error line="7">No DocBlock was found for Class AbstractSpider</error>
+      <error line="10">No DocBlock was found for Property $timeStart</error>
+      <error line="12">No DocBlock was found for Property $elements</error>
+      <error line="14">No DocBlock was found for Property $requests</error>
+      <error line="16">No DocBlock was found for Property $cached</error>
+      <error line="18">No DocBlock was found for Property $errors</error>
+      <error line="20">No DocBlock was found for Property $subscription</error>
+      <error line="22">No DocBlock was found for Property $timeParcial</error>
+      <error line="24">No DocBlock was found for Property $goutte</error>
+      <error line="28">No DocBlock was found for Method getCrawler</error>
+      <error line="53">No DocBlock was found for Method getBody</error>
+      <error line="58">No DocBlock was found for Method getRequest</error>
+      <error line="63">No DocBlock was found for Method getResponse</error>
+      <error line="68">No DocBlock was found for Method getSubscription</error>
+      <error line="73">No DocBlock was found for Method getDomain</error>
+      <error line="78">No DocBlock was found for Method getLinkTags</error>
+      <error line="88">No DocBlock was found for Method performLogin</error>
+      <error line="105">No DocBlock was found for Method getTimeUsage</error>
+      <error line="110">No DocBlock was found for Property $limitReached</error>
+      <error line="112">No DocBlock was found for Method checkLimit</error>
+    </parse_markers>
+    <namespace-alias name="AbstractSpiderEgg">CamelSpider\Entity\AbstractSpiderEgg</namespace-alias>
+    <class final="false" abstract="true" line="7" namespace="CamelSpider\Spider" package="Default">
+      <name>AbstractSpider</name>
+      <extends>\CamelSpider\Entity\AbstractSpiderEgg</extends>
+      <full_name>\CamelSpider\Spider\AbstractSpider</full_name>
+      <property final="false" static="false" visibility="protected" line="10" package="Default">
+        <name>$timeStart</name>
+        <default/>
+      </property>
+      <property final="false" static="false" visibility="protected" line="12" package="Default">
+        <name>$elements</name>
+        <default/>
+      </property>
+      <property final="false" static="false" visibility="protected" line="14" package="Default">
+        <name>$requests</name>
+        <default>0</default>
+      </property>
+      <property final="false" static="false" visibility="protected" line="16" package="Default">
+        <name>$cached</name>
+        <default>0</default>
+      </property>
+      <property final="false" static="false" visibility="protected" line="18" package="Default">
+        <name>$errors</name>
+        <default>0</default>
+      </property>
+      <property final="false" static="false" visibility="protected" line="20" package="Default">
+        <name>$subscription</name>
+        <default/>
+      </property>
+      <property final="false" static="false" visibility="protected" line="22" package="Default">
+        <name>$timeParcial</name>
+        <default/>
+      </property>
+      <property final="false" static="false" visibility="protected" line="24" package="Default">
+        <name>$goutte</name>
+        <default/>
+      </property>
+      <property final="false" static="false" visibility="protected" line="110" package="Default">
+        <name>$limitReached</name>
+        <default>false</default>
+      </property>
+      <method final="false" abstract="false" static="false" visibility="public" line="28" package="Default">
+        <name>getCrawler</name>
+        <argument line="28">
+          <name>$URI</name>
+          <default/>
+          <type/>
+        </argument>
+        <argument line="28">
+          <name>$mode</name>
+          <default>'GET'</default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" line="53" package="Default">
+        <name>getBody</name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" line="58" package="Default">
+        <name>getRequest</name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" line="63" package="Default">
+        <name>getResponse</name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" line="68" package="Default">
+        <name>getSubscription</name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" line="73" package="Default">
+        <name>getDomain</name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" line="78" package="Default">
+        <name>getLinkTags</name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" line="88" package="Default">
+        <name>performLogin</name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" line="100" package="Default">
+        <name>getMemoryUsage</name>
+        <docblock>
+          <description>return memory in MB</description>
+          <long-description>
+</long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" line="105" package="Default">
+        <name>getTimeUsage</name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" line="112" package="Default">
+        <name>checkLimit</name>
+      </method>
+    </class>
+  </file>
+  <file path="CamelSpider/Spider/DocumentManager.php" hash="5f17ca678961f3fb99ebbc31cc3e0030" package="Default">
+    <parse_markers>
+      <error line="1">No DocBlock was found for File CamelSpider/Spider/DocumentManager.php</error>
+      <notice line="20">Argument $body is missing from the function Docblock</notice>
+      <notice line="20">Argument $link is missing from the function Docblock</notice>
+      <notice line="20">Argument $subscription is missing from the function Docblock</notice>
+    </parse_markers>
+    <namespace-alias name="InterfaceSubscription">CamelSpider\Entity\InterfaceSubscription</namespace-alias>
+    <namespace-alias name="InterfaceLink">CamelSpider\Entity\InterfaceLink</namespace-alias>
+    <class final="false" abstract="false" line="14" namespace="CamelSpider\Spider" package="Default">
+      <name>DocumentManager</name>
+      <extends/>
+      <full_name>\CamelSpider\Spider\DocumentManager</full_name>
+      <docblock>
+        <description>Especializado em consultas aos documentos,
+em seus diversos lugares</description>
+        <long-description>
+</long-description>
+      </docblock>
+      <method final="false" abstract="false" static="true" visibility="public" line="20" package="Default">
+        <name>isFresh</name>
+        <docblock>
+          <description>Verifica se o documento &#xE9; novo</description>
+          <long-description>
+</long-description>
+          <tag line="16" name="todo" description="implementar get Raw"/>
+        </docblock>
+        <argument line="20">
+          <name>$body</name>
+          <default/>
+          <type/>
+        </argument>
+        <argument line="20">
+          <name>$link</name>
+          <default/>
+          <type>InterfaceLink</type>
+        </argument>
+        <argument line="20">
+          <name>$subscription</name>
+          <default/>
+          <type>InterfaceSubscription</type>
         </argument>
       </method>
     </class>
@@ -622,29 +963,51 @@ Aplicar filtros contidos em $this-&gt;subscription&lt;/p&gt;
       </method>
     </interface>
   </file>
-  <file path="CamelSpider/Spider/SpiderAsserts.php" hash="01e4b442d829769dc77fe592d45289a5" package="Default">
-    <docblock>
-      <description>Usado para verificar express&#xF5;es filtro de conte&#xFA;do</description>
-      <long-description>
-</long-description>
-    </docblock>
+  <file path="CamelSpider/Spider/SpiderAsserts.php" hash="3d7f787b915a1374df7931cebea775da" package="Default">
     <parse_markers>
-      <error line="2">No Page-level DocBlock was found in file CamelSpider/Spider/SpiderAsserts.php</error>
-      <error line="9">No DocBlock was found for Class SpiderAsserts</error>
+      <error line="1">No DocBlock was found for File CamelSpider/Spider/SpiderAsserts.php</error>
+      <error line="7">No DocBlock was found for Class SpiderAsserts</error>
+      <error line="10">No DocBlock was found for Method respect</error>
+      <error line="18">No DocBlock was found for Method containKeywords</error>
     </parse_markers>
-    <class final="false" abstract="false" line="9" namespace="CamelSpider\Spider" package="Default">
+    <namespace-alias name="v">Respect\Validation\Validator</namespace-alias>
+    <class final="false" abstract="false" line="7" namespace="CamelSpider\Spider" package="Default">
       <name>SpiderAsserts</name>
       <extends/>
       <full_name>\CamelSpider\Spider\SpiderAsserts</full_name>
+      <method final="false" abstract="false" static="true" visibility="public" line="10" package="Default">
+        <name>respect</name>
+      </method>
+      <method final="false" abstract="false" static="true" visibility="public" line="18" package="Default">
+        <name>containKeywords</name>
+        <argument line="18">
+          <name>$txt</name>
+          <default/>
+          <type/>
+        </argument>
+        <argument line="18">
+          <name>$keywords</name>
+          <default>null</default>
+          <type>array</type>
+        </argument>
+      </method>
     </class>
   </file>
-  <file path="CamelSpider/Spider/SpiderDom.php" hash="6e9425975cb29b03eaada3772656b188" package="Default">
+  <file path="CamelSpider/Spider/SpiderDom.php" hash="177ee1ba0a6c53aede89af885649893d" package="Default">
     <parse_markers>
       <error line="1">No DocBlock was found for File CamelSpider/Spider/SpiderDom.php</error>
-      <error line="17">No DocBlock was found for Method toHtml</error>
-      <notice line="24">Argument $node is missing from the function Docblock</notice>
-      <error line="27">No DocBlock was found for Method saveHtmlToFile</error>
-      <error line="33">No DocBlock was found for Method countInnerTags</error>
+      <notice line="23">Argument $node is missing from the function Docblock</notice>
+      <error line="43">No DocBlock was found for Method getGreater</error>
+      <critical line="55">No short description for method oldToHtml</critical>
+      <notice line="58">Argument $node is missing from the function Docblock</notice>
+      <notice line="68">Argument $node is missing from the function Docblock</notice>
+      <notice line="82">Argument $node is missing from the function Docblock</notice>
+      <error line="87">No DocBlock was found for Method textLen</error>
+      <error line="92">No DocBlock was found for Method substr_count</error>
+      <error line="97">No DocBlock was found for Method saveDomToHtmlFile</error>
+      <error line="101">No DocBlock was found for Method saveHtmlToFile</error>
+      <error line="105">No DocBlock was found for Method saveTxtToFile</error>
+      <error line="111">No DocBlock was found for Method countInnerTags</error>
     </parse_markers>
     <class final="false" abstract="false" line="14" namespace="CamelSpider\Spider" package="CamelSpider\Spider">
       <name>SpiderDom</name>
@@ -659,48 +1022,151 @@ Aplicar filtros contidos em $this-&gt;subscription&lt;/p&gt;
         <tag line="5" name="author" description="Gilmar Pupo &lt;g@g1mr.com&gt;"/>
         <tag line="5" name="see" description="\CamelSpider\Spider\http://www.php.net/manual/en/class.domelement.php" refers="\CamelSpider\Spider\http://www.php.net/manual/en/class.domelement.php"/>
       </docblock>
-      <method final="false" abstract="false" static="true" visibility="public" line="17" package="Default">
-        <name>toHtml</name>
-        <argument line="17">
+      <method final="false" abstract="false" static="true" visibility="public" line="23" package="Default">
+        <name>containerCandidate</name>
+        <docblock>
+          <description>Verifica se um DomElement &#xE9; candidato a ser o container
+de conte&#xFA;do</description>
+          <long-description>
+</long-description>
+          <tag line="18" name="todo" description="utilizar configurac&#xF5;es injetadas"/>
+        </docblock>
+        <argument line="23">
+          <name>$node</name>
+          <default/>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="true" visibility="public" line="43" package="Default">
+        <name>getGreater</name>
+        <argument line="43">
+          <name>$a</name>
+          <default/>
+          <type>DOMElement</type>
+        </argument>
+        <argument line="43">
+          <name>$b</name>
+          <default>NULL</default>
+          <type>DOMElement</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="true" visibility="public" line="58" package="Default">
+        <name>oldToHtml</name>
+        <docblock>
+          <description/>
+          <long-description>
+</long-description>
+          <tag line="55" name="deprecated" description=""/>
+        </docblock>
+        <argument line="58">
           <name>$node</name>
           <default/>
           <type>DOMElement</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" line="24" package="Default">
+      <method final="false" abstract="false" static="true" visibility="public" line="68" package="Default">
+        <name>toHtml</name>
+        <docblock>
+          <description>Save an isolated node as html</description>
+          <long-description>
+</long-description>
+          <tag line="63" name="return" description="HTML" type="string">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+        <argument line="68">
+          <name>$node</name>
+          <default/>
+          <type>DOMElement</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="true" visibility="public" line="82" package="Default">
         <name>toText</name>
         <docblock>
           <description>Convert HTML to plain text</description>
           <long-description>
 </long-description>
+          <tag line="78" name="see" description="\CamelSpider\Spider\http://www.php.net/manual/en/class.domtext.php" refers="\CamelSpider\Spider\http://www.php.net/manual/en/class.domtext.php"/>
         </docblock>
-        <argument line="24">
+        <argument line="82">
           <name>$node</name>
           <default/>
           <type>DOMElement</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" line="27" package="Default">
-        <name>saveHtmlToFile</name>
-        <argument line="27">
+      <method final="false" abstract="false" static="true" visibility="public" line="87" package="Default">
+        <name>textLen</name>
+        <argument line="87">
+          <name>$node</name>
+          <default/>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="true" visibility="public" line="92" package="Default">
+        <name>substr_count</name>
+        <argument line="92">
+          <name>$node</name>
+          <default/>
+          <type/>
+        </argument>
+        <argument line="92">
+          <name>$substring</name>
+          <default/>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="true" visibility="public" line="97" package="Default">
+        <name>saveDomToHtmlFile</name>
+        <argument line="97">
           <name>$node</name>
           <default/>
           <type>DOMElement</type>
         </argument>
-        <argument line="27">
+        <argument line="97">
           <name>$file</name>
           <default/>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" line="33" package="Default">
-        <name>countInnerTags</name>
-        <argument line="33">
+      <method final="false" abstract="false" static="true" visibility="public" line="101" package="Default">
+        <name>saveHtmlToFile</name>
+        <argument line="101">
           <name>$node</name>
           <default/>
           <type>DOMElement</type>
         </argument>
-        <argument line="33">
+        <argument line="101">
+          <name>$file</name>
+          <default/>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="true" visibility="public" line="105" package="Default">
+        <name>saveTxtToFile</name>
+        <argument line="105">
+          <name>$node</name>
+          <default/>
+          <type>DOMElement</type>
+        </argument>
+        <argument line="105">
+          <name>$file</name>
+          <default/>
+          <type/>
+        </argument>
+        <argument line="105">
+          <name>$title</name>
+          <default>NULL</default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="true" visibility="public" line="111" package="Default">
+        <name>countInnerTags</name>
+        <argument line="111">
+          <name>$node</name>
+          <default/>
+          <type>DOMElement</type>
+        </argument>
+        <argument line="111">
           <name>$tag</name>
           <default/>
           <type/>
@@ -724,307 +1190,179 @@ Aplicar filtros contidos em $this-&gt;subscription&lt;/p&gt;
       </method>
     </class>
   </file>
-  <file path="CamelSpider/Spider/SpiderProcessor.php" hash="9902f81af4a7989d22a4372c94c0d0f5" package="Default">
+  <file path="CamelSpider/Spider/SpiderProcessor.php" hash="753c0b6d227d7b64b78cfce47a7378d1" package="Default">
     <parse_markers>
       <error line="1">No DocBlock was found for File CamelSpider/Spider/SpiderProcessor.php</error>
-      <error line="31">No DocBlock was found for Property $config</error>
-      <error line="33">No DocBlock was found for Property $goutte</error>
-      <error line="35">No DocBlock was found for Property $logger</error>
-      <error line="37">No DocBlock was found for Property $elements</error>
-      <error line="39">No DocBlock was found for Property $cache</error>
-      <error line="41">No DocBlock was found for Property $requests</error>
-      <error line="43">No DocBlock was found for Property $cached</error>
-      <error line="45">No DocBlock was found for Property $errors</error>
-      <error line="47">No DocBlock was found for Property $subscription</error>
-      <error line="49">No DocBlock was found for Property $timeStart</error>
-      <error line="51">No DocBlock was found for Property $timeParcial</error>
-      <critical line="53">No short description for method __construct</critical>
-      <error line="78">No DocBlock was found for Method logger</error>
-      <error line="87">No DocBlock was found for Method transferDependency</error>
-      <error line="95">No DocBlock was found for Method getSubscription</error>
-      <error line="108">No DocBlock was found for Method getTimeUsage</error>
-      <error line="113">No DocBlock was found for Method checkLimit</error>
-      <error line="130">No DocBlock was found for Method debug</error>
-      <error line="139">No DocBlock was found for Method getResume</error>
-      <error line="166">No DocBlock was found for Method getPool</error>
-      <error line="178">No DocBlock was found for Method getCrawler</error>
-      <error line="212">No DocBlock was found for Method getRequest</error>
-      <error line="217">No DocBlock was found for Method getDomain</error>
-      <error line="222">No DocBlock was found for Method getLinkTags</error>
-      <critical line="231">No short description for method saveLink</critical>
-      <notice line="234">Argument $link is missing from the function Docblock</notice>
-      <error line="244">No DocBlock was found for Method errLink</error>
-      <error line="252">No DocBlock was found for Method isValidLink</error>
-      <error line="277">No DocBlock was found for Method processAddLink</error>
-      <error line="309">No DocBlock was found for Method collect</error>
-      <error line="377">No DocBlock was found for Method collectLinks</error>
-      <error line="396">No DocBlock was found for Method poolCollect</error>
-      <error line="425">No DocBlock was found for Method restart</error>
-      <error line="432">No DocBlock was found for Method performLogin</error>
-      <error line="440">No DocBlock was found for Method checkUpdate</error>
+      <error line="31">No DocBlock was found for Property $name</error>
+      <critical line="33">No short description for method __construct</critical>
+      <error line="50">No DocBlock was found for Method debug</error>
+      <error line="55">No DocBlock was found for Method getResume</error>
+      <error line="83">No DocBlock was found for Method getPool</error>
+      <critical line="95">No short description for method saveLink</critical>
+      <notice line="98">Argument $link is missing from the function Docblock</notice>
+      <error line="108">No DocBlock was found for Method errLink</error>
+      <error line="116">No DocBlock was found for Method isValidLink</error>
+      <error line="141">No DocBlock was found for Method processAddLink</error>
+      <error line="175">No DocBlock was found for Method collect</error>
+      <error line="251">No DocBlock was found for Method collectLinks</error>
+      <error line="272">No DocBlock was found for Method poolCollect</error>
+      <error line="295">No DocBlock was found for Method restart</error>
+      <error line="302">No DocBlock was found for Method checkUpdate</error>
     </parse_markers>
     <namespace-alias name="Link">CamelSpider\Entity\Link</namespace-alias>
     <namespace-alias name="InterfaceLink">CamelSpider\Entity\InterfaceLink</namespace-alias>
     <namespace-alias name="Document">CamelSpider\Entity\Document</namespace-alias>
     <namespace-alias name="InterfaceSubscription">CamelSpider\Entity\InterfaceSubscription</namespace-alias>
     <namespace-alias name="a">CamelSpider\Spider\SpiderAsserts</namespace-alias>
-    <namespace-alias name="InterfaceCache">CamelSpider\Spider\InterfaceCache</namespace-alias>
     <namespace-alias name="Uri">Zend\Uri\Uri</namespace-alias>
-    <class final="false" abstract="false" line="29" namespace="CamelSpider\Spider" package="CamelSpider\Spider">
+    <class final="false" abstract="false" line="28" namespace="CamelSpider\Spider" package="CamelSpider\Spider">
       <name>SpiderProcessor</name>
-      <extends/>
+      <extends>\CamelSpider\Spider\AbstractSpider</extends>
       <full_name>\CamelSpider\Spider\SpiderProcessor</full_name>
       <docblock>
         <description>Process every subscription</description>
         <long-description>
 </long-description>
-        <tag line="21" name="package" description="CamelSpider"/>
-        <tag line="21" name="subpackage" description="Spider"/>
-        <tag line="21" name="author" description="Gilmar Pupo &lt;g@g1mr.com&gt;"/>
+        <tag line="20" name="package" description="CamelSpider"/>
+        <tag line="20" name="subpackage" description="Spider"/>
+        <tag line="20" name="author" description="Gilmar Pupo &lt;g@g1mr.com&gt;"/>
       </docblock>
       <property final="false" static="false" visibility="protected" line="31" package="Default">
-        <name>$config</name>
-        <default/>
+        <name>$name</name>
+        <default>'Processor'</default>
       </property>
-      <property final="false" static="false" visibility="protected" line="33" package="Default">
-        <name>$goutte</name>
-        <default/>
-      </property>
-      <property final="false" static="false" visibility="protected" line="35" package="Default">
-        <name>$logger</name>
-        <default/>
-      </property>
-      <property final="false" static="false" visibility="protected" line="37" package="Default">
-        <name>$elements</name>
-        <default/>
-      </property>
-      <property final="false" static="false" visibility="protected" line="39" package="Default">
-        <name>$cache</name>
-        <default/>
-      </property>
-      <property final="false" static="false" visibility="private" line="41" package="Default">
-        <name>$requests</name>
-        <default>0</default>
-      </property>
-      <property final="false" static="false" visibility="private" line="43" package="Default">
-        <name>$cached</name>
-        <default>0</default>
-      </property>
-      <property final="false" static="false" visibility="private" line="45" package="Default">
-        <name>$errors</name>
-        <default>0</default>
-      </property>
-      <property final="false" static="false" visibility="protected" line="47" package="Default">
-        <name>$subscription</name>
-        <default/>
-      </property>
-      <property final="false" static="false" visibility="private" line="49" package="Default">
-        <name>$timeStart</name>
-        <default/>
-      </property>
-      <property final="false" static="false" visibility="private" line="51" package="Default">
-        <name>$timeParcial</name>
-        <default/>
-      </property>
-      <method final="false" abstract="false" static="false" visibility="public" line="59" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" line="39" package="Default">
         <name>__construct</name>
         <docblock>
           <description/>
           <long-description>
 </long-description>
-          <tag line="53" name="param" description="Goutte $goutte Crawler Goutte" type="\Goutte\Client" variable="$goutte">
+          <tag line="33" name="param" description="Goutte $goutte Crawler Goutte" type="\Goutte\Client" variable="$goutte">
             <type by_reference="false">\Goutte\Client</type>
           </tag>
-          <tag line="53" name="param" description="A class facade for Zend Cache" type="\CamelSpider\Spider\InterfaceCache" variable="$cache">
+          <tag line="33" name="param" description="A class facade for Zend Cache" type="\CamelSpider\Spider\InterfaceCache" variable="$cache">
             <type by_reference="false">\CamelSpider\Spider\InterfaceCache</type>
           </tag>
-          <tag line="53" name="param" description="Object to write logs (in realtime with low memory usage!)" type="\CamelSpider\Spider\Monolog" variable="$logger">
+          <tag line="33" name="param" description="Object to write logs (in realtime with low memory usage!)" type="\CamelSpider\Spider\Monolog" variable="$logger">
             <type by_reference="false">\CamelSpider\Spider\Monolog</type>
           </tag>
-          <tag line="53" name="param" description="Overload of default configurations in the constructor" type="array" variable="$config">
+          <tag line="33" name="param" description="Overload of default configurations in the constructor" type="array" variable="$config">
             <type by_reference="false">array</type>
           </tag>
         </docblock>
-        <argument line="59">
+        <argument line="39">
           <name>$goutte</name>
           <default/>
           <type>Client</type>
         </argument>
-        <argument line="59">
+        <argument line="39">
           <name>$cache</name>
           <default/>
           <type>InterfaceCache</type>
         </argument>
-        <argument line="59">
+        <argument line="39">
           <name>$logger</name>
           <default>NULL</default>
           <type/>
         </argument>
-        <argument line="59">
+        <argument line="39">
           <name>$config</name>
           <default>NULL</default>
           <type>array</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" line="78" package="Default">
-        <name>logger</name>
-        <argument line="78">
-          <name>$string</name>
-          <default/>
-          <type/>
-        </argument>
-        <argument line="78">
-          <name>$type</name>
-          <default>'info'</default>
-          <type/>
-        </argument>
-      </method>
-      <method final="false" abstract="false" static="false" visibility="private" line="87" package="Default">
-        <name>transferDependency</name>
-      </method>
-      <method final="false" abstract="false" static="false" visibility="protected" line="95" package="Default">
-        <name>getSubscription</name>
-      </method>
-      <method final="false" abstract="false" static="false" visibility="protected" line="103" package="Default">
-        <name>getMemoryUsage</name>
-        <docblock>
-          <description>return memory in MB</description>
-          <long-description>
-</long-description>
-        </docblock>
-      </method>
-      <method final="false" abstract="false" static="false" visibility="protected" line="108" package="Default">
-        <name>getTimeUsage</name>
-      </method>
-      <method final="false" abstract="false" static="false" visibility="protected" line="113" package="Default">
-        <name>checkLimit</name>
-      </method>
-      <method final="false" abstract="false" static="false" visibility="public" line="130" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" line="50" package="Default">
         <name>debug</name>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" line="139" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" line="55" package="Default">
         <name>getResume</name>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" line="166" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" line="83" package="Default">
         <name>getPool</name>
-        <argument line="166">
+        <argument line="83">
           <name>$mode</name>
           <default/>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" line="178" package="Default">
-        <name>getCrawler</name>
-        <argument line="178">
-          <name>$URI</name>
-          <default/>
-          <type/>
-        </argument>
-        <argument line="178">
-          <name>$mode</name>
-          <default>'GET'</default>
-          <type/>
-        </argument>
-      </method>
-      <method final="false" abstract="false" static="false" visibility="protected" line="207" package="Default">
-        <name>getResponse</name>
-        <docblock>
-          <description>Processa o conte&#xFA;do do documento.</description>
-          <long-description>&lt;p&gt;Neste momento s&#xE3;o aplicados os filtros de conte&#xFA;do
-e retornando flag se o conte&#xFA;do &#xE9; relevante&lt;/p&gt;
-</long-description>
-        </docblock>
-      </method>
-      <method final="false" abstract="false" static="false" visibility="protected" line="212" package="Default">
-        <name>getRequest</name>
-      </method>
-      <method final="false" abstract="false" static="false" visibility="protected" line="217" package="Default">
-        <name>getDomain</name>
-      </method>
-      <method final="false" abstract="false" static="false" visibility="protected" line="222" package="Default">
-        <name>getLinkTags</name>
-      </method>
-      <method final="false" abstract="false" static="false" visibility="protected" line="234" package="Default">
+      <method final="false" abstract="false" static="false" visibility="protected" line="98" package="Default">
         <name>saveLink</name>
         <docblock>
           <description/>
           <long-description>
 </long-description>
-          <tag line="231" name="TODO" description=": passar saveLink para Elements"/>
+          <tag line="95" name="TODO" description=": passar saveLink para Elements"/>
         </docblock>
-        <argument line="234">
+        <argument line="98">
           <name>$link</name>
           <default/>
           <type>InterfaceLink</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" line="244" package="Default">
+      <method final="false" abstract="false" static="false" visibility="protected" line="108" package="Default">
         <name>errLink</name>
-        <argument line="244">
+        <argument line="108">
           <name>$link</name>
           <default/>
           <type/>
         </argument>
-        <argument line="244">
+        <argument line="108">
           <name>$cause</name>
           <default>'undefined'</default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" line="252" package="Default">
+      <method final="false" abstract="false" static="false" visibility="protected" line="116" package="Default">
         <name>isValidLink</name>
-        <argument line="252">
+        <argument line="116">
           <name>$href</name>
           <default/>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" line="277" package="Default">
+      <method final="false" abstract="false" static="false" visibility="protected" line="141" package="Default">
         <name>processAddLink</name>
-        <argument line="277">
+        <argument line="141">
           <name>$link</name>
           <default/>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" line="309" package="Default">
+      <method final="false" abstract="false" static="false" visibility="protected" line="175" package="Default">
         <name>collect</name>
-        <argument line="309">
+        <argument line="175">
           <name>$target</name>
           <default/>
           <type/>
         </argument>
-        <argument line="309">
+        <argument line="175">
           <name>$withLinks</name>
           <default>false</default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" line="377" package="Default">
+      <method final="false" abstract="false" static="false" visibility="protected" line="251" package="Default">
         <name>collectLinks</name>
-        <argument line="377">
+        <argument line="251">
           <name>$crawler</name>
           <default/>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" line="396" package="Default">
+      <method final="false" abstract="false" static="false" visibility="protected" line="272" package="Default">
         <name>poolCollect</name>
-        <argument line="396">
+        <argument line="272">
           <name>$withLinks</name>
           <default>false</default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" line="425" package="Default">
+      <method final="false" abstract="false" static="false" visibility="protected" line="295" package="Default">
         <name>restart</name>
       </method>
-      <method final="false" abstract="false" static="false" visibility="protected" line="432" package="Default">
-        <name>performLogin</name>
-      </method>
-      <method final="false" abstract="false" static="false" visibility="public" line="440" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" line="302" package="Default">
         <name>checkUpdate</name>
-        <argument line="440">
+        <argument line="302">
           <name>$subscription</name>
           <default/>
           <type>InterfaceSubscription</type>
@@ -1062,6 +1400,111 @@ e retornando flag se o conte&#xFA;do &#xE9; relevante&lt;/p&gt;
         <name>addDocument</name>
       </method>
     </interface>
+  </file>
+  <file path="CamelSpider/Spider/SpiderTxt.php" hash="8a538d615afa1cfe9ef828c17f7c0329" package="Default">
+    <parse_markers>
+      <error line="1">No DocBlock was found for File CamelSpider/Spider/SpiderTxt.php</error>
+      <error line="13">No DocBlock was found for Method diffPercentage</error>
+    </parse_markers>
+    <namespace-alias name="IdeiasLang">CamelSpider\Tools\IdeiasLang</namespace-alias>
+    <class final="false" abstract="false" line="10" namespace="CamelSpider\Spider" package="Default">
+      <name>SpiderTxt</name>
+      <extends/>
+      <full_name>\CamelSpider\Spider\SpiderTxt</full_name>
+      <docblock>
+        <description>Helper for Strings</description>
+        <long-description>
+</long-description>
+      </docblock>
+      <method final="false" abstract="false" static="true" visibility="public" line="13" package="Default">
+        <name>diffPercentage</name>
+        <argument line="13">
+          <name>$a</name>
+          <default/>
+          <type/>
+        </argument>
+        <argument line="13">
+          <name>$b</name>
+          <default/>
+          <type/>
+        </argument>
+      </method>
+    </class>
+  </file>
+  <file path="CamelSpider/Tools/IdeiasLang.php" hash="ef318bb5963dbde2c9c3bf46f3b5df6d" package="Default">
+    <parse_markers>
+      <error line="1">No DocBlock was found for File CamelSpider/Tools/IdeiasLang.php</error>
+      <critical line="5">No short description for class IdeiasLang</critical>
+    </parse_markers>
+    <class final="false" abstract="false" line="12" namespace="CamelSpider\Tools" package="IdeiasLang">
+      <name>IdeiasLang</name>
+      <extends/>
+      <full_name>\CamelSpider\Tools\IdeiasLang</full_name>
+      <docblock>
+        <description/>
+        <long-description>
+</long-description>
+        <tag line="5" name="package" description="IdeiasLang"/>
+        <tag line="5" name="author" description="Ricardo Striquer Soares ricardo@ideiaspontual.com"/>
+        <tag line="5" name="version" description="1.0"/>
+        <tag line="5" name="link" description="www.ideiaspontual.com" link="www.ideiaspontual.com"/>
+        <tag line="5" name="copyright" description="2004, Ideias Pontual Desenvolvimento de Software Ltda."/>
+      </docblock>
+      <method final="false" abstract="false" static="false" visibility="public" line="21" package="Default">
+        <name>sameLF</name>
+        <docblock>
+          <description>Transforma todo tipo de quebra de linha em um mesmo caracter</description>
+          <long-description>
+</long-description>
+          <tag line="14" name="param" description="Texto a ser analisado" type="string" variable="$sText">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="14" name="param" description="Eh o caractere ou sequencia de caracteres que deve ser utilizado para a quebra de linha." type="string" variable="$sLF">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="14" name="return" description="Texto adicionado da quebra de linha." type="string">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+        <argument line="21">
+          <name>$sText</name>
+          <default/>
+          <type/>
+        </argument>
+        <argument line="21">
+          <name>$sLF</name>
+          <default>"\n"</default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" line="44" package="Default">
+        <name>iDiff</name>
+        <docblock>
+          <description>Retorna o percentual de diferenca entre dois os arquivos.</description>
+          <long-description>
+</long-description>
+          <tag line="32" name="param" description="Conteudo original, se for passado um valor NULL a funcao retorna um valor negativo." type="string" variable="$sFile1">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="32" name="param" description="Conteudo a ser comparado, se for passado um valor NULL a funcao retorna um valor negativo." type="string" variable="$sFile2">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="32" name="return" description="Quantidade de diferenca entre o arquivo 1 e 2, se for um valor negativo quer dizer que um dos dois arquivos estava vazio e por isto nao houve comparacao." type="double">
+            <type by_reference="false">double</type>
+          </tag>
+        </docblock>
+        <argument line="44">
+          <name>$sFile1</name>
+          <default/>
+          <type/>
+        </argument>
+        <argument line="44">
+          <name>$sFile2</name>
+          <default/>
+          <type/>
+        </argument>
+      </method>
+    </class>
   </file>
   <file path="CamelSpider/Tools/Urlizer.php" hash="4c8233c5f97c7715eb8b2609bb22569a" package="Default">
     <parse_markers>
@@ -1278,6 +1721,7 @@ Note: this function has been modified to simple return true or false</descriptio
   <package name="Doctrine">
     <package name="Urlizer"/>
   </package>
+  <package name="IdeiasLang"/>
   <namespace name="CamelSpider">
     <namespace name="Entity"/>
     <namespace name="Spider"/>

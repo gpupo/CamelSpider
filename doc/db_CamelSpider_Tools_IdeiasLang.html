@@ -78,7 +78,7 @@
       });
 
       
-    </script><h1 xmlns:dbx="http://docblox-project.org/xsl/functions" class="file">CamelSpider/Spider/SpiderAsserts.php</h1>
+    </script><h1 xmlns:dbx="http://docblox-project.org/xsl/functions" class="file">CamelSpider/Tools/IdeiasLang.php</h1>
 <div xmlns:dbx="http://docblox-project.org/xsl/functions" id="file-nav-box">
 <div id="file-nav-options">
               Show:
@@ -88,7 +88,7 @@
 <ul id="file-nav"><li>
 <a href="#classes"><img src="images/icons/class.png" height="14">
                           Classes
-                      </a><ul><li><a href="#%5CCamelSpider%5CSpider%5CSpiderAsserts">\CamelSpider\Spider\SpiderAsserts</a></li></ul>
+                      </a><ul><li><a href="#%5CCamelSpider%5CTools%5CIdeiasLang">\CamelSpider\Tools\IdeiasLang</a></li></ul>
 </li></ul>
 <div style="clear: left;"></div>
 </div>
@@ -96,24 +96,43 @@
               Table of Contents
           </div>
 </div>
-<a xmlns:dbx="http://docblox-project.org/xsl/functions" name="top" class="anchor"></a><a name="classes" class="anchor"></a><a xmlns:dbx="http://docblox-project.org/xsl/functions" id="\CamelSpider\Spider\SpiderAsserts" class="anchor"></a><h2 xmlns:dbx="http://docblox-project.org/xsl/functions" class="class">\CamelSpider\Spider\SpiderAsserts<div class="to-top"><a href="#top">jump to top</a></div>
+<a xmlns:dbx="http://docblox-project.org/xsl/functions" name="top" class="anchor"></a><a name="classes" class="anchor"></a><a xmlns:dbx="http://docblox-project.org/xsl/functions" id="\CamelSpider\Tools\IdeiasLang" class="anchor"></a><h2 xmlns:dbx="http://docblox-project.org/xsl/functions" class="class">\CamelSpider\Tools\IdeiasLang<div class="to-top"><a href="#top">jump to top</a></div>
 </h2>
 <div xmlns:dbx="http://docblox-project.org/xsl/functions" class="class">
-<small class="package"><b>Package: </b>Default</small><dl class="class-info"></dl>
+<small class="package"><b>Package: </b>IdeiasLang</small><p class="short-description"></p>
+<div class="long-description">
+</div>
+<dl class="class-info">
+<dt>Author</dt>
+<dd>Ricardo Striquer Soares ricardo@ideiaspontual.com
+         
+    </dd>
+<dt>Copyright</dt>
+<dd>2004, Ideias Pontual Desenvolvimento de Software Ltda.
+         
+    </dd>
+<dt>Link</dt>
+<dd>
+<a href="www.ideiaspontual.com">www.ideiaspontual.com</a>
+         
+    </dd>
+<dt>Version</dt>
+<dd>1.0
+         
+    </dd>
+</dl>
 <h3>Methods</h3>
 <div>
-<a id="\CamelSpider\Spider\SpiderAsserts::containKeywords()" class="anchor"></a><div class="method public">
-<a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_public.png" style="margin-right: 5px" alt="public"><span class="highlight">containKeywords</span><span class="nb-faded-text">(
-           $txt,  $keywords
-              =
-              null
+<a id="\CamelSpider\Tools\IdeiasLang::iDiff()" class="anchor"></a><div class="method public">
+<a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_public.png" style="margin-right: 5px" alt="public"><span class="highlight">iDiff</span><span class="nb-faded-text">(
+          string $sFile1, string $sFile2
           )
         </span>
         :
-          void</code><div class="description">
-<span class="attribute">static</span><p class="short_description"></p>
-</div>
+          double</code><div class="description"><p class="short_description">Retorna o percentual de diferenca entre dois os arquivos.</p></div>
 <div class="code-tabs">
+<div class="long-description">
+</div>
 <strong>Parameters</strong><table class="argument-info">
 <thead><tr>
 <th>Name</th>
@@ -121,29 +140,69 @@
 <th>Description</th>
 </tr></thead>
 <tr>
-<th>$txt</th>
-<td></td>
-<td><em></em></td>
+<th>$sFile1</th>
+<td>string</td>
+<td><em><p>Conteudo original, se for passado um valor NULL a funcao retorna um valor negativo.</p></em></td>
 </tr>
 <tr>
-<th>$keywords</th>
-<td></td>
-<td><em></em></td>
+<th>$sFile2</th>
+<td>string</td>
+<td><em><p>Conteudo a ser comparado, se for passado um valor NULL a funcao retorna um valor negativo.</p></em></td>
+</tr>
+</table>
+<strong>Returns</strong><table class="argument-info">
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tr>
+<td>double</td>
+<td>Quantidade de diferenca entre o arquivo 1 e 2, se for um valor negativo quer dizer que um dos dois arquivos estava vazio e por isto nao houve comparacao.</td>
 </tr>
 </table>
 </div>
 <div class="clear"></div>
 </div>
-<a id="\CamelSpider\Spider\SpiderAsserts::respect()" class="anchor"></a><div class="method public">
-<a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_public.png" style="margin-right: 5px" alt="public"><span class="highlight">respect</span><span class="nb-faded-text">(
-          
+<a id="\CamelSpider\Tools\IdeiasLang::sameLF()" class="anchor"></a><div class="method public">
+<a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_public.png" style="margin-right: 5px" alt="public"><span class="highlight">sameLF</span><span class="nb-faded-text">(
+          string $sText, string $sLF
+              =
+              "\n"
           )
         </span>
         :
-          void</code><div class="description">
-<span class="attribute">static</span><p class="short_description"></p>
+          string</code><div class="description"><p class="short_description">Transforma todo tipo de quebra de linha em um mesmo caracter</p></div>
+<div class="code-tabs">
+<div class="long-description">
 </div>
-<div class="code-tabs"></div>
+<strong>Parameters</strong><table class="argument-info">
+<thead><tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tr>
+<th>$sText</th>
+<td>string</td>
+<td><em><p>Texto a ser analisado</p></em></td>
+</tr>
+<tr>
+<th>$sLF</th>
+<td>string</td>
+<td><em><p>Eh o caractere ou sequencia de caracteres que deve ser utilizado para a quebra de linha.</p></em></td>
+</tr>
+</table>
+<strong>Returns</strong><table class="argument-info">
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tr>
+<td>string</td>
+<td>Texto adicionado da quebra de linha.</td>
+</tr>
+</table>
+</div>
 <div class="clear"></div>
 </div>
 </div>
