@@ -62,7 +62,7 @@ class Document extends AbstractSpiderEgg
         $this->processResponse();
     }
 
-	    protected function setTitle()
+    protected function setTitle()
     {
         $title = $this->crawler->filter('title')->text();
         $this->set('title', trim($title));
@@ -78,6 +78,11 @@ class Document extends AbstractSpiderEgg
     {
         return $this->crawler->filter('body');
     }
+    protected function getRaw()
+    {
+        return SpiderDom::toHtml($this->getBody());
+    }
+
     /**
      * Faz query no documento, de acordo com os parâmetros definidos
      * na assinatura e define a relevância, sendo que esta relevância 
@@ -85,7 +90,7 @@ class Document extends AbstractSpiderEgg
      *  1) Possivelmente contém conteúdo
      *  2) Contém conteúdo e contém uma ou mais palavras chave desejadas 
      *  pela assinatura ou não contém palavras indesejadas
-     *  3) Contém conteúdo, contém palavras indesejadas e não contém 
+     *  3) Contém conteúdo, contém palavras desejadas e não contém 
      *  palavras indesejadas
      **/
     protected function setRelevancy()
@@ -132,7 +137,6 @@ class Document extends AbstractSpiderEgg
         {
             if(SpiderDom::containerCandidate($node)){
                 $this->bigger = SpiderDom::getGreater($node, $this->bigger);
-                $this->saveBiggerToFile();
             }
         }
     }
@@ -151,8 +155,13 @@ class Document extends AbstractSpiderEgg
     protected function saveBiggerToFile()
     {
         $title = '# '. $this->getTitle() . "\n\n";
-        $this->cache->saveToHtmlFile(SpiderDom::toHtml($this->bigger), $this->get('slug'));
+        $this->cache->saveToHtmlFile($this->getHtml(), $this->get('slug'));
         $this->cache->saveDomToTxtFile($this->bigger, $this->get('slug'), $title);
+    }
+
+    public function getHtml()
+    {
+        return SpiderDom::toHtml($this->bigger);
     }
 
     /**
@@ -186,6 +195,11 @@ class Document extends AbstractSpiderEgg
         $this->setTitle();
         $this->setSlug();
         $this->getBiggerTag();
+
+        if ($this->getConfig('save_document', false)) {
+            $this->saveBiggerToFile();
+        }
+
         $this->setText();
         $this->setRelevancy();
     }
@@ -200,5 +214,18 @@ class Document extends AbstractSpiderEgg
         return $this->get('relevancy');
     }
 
+    /**
+     * @return array $array
+     */
+    public function toArray()
+    {
+        $array = array(
+            'relevancy' => $this->getRelevancy(),
+            'text'      => $this->getText(),
+            'html'      => $this->getHtml(),
+            'raw'       => $this->getRaw()
+        );
 
+        return $array;
+    }
 }

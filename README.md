@@ -1,20 +1,34 @@
 
 CamelSpider é uma [aranha](http://www.camel-spiders.net/) que coleta links e conteúdo de sites.
 
-        *Exemplo de uso da CamelSpider*
+        Exemplo de uso da CamelSpider:
         Portal de notícias quer coletar novos documentos vindos de
         fontes conhecidas de notícias, então, a partir de um cadastro destas
         fontes, CamelSpider coleta estas novas notícias e armazena na base de
         dados do portal.
 
+
 Um diferencial da CamelSpider, é oferecer um documento tem texto plano
 que reflete o conteúdo principal de cada conteúdo indexado.
+
+Com a CamelSpider, você pode fazer um leitor de Feed para sites que não
+possuem Feed!
 
 ## Filtros
 
 Esse conteúdo é filtrado a partir de palavras chaves.
 
 A spider navega nestes sites, coleta os links que fazem parte do escopo do domínio e faz o processamento interno dessa informação.
+
+De acordo com os filtros, cada documento coletado recebe uma avaliação
+de releância, sendo que esta pontuação pode ser:
+ *  0) não contém conteúdo
+ *  1) Possivelmente contém conteúdo
+ *  2) Contém conteúdo e contém uma ou mais palavras chave desejadas pela assinatura ou não contém palavras indesejadas
+ *  3) Contém conteúdo, contém palavras desejadas e não contém palavras indesejadas
+     
+
+## Estrutura 
 
 A Camel Spider é um componente a ser utilizado por uma aplicação que gerencie a base de assinaturas e receba o retorno do processamento para armazenamento em banco de dados.
 
@@ -23,6 +37,13 @@ A Camel Spider utiliza componentes do Zend Framework 2, Docrine Common e Goutte,
 Queremos que a Camel Spider seja uma Spider Web que supra necessidades de projetos em PHP 5.3.
 
 O [Camel Spider Bundle](http://github.com/gpupo/CamelSpiderBundle) integra a Camel Spider ao Symfony 2 e gerencia as assinaturas e o cache de informações e neste projeto complementar você pode visualizar a implementação de componentes que a CamelSpider utiliza como dependency injection mas não os implementa por ser fora de seu escopo.
+
+## Config
+
+camelSpider:
+    save_document:  false | true
+    memory_limit:   80
+    requests:limit: 300
 
 
 ## Otimização e cache
@@ -48,10 +69,19 @@ acessados diretamente do cache, pela aplicação que os utiliza.
 * Symfony Components: BrowserKit, ClassLoader, CssSelector, DomCrawler, Finder, and Process
 * Zend libraries: Cache, Date, Uri, Http, and Validate
 * PEAR [Text_Diff](http://pear.php.net/package/Text_Diff)
+* [Respect\Validation](http://respect.github.com)
+
 
 ## Você pode contribuir com o projeto!
 
 Este README precia de tradução e ainda temos muito trabalho pela frente e gostaríamos da sua ajuda.
+Coisas para fazer:
+
+    - Criar sandbox para facilitar os testes
+    - Criar testes unitários
+    - Melhorar a documentação em Inglês
+    - Corrigir coding standarts
+
 
 ## Documentação
 
