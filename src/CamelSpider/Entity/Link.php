@@ -50,11 +50,17 @@ class Link extends ArrayCollection implements InterfaceLink
     /**
      * reduce memory usage
      */
-    public function toArray()
+    public function toMinimal()
     {
         $this->removeElement('document');
         $this->set('document', $this->getDocument()->toArray());
 
-        return parent::toArray();
+        return $this;
     }
+
+    public function toArray()
+    {
+        return $this->toMinimal()->toArray();
+    }
+
 }

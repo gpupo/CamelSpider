@@ -101,7 +101,7 @@ EOF;
             $this->cache->save($link->getId(), $link, $this->getLinkTags());
         }
 
-        $this->elements->set($link->getId(), $link->toArray());
+        $this->elements->set($link->getId(), $link->toMinimal());
 
     }
 
