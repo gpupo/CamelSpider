@@ -42,9 +42,9 @@ O [Camel Spider Bundle](http://github.com/gpupo/CamelSpiderBundle) integra a Cam
 
 camelSpider:
     save_document:  false | true
-    memory_limit:   80
-    requests:limit: 300
-
+    memory_limit:   80 *(MB)*
+    requests:limit: 300 
+    log_level:      1~5 *#default 1*
 
 ## Otimização e cache
 

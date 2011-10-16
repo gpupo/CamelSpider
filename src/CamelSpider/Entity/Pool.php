@@ -14,7 +14,7 @@ use CamelSpider\Entity\AbstractSpiderEgg,
  **/
 class Pool extends AbstractSpiderEgg
 {
-    protected $name = 'Document';
+    protected $name = 'Pool';
 
     public function __construct($dependency = null)
     {
@@ -30,15 +30,12 @@ class Pool extends AbstractSpiderEgg
     }
 
     /**
-     * Reduce for only Links waiting process
-     *
-     * @return Pool reduced
+     * @deprecated
      */
-    public function getWaiting()
+    public function old_filterWaiting()
     {
         return $this->filter(
             function ($link) {
-
                 if ($link instanceof Link) {
                     return $link->isWaiting();
                 }
@@ -48,15 +45,37 @@ class Pool extends AbstractSpiderEgg
         );
     }
 
+
+    /**
+     * Reduce for only Links waiting process
+     *
+     * @return array
+     */
+    protected function filterWaiting()
+    {
+        $a = array();
+
+        foreach ($this->toArray() as $link) {
+            if ($link instanceof InterfaceLink && $link->isWaiting()) {
+                $a[] = $link;
+            }
+        }
+
+        return $a;
+    }
+
+    /**
+     * @return array
+     */
     public function getPool($mode)
     {
-        $pool =  $this->getWaiting();
-        if($pool->count() < 1)
+        $pool =  $this->filterWaiting();
+        if(count($pool) < 1)
         {
             $this->logger('Pool empty on the ' . $mode, 'info', 5);
             return false;
         }
-        $this->logger('Pool count:' . $pool->count(), 'info', 5);
+        $this->logger('Pool count:' . count($pool), 'info', 1);
         return $pool;
     }
 
@@ -79,9 +98,9 @@ class Pool extends AbstractSpiderEgg
         return $this;
     }
 
-    public function errLink($link, $cause = 'undefined')
+    public function errLink(InterfaceLink $link, $cause = 'undefined')
     {
-        $link->set('status', 3);
+        $link->setStatus(3);
         $this->_save($link);
         $this->logger($link->get('href')  . ' marked with error. Cause [' . $cause . ']');
         $this->errors++;

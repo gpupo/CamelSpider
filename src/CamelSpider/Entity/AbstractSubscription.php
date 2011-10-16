@@ -9,6 +9,11 @@ use Doctrine\Common\Collections\ArrayCollection,
 abstract class AbstractSubscription extends ArrayCollection implements InterfaceSubscription
 {
 
+    public function setStatus($x)
+    {
+        return $this->set('status', $x);
+    }
+
     public function getId()
     {
         return $this->get('id');

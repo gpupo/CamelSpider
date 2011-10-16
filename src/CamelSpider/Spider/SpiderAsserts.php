@@ -6,7 +6,7 @@ use Respect\Validation\Validator as v,
     CamelSpider\Entity\InterfaceLink,
     Zend\Uri\Uri;
 
-class SpiderAsserts 
+class SpiderAsserts
 {
 
     public static function containKeywords($txt, array $keywords = null)

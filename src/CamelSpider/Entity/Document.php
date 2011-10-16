@@ -81,7 +81,9 @@ class Document extends AbstractSpiderEgg
 
     protected function getRaw()
     {
-        return SpiderDom::toHtml($this->getBody());
+        if ($this->getBody() instanceof DOMElement) {
+            return SpiderDom::toHtml($this->getBody());
+        }
     }
 
     /**
@@ -161,7 +163,9 @@ class Document extends AbstractSpiderEgg
 
     public function getHtml()
     {
-        return SpiderDom::toHtml($this->bigger);
+        if ($this->bigger) {
+            return SpiderDom::toHtml($this->bigger);
+        }
     }
 
     /**

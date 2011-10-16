@@ -7,10 +7,13 @@ use CamelSpider\Entity\AbstractSpiderEgg,
 
 abstract class AbstractSpider extends AbstractSpiderEgg
 {
+    protected $name = 'Spider';
 
     protected $time = array('total' => 0, 'parcial' => 0);
 
     protected $pool;
+
+    protected $hiperlinks = 0;
 
     protected $requests = 0;
 
@@ -94,9 +97,10 @@ abstract class AbstractSpider extends AbstractSpiderEgg
     %s
     - Memory usage...........................%s Mb
     - Number of new requests.................%s 
-    - Time parcial...........................%s Seg
     - Time total.............................%s Seg
     - Objects in cache.......................%s
+    - Success................................%s
+    - Hyperlinks.............................%s
     - Errors.................................%s
 
 EOF;
@@ -117,9 +121,10 @@ EOF;
                 $this->subscription,
                 $this->getMemoryUsage(),
                 $this->requests,
-                $this->getTimeUsage('parcial'),
                 $this->getTimeUsage('total'),
                 $this->cached,
+                $this->success,
+                $this->hyperlinks,
                 $this->errors
             );
     }
@@ -152,7 +157,6 @@ EOF;
         $this->pool = new Pool($this->transferDependency());
     }
 
-
     /**
      * Get Memory usage in MB
      * @return int
@@ -169,7 +173,6 @@ EOF;
     {
         return round(microtime(true) - $this->time[$type]);
     }
-
 
     protected function checkLimit()
     {

@@ -20,8 +20,6 @@ use CamelSpider\Entity\Link,
 /**
  * Process every subscription
  *
- * @package     CamelSpider
- * @subpackage  Spider
  * @author      Gilmar Pupo <g@g1mr.com>
  *
 */
@@ -72,7 +70,7 @@ class Indexer extends AbstractSpider
 
         //Evita duplicidade
         if ($this->requests > 0 && $this->cache->isObject($link->getId())) {
-            $this->logger('cached:[' . $link->get('href') . ']');
+            $this->logger('cached', 'info', 5);
             $this->cached++;
             return false;
         }
@@ -88,14 +86,15 @@ class Indexer extends AbstractSpider
         {
             //check format1
         }
-		try{
-			if(!SpiderAsserts::isDocumentHref($URI)){
-			    $this->logger('URI wrong:[' . $URI . ']', 'err');
+
+        try {
+            if(!SpiderAsserts::isDocumentHref($URI)){
+                $this->logger('URI wrong:[' . $URI . ']', 'err');
                 $this->pool->errLink($target, 'invalid URL');
-			    return false;
+                return false;
             }
 
-            try{
+            try {
                 $crawler = $this->getCrawler($URI);
             }
             catch(\Exception $e){
@@ -103,18 +102,16 @@ class Indexer extends AbstractSpider
                 if($this->requests === 0){
                     $this->errors++;
                     throw new \Exception ('Error in the first request:' . $e->getMessage());
-                } 
+                }
             }
 
-            if(!$crawler){
+            if (!$crawler) {
                 $this->logger('Crawler broken', 'err');
                 $this->pool->errLink($target, 'impossible crawler');
                 return false;
             }
 
-            if($target instanceof Link){
-                //Verifica se a diff do documento coletado com o documento
-                //existente em DB é maior que X %
+            if (!$target instanceof InterfaceSubscription) {
                 if(DocumentManager::isFresh($this->getBody(), $target, $this->getSubscription())){
                     $target->setDocument(clone $crawler, $this->getSubscription(), $this->transferDependency());
                     $this->logger('document IS fresh');
@@ -123,16 +120,17 @@ class Indexer extends AbstractSpider
                     $this->logger('document isnt fresh');
                 }
             }
-		    $target->set('status', 1); //done!
+
+            $target->setStatus(1);//done!
+
             if ($withLinks) {
                 $this->logger('go to the scan more links!', 'info', 5);
                 try {
-                    $target->set('linksCount', $this->collectLinks($crawler));
+                    $target->set('hyperlinks', $this->collectLinks($crawler));
                 }
                 catch(\Exception $e) {
                     $this->logger($e->getMessage(), 'err');
-                    $this->debug();
-                    die($e->getMessage() . "!\n");
+                    $this->errors++;
                 }
             }
 
@@ -142,23 +140,32 @@ class Indexer extends AbstractSpider
 
             return true;
         }
-		catch (\Zend\Http\Exception\InvalidArgumentException $e) {
+        catch (\Zend\Http\Exception\InvalidArgumentException $e) {
             $this->logger( 'Invalid argument on [' . $URI . ']', 'err');
             $this->pool->errLink($target, 'invalid argument on HTTP request');
+            $this->errors++;
             throw new \Exception ('Invalid argument');
         }
         catch (\Zend\Http\Client\Adapter\Exception\RuntimeException $e) {
             $this->logger( 'Http Client Runtime error on  [' . $URI . ']', 'err');
             $this->pool->errLink($target, 'Runtime error on Http Client Adaper');
-
+            $this->errors++;
             return false;
         }
 
     }
 
+    /**
+     * @return int
+     */
     protected function collectLinks($crawler)
     {
         $aCollection = $crawler->filter('a');
+
+        if ($aCollection->count() < 1 && $this->requests === 0) {
+            throw new \Exception('Error on collect links in the index');
+        }
+
         $this->logger(
             'Number of links founded in request #' 
             . $this->requests . ':' . $aCollection->count()
@@ -171,24 +178,30 @@ class Indexer extends AbstractSpider
                 $this->addLink($link);
             }
         }
+        $this->hyperlinks += $aCollection->count();
 
-        if($aCollection->count() < 1 && $this->requests === 0){
-            throw new \Exception('Error on collect links in the index');
-        }
+        return $aCollection->count();
     }
 
     protected function poolCollect($withLinks = false)
     {
-        if (!$pool = $this->pool->getPool('test')) {
+        if (!$pool = $this->pool->getPool('collect')) {
             return false;
         }
-var_dump($pool);
+
         foreach ($pool as $link) {
-            if(!$this->checkLimit()){
+            if (!$link instanceof InterfaceLink) {
+                var_dump($pool);
+                break;
+            }
+
+            if (!$this->checkLimit()) {
                 $this->pool->errLink($link, 'Limit reached');
                 break;
             }
+
             $this->logger("\n" . '====== Request number #' . $this->requests . '======');
+
             try{
                 $this->collect($link, $withLinks);
             }
@@ -213,19 +226,15 @@ var_dump($pool);
         $this->collect($this->subscription, true);
 
         $i = 0;
-        while (
-            $i < $this->subscription->getMaxDepth()
-            && $this->pool->getPool('looping')
-        ) {
+        while ($i < $this->subscription->getMaxDepth()) {
             $this->poolCollect(true);
+            $i++;
         }
 
-        if ($this->pool->getPool('conclusion')) {
-            $this->poolCollect();	
-        }
+        $this->poolCollect(); //conclusion
 
         echo $this->getResume();
 
-        return $this->elements;
+        return $this->pool;
     }
 }

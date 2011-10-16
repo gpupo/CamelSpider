@@ -74,15 +74,20 @@ class AbstractCache extends AbstractSpiderEgg implements InterfaceCache
         return $this->cache->save($data, $id, $tags);
     }
 
+    protected function loadObject($id)
+    {
+        return $this->cache->load($id);
+    }
+
     public function getObject($id)
     {
         $this->logger('Using from the cache');
-        return $this->cache->load($id);
+        return $this->loadObject($id);
     }
-    
+
     public function isObject($id)
     {
-        if($this->getObject($id) !== false){
+        if($this->loadObject($id) !== false){
             return true;
         }
     }
@@ -90,12 +95,12 @@ class AbstractCache extends AbstractSpiderEgg implements InterfaceCache
     public function getFileRandomPath($slug, $format)
     {
         return $this->cache_dir
-            . '/' 
-            . $format 
-            . '/' 
-            . $slug 
-            . '-' 
-            . sha1(microtime(true)) 
+            . '/'
+            . $format
+            . '/'
+            . $slug
+            . '-'
+            . sha1(microtime(true))
             . '.'
             . $format;
     }

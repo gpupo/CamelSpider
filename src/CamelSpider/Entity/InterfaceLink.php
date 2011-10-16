@@ -9,5 +9,6 @@ interface InterfaceLink
     public function isDone();
     public function isWaiting();
     public function toMinimal();
+    public function setStatus($x);
 
 }

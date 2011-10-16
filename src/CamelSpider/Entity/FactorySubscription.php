@@ -17,14 +17,14 @@ class FactorySubscription
         $array = array(
             'domain'      =>   $domain,
             'href'        =>   'http://'. $domain . '/',
-            'max_depth'   =>   1,
+            'max_depth'   =>   2,
             'filters'     =>   array('contain' => 'jova', 'notContain' => 'agrícola'),
             'id'          =>   sha1($domain)
         );
 
         return self::build($array);
     }
-    
+
     public static function buildCollectionFromDomain(array $array)
     {
         $collection = new ArrayCollection();

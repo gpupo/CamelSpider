@@ -15,7 +15,7 @@ namespace CamelSpider\Spider;
 use CamelSpider\Entity\AbstractSpiderEgg,
     CamelSpider\Spider\Indexer,
     CamelSpider\Entity\FactorySubscription,
-    CamelSpider\Spider\Pool;
+    CamelSpider\Entity\Pool;
 
 /**
  * Aciona indexação para cada assinatura
@@ -45,6 +45,8 @@ class AbstractLauncher extends AbstractSpiderEgg
 
     protected function doSave(Pool $pool)
     {
+
+        var_dump($pool);
     }
 
 

@@ -20,6 +20,11 @@ class Link extends ArrayCollection implements InterfaceLink
         parent::__construct($link);
     }
 
+    public function setStatus($x)
+    {
+        return $this->set('status', $x);
+    }
+
     /**
      * Gera o hash para armazenar em cache
      **/
@@ -55,8 +60,6 @@ class Link extends ArrayCollection implements InterfaceLink
      */
     public function toMinimal()
     {
-        //$this->removeElement('document');
-
         if ($this->getDocument() instanceof Document) {
             $this->set('document', $this->getDocument()->toArray());
         }
