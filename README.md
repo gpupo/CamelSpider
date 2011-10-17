@@ -22,11 +22,11 @@ A spider navega nestes sites, coleta os links que fazem parte do escopo do domí
 
 De acordo com os filtros, cada documento coletado recebe uma avaliação
 de releância, sendo que esta pontuação pode ser:
- *  0) não contém conteúdo
- *  1) Possivelmente contém conteúdo
- *  2) Contém conteúdo e contém uma ou mais palavras chave desejadas pela assinatura ou não contém palavras indesejadas
- *  3) Contém conteúdo, contém palavras desejadas e não contém palavras indesejadas
-     
+
+ * 0) não contém conteúdo
+ * 1) Possivelmente contém conteúdo
+ * 2) Contém conteúdo e contém uma ou mais palavras chave desejadas pela assinatura ou não contém palavras indesejadas
+ * 3) Contém conteúdo, contém palavras desejadas e não contém palavras indesejadas
 
 ## Estrutura 
 
