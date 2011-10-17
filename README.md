@@ -1,7 +1,7 @@
 ![Camel
 Spider](http://www.camel-spiders.net/images/camel-spider-head.jpg)
 
-CamelSpider é uma [aranha](http://www.camel-spiders.net/) que coleta links e conteúdo de sites.
+CamelSpider é uma [aranha](http://www.camel-spiders.net/) ([Web crawler](http://en.wikipedia.org/wiki/Web_spider)) que coleta links e conteúdo de sites.
 
         Exemplo de uso da CamelSpider:
         Portal de notícias quer coletar novos documentos vindos de
