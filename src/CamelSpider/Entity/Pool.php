@@ -102,7 +102,12 @@ class Pool extends AbstractSpiderEgg
     {
         $link->setStatus(3);
         $this->_save($link);
-        $this->logger($link->get('href')  . ' marked with error. Cause [' . $cause . ']');
+        $this->logger(
+            $link->get('href')
+            ."\n"
+            .' marked with error.'
+            .'Cause: ' . $cause
+            ."\n");
         $this->errors++;
     }
 

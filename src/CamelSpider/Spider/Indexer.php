@@ -59,23 +59,24 @@ class Indexer extends AbstractSpider
                 . ']'
             ,'info', 5);
 
-            return false;
+            return 0;
         }
 
         //Evita links inválidos
         if (!SpiderAsserts::isDocumentLink($link)) {
             $this->logger('Href refused', 'info', 5);
-            return false;
+            return 0;
         }
 
         //Evita duplicidade
         if ($this->requests > 0 && $this->cache->isObject($link->getId())) {
             $this->logger('cached', 'info', 5);
             $this->cached++;
-            return false;
+            return 0;
         }
+        $this->pool->save($link);
 
-        return $this->pool->save($link);
+        return 1;
     }
 
     protected function collect(InterfaceLink $target, $withLinks = false)
@@ -105,7 +106,7 @@ class Indexer extends AbstractSpider
                 }
             }
 
-            if (!$crawler) {
+            if (!isset($crawler)) {
                 $this->logger('Crawler broken', 'err');
                 $this->pool->errLink($target, 'impossible crawler');
                 return false;
@@ -175,10 +176,9 @@ class Indexer extends AbstractSpider
         {
             if($this->checkLimit()){
                 $link = new Link($node);
-                $this->addLink($link);
+                $this->hyperlinks +=  $this->addLink($link);
             }
         }
-        $this->hyperlinks += $aCollection->count();
 
         return $aCollection->count();
     }

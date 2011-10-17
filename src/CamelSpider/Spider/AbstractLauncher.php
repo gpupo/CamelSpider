@@ -45,8 +45,15 @@ class AbstractLauncher extends AbstractSpiderEgg
 
     protected function doSave(Pool $pool)
     {
+        foreach ($pool->toArray() as $link) {
+            if (
+                $link instanceof InterfaceLink &&
+                $link->getRelevancy() >= $this->getConfig('minimal_relevancy', 3)
+            ) {
+                var_dump($link);
+            }
+        }
 
-        var_dump($pool);
     }
 
 

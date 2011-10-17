@@ -9,13 +9,13 @@ use Respect\Validation\Validator as v,
 class SpiderAsserts
 {
 
-    public static function containKeywords($txt, array $keywords = null)
+    public static function containKeywords($txt, $keywords = null, $ifNull = true)
     {
-        if(!$keywords) {
-            return true; // Subscription not contain filter for keywords
+        if (!is_array($keywords) || count($keywords) < 1) {
+            return $ifNull; // Subscription not contain filter for keywords
         }
-        foreach($keywords as $keyword){
-            if(v::contains($keyword)->validate($txt)) {
+        foreach ($keywords as $keyword) {
+            if (v::contains($keyword)->validate($txt)) {
                 return true;
             }
         }
@@ -26,17 +26,19 @@ class SpiderAsserts
     public static function isDocumentHref($href)
     {
         if(
-            stripos($href, 'mail') == true ||
-            empty($href) ||
+            empty($href)                        ||
+            stripos($href, 'mail') !== false    ||
             substr($href, 0,10) == 'javascript' ||
             substr($href, 0, 1) == '#'
         ) {
             return false;
         }
+
         $zendUri = new Uri($href);
         if ($zendUri->isValid()) {
             return true;
         }
+
         return false;
     }
 

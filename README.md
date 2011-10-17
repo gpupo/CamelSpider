@@ -45,6 +45,7 @@ camelSpider:
     memory_limit:   80 *(MB)*
     requests:limit: 300 
     log_level:      1~5 *#default 1*
+    minimal_relevancy: 3
 
 ## Otimização e cache
 

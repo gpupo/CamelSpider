@@ -34,8 +34,15 @@ abstract class AbstractSpider extends AbstractSpiderEgg
     public function getCrawler($URI, $mode = 'GET')
     {
 
-        $this->logger( 'created a Crawler for [' . $URI . ']');
+        $this->logger(
+            'created a Crawler for:'
+            ."\n"
+            . $URI
+            ."\n"
+        );
+
         $this->requests++;
+
         try {
             $client = $this->goutte->request($mode, $URI);
         }

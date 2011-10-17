@@ -114,7 +114,7 @@ class Document extends AbstractSpiderEgg
             $this->logger('Document not contain keywords');
         }
         //Not Contain?
-        if(!SpiderAsserts::containKeywords($txt, $this->subscription->getFilter('notContain'))) {
+        if(!SpiderAsserts::containKeywords($txt, $this->subscription->getFilter('notContain'), false)) {
             $this->addRelevancy();
         } else {
             $this->logger('Document contain bad keywords');
