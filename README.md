@@ -81,7 +81,7 @@ Coisas para fazer:
     - Criar sandbox para facilitar os testes
     - Criar testes unitários
     - Melhorar a documentação em Inglês
-    - Corrigir coding standarts
+    - Corrigir coding standards
 
 
 ## Documentação
