@@ -68,8 +68,8 @@ acessados diretamente do cache, pela aplicação que os utiliza.
 ## Dependências
 
 * Symfony Components: BrowserKit, ClassLoader, CssSelector, DomCrawler, Finder, and Process
-* Zend libraries: Cache, Date, Uri, Http, and Validate
-* PEAR [Text_Diff](http://pear.php.net/package/Text_Diff)
+* Zend Framework 2 libraries: Cache, Date, Uri, Http, and Validate
+* PEAR [Text_Diff -maybe!](http://pear.php.net/package/Text_Diff)
 * [Respect\Validation](http://respect.github.com)
 
 
