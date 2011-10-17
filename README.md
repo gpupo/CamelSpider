@@ -32,7 +32,7 @@ de releância, sendo que esta pontuação pode ser:
 
 A Camel Spider é um componente a ser utilizado por uma aplicação que gerencie a base de assinaturas e receba o retorno do processamento para armazenamento em banco de dados.
 
-A Camel Spider utiliza componentes do Zend Framework 2, Docrine Common e Goutte, e presume que será instânciada dentro de um projeto com o autoloading corretamente configurado de segundo a PRS-0.
+A Camel Spider utiliza componentes do Zend Framework 2, Docrine Common e Goutte, e presume que será instânciada dentro de um projeto com o autoloading corretamente configurado conforme a PRS-0.
 
 Queremos que a Camel Spider seja uma Spider Web que supra necessidades de projetos em PHP 5.3.
 
