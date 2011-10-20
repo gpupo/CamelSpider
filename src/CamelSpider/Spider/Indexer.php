@@ -10,6 +10,7 @@
 */
 
 namespace CamelSpider\Spider;
+
 use CamelSpider\Entity\Link,
     CamelSpider\Entity\InterfaceLink,
     CamelSpider\Entity\Document,
