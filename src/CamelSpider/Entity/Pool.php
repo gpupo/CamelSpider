@@ -90,7 +90,7 @@ class Pool extends AbstractSpiderEgg
     public function save(InterfaceLink $link)
     {
         if($link->isDone()){
-            $this->cache->save($link->getId(), $link);
+            $this->cache->save($link->getId('string'), $link);
         }
 
         $this->_save($link->toMinimal());

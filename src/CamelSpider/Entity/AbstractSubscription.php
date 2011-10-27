@@ -14,7 +14,7 @@ abstract class AbstractSubscription extends ArrayCollection implements Interface
         return $this->set('status', $x);
     }
 
-    public function getId()
+    public function getId($mode = null)
     {
         return $this->get('id');
     }

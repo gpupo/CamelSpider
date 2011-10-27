@@ -28,7 +28,7 @@ class Link extends ArrayCollection implements InterfaceLink
     /**
      * Gera o hash para armazenar em cache
      **/
-    public function getId()
+    public function getId($mode = null)
     {
         return sha1($this->get('href'));
     }

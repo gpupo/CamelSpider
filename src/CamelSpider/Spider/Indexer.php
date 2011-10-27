@@ -69,8 +69,9 @@ class Indexer extends AbstractSpider
             return 0;
         }
 
+        $this->logger('Check Cache for id:' . $link->getId('string'), 'info', 1);
         //Evita duplicidade
-        if ($this->requests > 0 && $this->cache->isObject($link->getId())) {
+        if ($this->requests > 0 && $this->cache->isObject($link->getId('string'))) {
             $this->logger('cached', 'info', 5);
             $this->cached++;
             return 0;
@@ -136,7 +137,7 @@ class Indexer extends AbstractSpider
                 }
             }
 
-            $this->logger('saving object on cache', 'info', 5);
+            $this->logger('saving object on cache, with id:' . $target->getId('string'), 'info', 5);
             $this->pool->save($target);
             $this->success++;
 
