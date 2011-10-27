@@ -61,11 +61,21 @@ class Link extends ArrayCollection implements InterfaceLink
     public function toMinimal()
     {
         if ($this->getDocument() instanceof Document) {
-            $this->set('document', $this->getDocument()->toArray());
+            $this->removeElement('document');
         }
 
         return $this;
     }
+
+    public function toPackage()
+    {
+        if ($this->getDocument() instanceof Document) {
+            $this->set('document', $this->getDocument()->toPackage());
+        }
+
+        return $this;
+    }
+
 
     public function toArray()
     {

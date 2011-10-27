@@ -3,6 +3,7 @@
 namespace CamelSpider\Entity;
 
 use CamelSpider\Entity\AbstractSpiderEgg,
+    CamelSpider\Entity\InterfaceSubscription,
     CamelSpider\Entity\InterfaceLink;
 
 /**
@@ -56,13 +57,32 @@ class Pool extends AbstractSpiderEgg
         $a = array();
 
         foreach ($this->toArray() as $link) {
-            if ($link instanceof InterfaceLink && $link->isWaiting()) {
+            if (!$link instanceof InterfaceSubscription && $link instanceof InterfaceLink && $link->isWaiting()) {
                 $a[] = $link;
             }
         }
 
         return $a;
     }
+
+    /**
+     * Reduce for only Links with process finished
+     *
+     * @return array
+     */
+    public function getPackage()
+    {
+        $a = array();
+
+        foreach ($this->toArray() as $link) {
+            if ($link instanceof InterfaceLink && !$link instanceof InterfaceSubscription && $link->isDone()) {
+                $a[] = $link;
+            }
+        }
+
+        return $a;
+    }
+
 
     /**
      * @return array
@@ -81,7 +101,7 @@ class Pool extends AbstractSpiderEgg
 
     private function _save(InterfaceLink $link)
     {
-        $this->set($link->getId(), $link);
+        $this->set($link->getId('string'), $link);
     }
 
     /**
@@ -89,8 +109,13 @@ class Pool extends AbstractSpiderEgg
      */
     public function save(InterfaceLink $link)
     {
+
+        if ($link instanceof InterfaceSubscription) {
+            return false;
+        }
+
         if($link->isDone()){
-            $this->cache->save($link->getId('string'), $link);
+            $this->cache->save($link->getId('string'), $link->toPackage());
         }
 
         $this->_save($link->toMinimal());

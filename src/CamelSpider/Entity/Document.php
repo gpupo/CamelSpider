@@ -218,6 +218,25 @@ class Document extends AbstractSpiderEgg
         return $this->get('relevancy');
     }
 
+
+    /**
+     * reduce memory usage
+     *
+     * @return self minimal
+     */
+    public function toPackage()
+    {
+         $array = array(
+            'relevancy' => $this->getRelevancy(),
+            'title'     => $this->getTitle(),
+            'text'      => $this->getText(),
+            'html'      => $this->getHtml(),
+            'raw'       => $this->getRaw()
+        );
+
+        return $array;
+    }
+
     /**
      * @return array $array
      */
@@ -225,9 +244,7 @@ class Document extends AbstractSpiderEgg
     {
         $array = array(
             'relevancy' => $this->getRelevancy(),
-            'text'      => $this->getText(),
-            'html'      => $this->getHtml(),
-            'raw'       => $this->getRaw()
+            'title'     => $this->getTitle(),
         );
 
         return $array;
