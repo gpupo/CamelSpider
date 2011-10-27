@@ -69,7 +69,7 @@ class Indexer extends AbstractSpider
             return 0;
         }
 
-        $this->logger('Check Cache for id:' . $link->getId('string'), 'info', 1);
+        $this->logger('Check Cache for id:' . $link->getId('string'), 'info', 3);
         //Evita duplicidade
         if ($this->requests > 0 && $this->cache->isObject($link->getId('string'))) {
             $this->logger('cached', 'info', 5);
@@ -202,7 +202,7 @@ class Indexer extends AbstractSpider
                 break;
             }
 
-            $this->logger("\n" . '====== Request number #' . $this->requests . '======');
+            $this->logger("\n" . '====== Request number #' . $this->requests . '======', 'info', 5);
 
             try{
                 $this->collect($link, $withLinks);
@@ -212,7 +212,7 @@ class Indexer extends AbstractSpider
                 $this->logger('Can\'t collect:' . $e->getMessage(), 'err');
             }
 
-            $this->logger($this->getResume());
+            $this->logger($this->getResume(), 'info', 5);
         }
     }
 

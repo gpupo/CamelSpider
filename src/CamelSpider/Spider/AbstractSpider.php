@@ -39,7 +39,7 @@ abstract class AbstractSpider extends AbstractSpiderEgg
             ."\n"
             . $URI
             ."\n"
-        );
+        ,'info', 3);
 
         $this->requests++;
 
@@ -52,7 +52,7 @@ abstract class AbstractSpider extends AbstractSpiderEgg
         }
 
         //Error in request
-        $this->logger('Status Code: [' . $this->getResponse()->getStatus() . ']');
+        $this->logger('Status Code: [' . $this->getResponse()->getStatus() . ']', 'info', 3);
         if($this->getResponse()->getStatus() >= 400){
             throw new \Exception('Request with error: ' . $this->getResponse()->getStatus() 
                 . " - " . $client->text()
@@ -194,7 +194,7 @@ EOF;
             $this->limitReached = true;
            return false;
         }
-        if($this->requests >= $this->getConfig('requests_limit', 300)){
+        if($this->requests >= $this->getConfig('requests_limit', 150)){
             //throw new \Exception ('Limit reached');
             $this->limitReached = true;
             $this->logger('Limit of requests reached', 'err');

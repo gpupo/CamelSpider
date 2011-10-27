@@ -83,6 +83,8 @@ class Document extends AbstractSpiderEgg
     {
         if ($this->getBody() instanceof DOMElement) {
             return SpiderDom::toHtml($this->getBody());
+        } else {
+            return 'SpiderDom toHtml with problems!';
         }
     }
 
@@ -100,24 +102,29 @@ class Document extends AbstractSpiderEgg
     {
         if(!$this->bigger)
         {
-            $this->logger('Content too short');
+            $this->logger('Content too short', 'info', 3);
             return false;
         }
         $this->addRelevancy();
 
         $txt = $this->getTitle() . "\n"  . $this->getText();
-
+        
+        $this->logger("Text to be verified:\n". $txt . "\n", 'info', 3);
         //Contain?
-        if(SpiderAsserts::containKeywords($txt, $this->subscription->getFilter('contain'))) {
+        $this->logger('Check for keywords[' . implode($this->subscription->getFilter('contain')) . ']', 'info', 1);
+        $containTest = SpiderAsserts::containKeywords($txt, (array) $this->subscription->getFilter('contain'), true);
+        var_dump($containTest);
+        if($containTest) {
             $this->addRelevancy();
         } else {
             $this->logger('Document not contain keywords');
         }
         //Not Contain?
+        $this->logger('Check for BAD keywords[' . implode($this->subscription->getFilter('notContain')) . ']', 'info', 1);
         if(!SpiderAsserts::containKeywords($txt, $this->subscription->getFilter('notContain'), false)) {
             $this->addRelevancy();
         } else {
-            $this->logger('Document contain bad keywords');
+            $this->logger('Document contain BAD keywords');
         }
     }
 

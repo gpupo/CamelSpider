@@ -18,13 +18,34 @@ abstract class AbstractSubscription extends ArrayCollection implements Interface
     {
         return $this->get('id');
     }
-    private function _explode($x)
+
+
+
+    /**
+     * normalize espaces after commas
+     *
+     * @param string $x   String to explode
+     *
+     * @return string
+     */
+    public function normalize($x)
     {
-        if(strpos(',', $x) === true){
-            return explode(',', $x);
-        }
-        else
-        {
+        return str_replace(array(' ,', ', '), array(',',','), $x);
+    }
+
+    /**
+     * Returns an array from a value by exploding
+     *
+     * @param string $x   String to explode
+     * @param string $sep The separator (default to comma)
+     *
+     * @return array
+     */
+    public function _explode($x, $sep=',')
+    {
+        if (strpos($x, $sep) !== false) {
+            return explode($sep, $this->normalize($x));
+        } else {
             return array($x);
         }
     }

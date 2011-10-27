@@ -70,7 +70,8 @@ class AbstractCache extends AbstractSpiderEgg implements InterfaceCache
             $this->logger('Object id Empty!', 'err');
             return false;
         }
-        $this->logger('Saving object');
+        $this->logger('Saving object', 'info', 3);
+
         return $this->cache->save($data, $id, $tags);
     }
 
@@ -81,7 +82,7 @@ class AbstractCache extends AbstractSpiderEgg implements InterfaceCache
 
     public function getObject($id)
     {
-        $this->logger('Using from the cache');
+        $this->logger('Using from the cache', 'info', 5);
         return $this->loadObject($id);
     }
 
