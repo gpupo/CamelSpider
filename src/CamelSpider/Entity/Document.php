@@ -105,22 +105,21 @@ class Document extends AbstractSpiderEgg
             $this->logger('Content too short', 'info', 3);
             return false;
         }
-        $this->addRelevancy();
+        $this->addRelevancy();//+1 cause text exist
 
         $txt = $this->getTitle() . "\n"  . $this->getText();
-        
+
         $this->logger("Text to be verified:\n". $txt . "\n", 'info', 3);
         //Contain?
-        $this->logger('Check for keywords[' . implode($this->subscription->getFilter('contain')) . ']', 'info', 1);
+        $this->logger('Check for keywords[' . implode($this->subscription->getFilter('contain')) . ']', 'info', 3);
         $containTest = SpiderAsserts::containKeywords($txt, (array) $this->subscription->getFilter('contain'), true);
-        var_dump($containTest);
         if($containTest) {
             $this->addRelevancy();
         } else {
             $this->logger('Document not contain keywords');
         }
         //Not Contain?
-        $this->logger('Check for BAD keywords[' . implode($this->subscription->getFilter('notContain')) . ']', 'info', 1);
+        $this->logger('Check for BAD keywords[' . implode($this->subscription->getFilter('notContain')) . ']', 'info', 3);
         if(!SpiderAsserts::containKeywords($txt, $this->subscription->getFilter('notContain'), false)) {
             $this->addRelevancy();
         } else {
@@ -131,7 +130,7 @@ class Document extends AbstractSpiderEgg
     protected function addRelevancy()
     {
         $this->set('relevancy', $this->get('relevancy') + 1);
-        $this->logger('Current relevancy:'. $this->getRelevancy());
+        $this->logger('Current relevancy:'. $this->getRelevancy(), 'info', 3);
     }
 
     /**
@@ -156,7 +155,7 @@ class Document extends AbstractSpiderEgg
             $this->searchBiggerInTags($tag);
         }
         if(! $this->bigger instanceof \DOMElement ) {
-            $this->logger('Cannot find bigger', 'err');
+            $this->logger('Cannot find bigger', 'info', 3);
             return false;
         }
     }
