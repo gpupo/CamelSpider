@@ -110,19 +110,26 @@ class Document extends AbstractSpiderEgg
         $txt = $this->getTitle() . "\n"  . $this->getText();
 
         $this->logger("Text to be verified:\n". $txt . "\n", 'info', 3);
-        //Contain?
-        $this->logger('Check for keywords[' . implode($this->subscription->getFilter('contain')) . ']', 'info', 3);
-        $containTest = SpiderAsserts::containKeywords($txt, (array) $this->subscription->getFilter('contain'), true);
-        if($containTest) {
+
+        //diseribles keywords filter
+        if (is_null($this->subscription->getFilter('contain'))) {
             $this->addRelevancy();
+            $this->logger('ignore keywords filter', 'info' , 5);
         } else {
-            $this->logger('Document not contain keywords');
+            //Contain?
+            $this->logger('Check for keywords[' . implode($this->subscription->getFilter('contain')) . ']', 'info', 3);
+            $containTest = SpiderAsserts::containKeywords($txt, (array) $this->subscription->getFilter('contain'), true);
+            if($containTest) {
+                $this->addRelevancy();
+            } else {
+                $this->logger('Document not contain keywords');
+            }
         }
 
         //Bad words
         if (is_null($this->subscription->getFilter('notContain'))) {
             $this->addRelevancy();
-            $this->logger('Bad words - not setting', 'info' , 5);
+            $this->logger('ignore Bad keywords filter', 'info' , 5);
         } else {
             //Not Contain?
             $this->logger('Check for BAD keywords[' . implode($this->subscription->getFilter('notContain')) . ']', 'info', 1);
