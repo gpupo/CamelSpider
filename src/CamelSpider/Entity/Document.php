@@ -118,12 +118,19 @@ class Document extends AbstractSpiderEgg
         } else {
             $this->logger('Document not contain keywords');
         }
-        //Not Contain?
-        $this->logger('Check for BAD keywords[' . implode($this->subscription->getFilter('notContain')) . ']', 'info', 3);
-        if(!SpiderAsserts::containKeywords($txt, $this->subscription->getFilter('notContain'), false)) {
+
+        //Bad words
+        if (is_null($this->subscription->getFilter('notContain'))) {
             $this->addRelevancy();
+            $this->logger('Bad words - not setting', 'info' , 5);
         } else {
-            $this->logger('Document contain BAD keywords');
+            //Not Contain?
+            $this->logger('Check for BAD keywords[' . implode($this->subscription->getFilter('notContain')) . ']', 'info', 1);
+            if(!SpiderAsserts::containKeywords($txt, $this->subscription->getFilter('notContain'), false)) {
+                $this->addRelevancy();
+            } else {
+                $this->logger('Document contain BAD keywords');
+            }
         }
     }
 

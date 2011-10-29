@@ -10,5 +10,6 @@ interface InterfaceSubscription extends InterfaceLink{
     public function getMaxDepth();
     //Return Object by Sha1 of url
     public function getLink($sha1);
+    public function getSourceType();
 
 }

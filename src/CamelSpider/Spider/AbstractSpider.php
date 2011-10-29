@@ -31,7 +31,7 @@ abstract class AbstractSpider extends AbstractSpiderEgg
 
     protected $limitReached = false;
 
-    public function getCrawler($URI, $mode = 'GET')
+    public function getCrawler($URI, $mode = 'GET', $type =  'html')
     {
 
         $this->logger(
@@ -42,21 +42,27 @@ abstract class AbstractSpider extends AbstractSpiderEgg
         ,'info', 3);
 
         $this->requests++;
+        if ($type == 'html') {
+            $this->logger('Create instance of Goutte');
+            try {
+                $client = $this->goutte->request($mode, $URI);
+            }
+            catch(\Zend\Http\Client\Adapter\Exception\TimeoutException $e)
+            {
+                $this->logger( 'faillure on create a crawler [' . $URI . ']', 'err');   
+            }
 
-        try {
-            $client = $this->goutte->request($mode, $URI);
-        }
-        catch(\Zend\Http\Client\Adapter\Exception\TimeoutException $e)
-        {
-            $this->logger( 'faillure on create a crawler [' . $URI . ']', 'err');	
-        }
+            //Error in request
+            $this->logger('Status Code: [' . $this->getResponse()->getStatus() . ']', 'info', 3);
+            if($this->getResponse()->getStatus() >= 400){
+                throw new \Exception('Request with error: ' . $this->getResponse()->getStatus() 
+                    . " - " . $client->text()
+                );
+            }
+        } else {
 
-        //Error in request
-        $this->logger('Status Code: [' . $this->getResponse()->getStatus() . ']', 'info', 3);
-        if($this->getResponse()->getStatus() >= 400){
-            throw new \Exception('Request with error: ' . $this->getResponse()->getStatus() 
-                . " - " . $client->text()
-            );
+            $this->logger('Create instance of Zend Feed Reader');
+            $client = $this->feedReader->request($URI);
         }
 
         return $client;

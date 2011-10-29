@@ -106,14 +106,13 @@ class SpiderAssertsTest extends \PHPUnit_Framework_TestCase {
     private function getBigText()
     {
        return <<<EOF
-O documento foi assinado pelo presidente da Fapesp, Celso Lafer, e pelo diretor da GSK para a América Latina e o Caribe, Rogério Rocha Ribeiro. A cerimônia teve ainda a participação do ministro da Saúde do Reino Unido, Simon Burns, do diretor-presidente da Fapesp, Ricardo Renzo Brentani, e do cônsul-geral britânico, John Dodrell.
-A colaboração foi estabelecida no âmbito do Projeto Trust in Science, iniciativa internacional do laboratório que também envolve, no país, o Conselho Nacional de Desenvolvimento Científico e Tecnológico (CNPq). 
-"Há alguns anos a FAPESP se empenha na dimensão da internacionalização, seja por meio do aumento das cooperações com o setor privado, seja a partir de acordos de interesse comum entre nações. Este documento se insere nesse esforço e prevê o estabelecimento de mecanismos de apoio a projetos de interesse mútuo para o avanço do conhecimento sobre doenças tropicais relevantes para a saúde pública no Brasil e no mundo", afirmou Lafer.
-Ribeiro afirmou que a GSK identificou algumas áreas terapêuticas de interesse que poderão ser consideradas futuramente nas chamadas de propostas. "As principais áreas de interesses da GSK são as doenças negligenciadas, doenças crônicas, doenças metabólicas, diabetes e doenças respiratórias. A ideia é abrir ainda mais esse leque", disse.
-De acordo com ele, o objetivo é apoiar a pesquisa acadêmica em projetos de ciência aplicada, que eventualmente levem ao desenvolvimento de medicamentos, vacinas e produtos, que possam ter grande impacto na saúde pública.
-"Nosso sonho é que essa cooperação nos leve, por exemplo, a alguma nova molécula que tenha impacto não só no Brasil e na América Latina, mas em todo o mundo, fazendo com que a pesquisa brasileira beneficie todo o planeta", disse.
-O documento prevê que a GSK será responsável por dar apoio financeiro, especificar áreas temáticas de interesse para empresa e irá cooperar com a Fapesp na publicação de chamadas de propostas. O laboratório oferecerá ainda contribuição técnica para o trabalho e se dispõe a realizar esforços para construir boas relações de longo prazo com a comunidade paulista de pesquisa.
-A Fapesp será responsável por fornecer suporte financeiro em proporção igual às contribuições da GSK e cooperar com o laboratório na seleção de propostas de pesquisa na regulamentação de direitos de propriedade intelectual. A Fundação também organizará o processo de chamadas de propostas e a administrará os financiamentos para os pesquisadores responsáveis pelos projetos aprovados, além de acompanhar os relatórios de resultados.
+O documento foi assinado pelo presidente da Fapesp, Celso Lafer, e pelo diretor da GSK para a América Latina e o Caribe, Rogério Rocha Ribeiro.
+A cerimônia teve ainda a participação do ministro da Saúde do Reino Unido, Simon Burns, do diretor-presidente da Fapesp, Ricardo Renzo Brentani,
+e do cônsul-geral britânico, John Dodrell.
+A colaboração foi estabelecida no âmbito do Projeto Trust in Science, iniciativa internacional do laboratório que também envolve,
+no país, o Conselho Nacional de Desenvolvimento Científico e Tecnológico (CNPq).
+"Há alguns anos a FAPESP se empenha na dimensão da internacionalização, seja por meio do aumento das cooperações com o setor privado,
+seja a partir de acordos de interesse comum entre nações.
 EOF;
 
     }

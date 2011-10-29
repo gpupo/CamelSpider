@@ -11,10 +11,12 @@ class Link extends ArrayCollection implements InterfaceLink
     {
         $link = array();
 
-        if ($node) {
+        if (!is_null($node) && $node instanceof \DOMElement) {
             $link = array(
                 'href' => $node->getAttribute('href'),
             );
+        } elseif (is_string($node)) {
+            $link['href'] = $node;
         }
         $link['status'] = 0;
         parent::__construct($link);

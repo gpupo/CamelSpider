@@ -3,7 +3,7 @@
 namespace CamelSpider\Spider;
 
 /**
- * Methods for DOMElements 
+ * Methods for DOMElements
  *
  * @package     CamelSpider
  * @subpackage  Spider
@@ -25,7 +25,7 @@ class SpiderDom
         if(self::textLen($node) < 500)
             return false;
 
-        if(self::substr_count($node, '				') > 5)
+        if(self::substr_count($node, '              ') > 5)
             return false;
 
         if(self::substr_count($node, '"') > 30)
@@ -65,14 +65,27 @@ class SpiderDom
      *
      * @return string HTML
      */
-    public static function toHtml(\DOMElement $node)
+    public static function toHtml(\DOMNode $node)
     {
+        $rootTag = 'rootTag';
+
+        if ($node instanceof \DOMDocument) {
+            $node = $node->documentElement;
+        }
+
         $doc = new \DOMDocument;
-        $doc->loadXML("<html></html>");
+        $doc->loadXML('<' . $rootTag . '></'. $rootTag . '>');
         $docNode = $doc->importNode($node, true);
         $doc->documentElement->appendChild($docNode);
-        
-        return str_replace('<?xml version="1.0"?>', '', $doc->saveXML());
+
+        $html = trim(str_replace('<?xml version="1.0"?>', '', $doc->saveXML()));
+        if (stripos($html,'<html>') === false) {
+            $html = str_replace($rootTag, 'html', $html);
+        } else {
+            $html = str_replace(array('<' . $rootTag . '>', '</'. $rootTag . '>'), '', $html);
+        }
+
+        return $html;
     }
 
     /**

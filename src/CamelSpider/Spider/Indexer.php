@@ -32,14 +32,16 @@ class Indexer extends AbstractSpider
     /**
     * @param \Goutte\Client Goutte $goutte Crawler Goutte
     * @param InterfaceCache $cache A class facade for Zend Cache
+    * @param InterfaceFeedReader $feedReader A Zend Feed Reader Object
     * @param Monolog $logger Object to write logs (in realtime with low memory usage!)
     * @param array $config Overload of default configurations in the constructor
     **/
-    public function __construct(\Goutte\Client $goutte, InterfaceCache $cache, $logger = NULL, array $config = NULL)
+    public function __construct(\Goutte\Client $goutte, InterfaceCache $cache, InterfaceFeedReader $feedReader,  $logger = NULL, array $config = NULL)
     {
         $this->setTime('total');
         $this->goutte = $goutte;
         $this->logger = $logger;
+        $this->feedReader = $feedReader;
         $this->cache = $cache;
         parent::__construct(array(), $config);
 
@@ -55,8 +57,8 @@ class Indexer extends AbstractSpider
                 . "\n"
                 . '['
                 . $this->subscription->getDomainString()
-                . "]\n[" 
-                . $link->get('href') 
+                . "]\n["
+                . $link->get('href')
                 . ']'
             ,'info', 5);
 
@@ -83,11 +85,12 @@ class Indexer extends AbstractSpider
 
     protected function collect(InterfaceLink $target, $withLinks = false)
     {
-        $URI = $target->get('href');
-
+        $URI = $target->getHref();
+        $type = 'html';
         if($target instanceof InterfaceSubscription)
         {
-            //check format1
+            $this->logger("Subscription Type: " . $target->getSourceType());
+            $type = $target->getSourceType();
         }
 
         try {
@@ -98,7 +101,7 @@ class Indexer extends AbstractSpider
             }
 
             try {
-                $crawler = $this->getCrawler($URI);
+                $crawler = $this->getCrawler($URI, 'GET', $type);
             }
             catch(\Exception $e){
                 $this->logger($e->getMessage(), 'err');
@@ -129,7 +132,7 @@ class Indexer extends AbstractSpider
             if ($withLinks) {
                 $this->logger('go to the scan more links!', 'info', 5);
                 try {
-                    $target->set('hyperlinks', $this->collectLinks($crawler));
+                    $target->set('hyperlinks', $this->collectLinks($crawler, $type));
                 }
                 catch(\Exception $e) {
                     $this->logger($e->getMessage(), 'err');
@@ -159,9 +162,52 @@ class Indexer extends AbstractSpider
     }
 
     /**
+     * Factory
+     *
      * @return int
      */
-    protected function collectLinks($crawler)
+    protected function collectLinks($obj, $mode = 'crawler')
+    {
+        $this->logger('Coletando links em modo [' . $mode . ']');
+        switch ($mode) {
+            case 'crawler':
+            case 'html':
+                return $this->collectLinksWithCrawler($obj);
+                break;
+            case 'zend_feed_reader':
+            case 'rss':
+            case 'atom':
+                return $this->collectLinksWithZendFeedReader($obj);
+                break;
+        }
+    }
+
+
+    /**
+     * Collect links in rss and atom feed
+     *
+     * @return int
+     */
+    public function collectLinksWithZendFeedReader(InterfaceFeedReader $reader)
+    {
+        $this->logger('Links on this feed:' . $reader->getLinks()->count());
+
+        foreach($reader->getLinks()->toArray() as $link)
+        {
+            if($this->checkLimit()){
+                $this->hyperlinks +=  $this->addLink($link);
+            }
+        }
+
+        return $reader->getLinks()->count();
+    }
+
+    /**
+     * Collect links in simple HTML
+     *
+     * @return int count of links
+     */
+    protected function collectLinksWithCrawler($crawler)
     {
         $aCollection = $crawler->filter('a');
 
@@ -170,8 +216,11 @@ class Indexer extends AbstractSpider
         }
 
         $this->logger(
-            'Number of links founded in request #' 
-            . $this->requests . ':' . $aCollection->count()
+            'Number of links founded in request #'
+            . $this->requests
+            . ':'
+            . $aCollection->count()
+            . ' with Goutte Crawler'
         );
 
         foreach($aCollection as $node)

@@ -30,6 +30,7 @@ class AbstractCache extends AbstractSpiderEgg implements InterfaceCache
             $this->mkdir($this->cache_dir . $subdir);
         }
     }
+
     protected function mkdir($dir)
     {
         if (!is_dir($dir)) {
@@ -91,6 +92,14 @@ class AbstractCache extends AbstractSpiderEgg implements InterfaceCache
         if($this->loadObject($id) !== false){
             return true;
         }
+    }
+
+    /**
+     * dispatch Zend Cache Object for others Zend Libraries
+     */
+    public function getZendCache()
+    {
+        return $this->cache;
     }
 
     public function getFileRandomPath($slug, $format)
