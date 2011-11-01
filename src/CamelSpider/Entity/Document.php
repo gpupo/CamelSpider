@@ -213,6 +213,10 @@ class Document extends AbstractSpiderEgg
         $this->set('slug', substr(Urlizer::urlize($this->get('title')), 0, 30));
     }
 
+    public function getSlug(){
+        return $this->get('slug');
+    }
+
     protected function processResponse()
     {
         $this->logger('processing');
@@ -249,6 +253,7 @@ class Document extends AbstractSpiderEgg
          $array = array(
             'relevancy' => $this->getRelevancy(),
             'title'     => $this->getTitle(),
+            'slug'      => $this->getSlug(),
             'text'      => $this->getText(),
             'html'      => $this->getHtml(),
             'raw'       => $this->getRaw()
