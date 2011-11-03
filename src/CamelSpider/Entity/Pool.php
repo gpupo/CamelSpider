@@ -99,6 +99,18 @@ class Pool extends AbstractSpiderEgg
         return $pool;
     }
 
+    /**
+     * Check if link is processed
+     */
+    public function isDone(InterfaceLink $link)
+    {
+        if ($cache = $this->cache->getObject($link->getId())) {
+            return $cache->isDone();
+        } else {
+            return false;
+        }
+    }
+
     private function _save(InterfaceLink $link)
     {
         $this->set($link->getId('string'), $link);

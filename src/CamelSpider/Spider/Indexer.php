@@ -48,6 +48,12 @@ class Indexer extends AbstractSpider
         return $this;
     }
 
+
+    protected function isDone($URI)
+    {
+        $link = new Link($URI);
+        return $this->pool->isDone($link);
+    }
     protected function addLink(Link $link)
     {
         if (!$this->subscription->insideScope($link)) {
@@ -95,8 +101,13 @@ class Indexer extends AbstractSpider
 
         try {
             if(!SpiderAsserts::isDocumentHref($URI)){
-                $this->logger('URI wrong:[' . $URI . ']', 'err');
+                $this->logger('URI wrong:[' . $URI . ']', 'err', 3);
                 $this->pool->errLink($target, 'invalid URL');
+                return false;
+            }
+            //verifica se já foi processado
+            if (!$target instanceof InterfaceSubscription && $this->isDone($URI)) {
+                $this->logger('URI is Done:[' . $URI . ']', 'info', 1);
                 return false;
             }
 
@@ -104,7 +115,7 @@ class Indexer extends AbstractSpider
                 $crawler = $this->getCrawler($URI, 'GET', $type);
             }
             catch(\Exception $e){
-                $this->logger($e->getMessage(), 'err');
+                $this->logger($e->getMessage(), 'err', 3);
                 if($this->requests === 0){
                     $this->errors++;
                     throw new \Exception ('Error in the first request:' . $e->getMessage());
@@ -118,9 +129,10 @@ class Indexer extends AbstractSpider
             }
 
             if (!$target instanceof InterfaceSubscription) {
+
                 if(DocumentManager::isFresh($this->getBody(), $target, $this->getSubscription())){
                     $target->setDocument(clone $crawler, $this->getSubscription(), $this->transferDependency());
-                    $this->logger('document IS fresh');
+                    $this->logger('document IS fresh', 'info', 3);
                 }
                 else{
                     $this->logger('document isnt fresh');

@@ -49,7 +49,6 @@ class Document extends AbstractSpiderEgg
     {
         $this->crawler = $crawler;
         $this->subscription = $subscription;
-
         if($dependency){
             foreach(array('logger', 'cache') as $k){
                 if(isset($dependency[$k])){
@@ -64,9 +63,16 @@ class Document extends AbstractSpiderEgg
 
     protected function setTitle()
     {
+        //echo "========\nDUMP:" . var_dump($this->crawler->filter('title'));
+        //echo "\n";
+        foreach($this->crawler->filter('title') as $node){
+            echo '<title DOM:'. SpiderDom::toText($node) ."\n";
+        }
+
         $title = $this->crawler->filter('title')->text();
         $this->set('title', trim($title));
-        $this->logger('setting Title as [' . $this->getTitle() . ']');
+        echo '<title getTitle:' .$this->getTitle() . "\n\n";
+        $this->logger('setting Title as [' . $this->getTitle() . ']', 'info', 3);
     }
 
     public function getTitle()
@@ -219,9 +225,7 @@ class Document extends AbstractSpiderEgg
 
     protected function processResponse()
     {
-        $this->logger('processing');
-        $this->setTitle();
-        $this->setSlug();
+        $this->logger('processing document' ,'info', 3);
         $this->getBiggerTag();
 
         if ($this->getConfig('save_document', false)) {
@@ -230,6 +234,9 @@ class Document extends AbstractSpiderEgg
 
         $this->setText();
         $this->setRelevancy();
+        $this->setTitle();
+        $this->setSlug();
+        $this->logger('Document processed:' . $this->getTitle() ,'echo', 3);
     }
 
     /**
