@@ -63,15 +63,8 @@ class Document extends AbstractSpiderEgg
 
     protected function setTitle()
     {
-        //echo "========\nDUMP:" . var_dump($this->crawler->filter('title'));
-        //echo "\n";
-        foreach($this->crawler->filter('title') as $node){
-            echo '<title DOM:'. SpiderDom::toText($node) ."\n";
-        }
-
         $title = $this->crawler->filter('title')->text();
         $this->set('title', trim($title));
-        echo '<title getTitle:' .$this->getTitle() . "\n\n";
         $this->logger('setting Title as [' . $this->getTitle() . ']', 'info', 3);
     }
 
@@ -138,7 +131,7 @@ class Document extends AbstractSpiderEgg
             $this->logger('ignore Bad keywords filter', 'info' , 5);
         } else {
             //Not Contain?
-            $this->logger('Check for BAD keywords[' . implode($this->subscription->getFilter('notContain')) . ']', 'info', 1);
+            $this->logger('Check for BAD keywords[' . implode($this->subscription->getFilter('notContain')) . ']', 'info', 3);
             if(!SpiderAsserts::containKeywords($txt, $this->subscription->getFilter('notContain'), false)) {
                 $this->addRelevancy();
             } else {
@@ -236,7 +229,6 @@ class Document extends AbstractSpiderEgg
         $this->setRelevancy();
         $this->setTitle();
         $this->setSlug();
-        $this->logger('Document processed:' . $this->getTitle() ,'echo', 3);
     }
 
     /**
