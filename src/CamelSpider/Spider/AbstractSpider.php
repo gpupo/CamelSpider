@@ -43,13 +43,13 @@ abstract class AbstractSpider extends AbstractSpiderEgg
 
         $this->requests++;
         if ($type == 'html') {
-            $this->logger('Create instance of Goutte');
+            $this->logger('Create instance of Goutte', 'debug', 3);
             try {
                 $client = $this->goutte->request($mode, $URI);
             }
             catch(\Zend\Http\Client\Adapter\Exception\TimeoutException $e)
             {
-                $this->logger( 'faillure on create a crawler [' . $URI . ']', 'err');   
+                $this->logger( 'faillure on create a crawler [' . $URI . ']', 'err');
             }
 
             //Error in request
