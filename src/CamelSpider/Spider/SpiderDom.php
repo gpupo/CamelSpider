@@ -16,19 +16,21 @@ class SpiderDom
 
 
     public static $stripedTags = array(
-            'b',
-            'span',
-            'a',
-            'div',
-            'li',
-            'ul',
-            'div',
-            'p',
-            'td',
-            'tr',
-            'table',
-            'body',
-            'html'
+        'b',
+        'span',
+        'a',
+        'div',
+        'li',
+        'ul',
+        'div',
+        'dl',
+        'ol',
+        'p',
+        'td',
+        'tr',
+        'table',
+        'body',
+        'html'
     );
 
     /**
@@ -138,11 +140,20 @@ class SpiderDom
             $allow = static::$stripedTags;
         }
 
-        foreach ($tags[1] as $tag){
+        foreach (array_merge($tags[1],static::$stripedTags)  as $tag){
             $content = preg_replace("/<".$tag."[^>]*>/i","<".$tag.">",$content);
         }
+        //remove wrong tags
+        foreach (array_merge($tags[1],static::$stripedTags)  as $tag){
+            $content = str_ireplace("<".$tag."><".$tag.">", "<".$tag.">", $content);
+        }
+        foreach (array('img') as $tag) {
+            $content = str_ireplace("<".$tag.">", '', $content);
+        }
 
-        return trim($content);
+        $content = trim($content);
+
+        return $content;
     }
 
     /**
