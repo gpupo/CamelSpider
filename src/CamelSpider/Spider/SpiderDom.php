@@ -88,6 +88,20 @@ class SpiderDom
         return $html;
     }
 
+
+
+    public static function strip_tags($content, $allow)
+    {
+
+        $content = str_replace('&nbsp;', '', strip_tags($content, $allow));
+        preg_match_all("/<([^>]+)>/i",$allow,$tags,PREG_PATTERN_ORDER);
+        foreach ($tags[1] as $tag){
+            $content = preg_replace("/<".$tag."[^>]*>/i","<".$tag.">",$content);
+        }
+
+        return $content;
+    }
+
     /**
      * Convert HTML to plain text
      * @see http://www.php.net/manual/en/class.domtext.php

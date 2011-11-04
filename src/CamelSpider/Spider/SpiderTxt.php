@@ -17,4 +17,5 @@ class SpiderTxt
         return $percentage;
     }
 
+}
 
