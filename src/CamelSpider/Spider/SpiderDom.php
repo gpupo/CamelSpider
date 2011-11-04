@@ -15,6 +15,22 @@ class SpiderDom
 {
 
 
+    public static $stripedTags = array(
+            'b',
+            'span',
+            'a',
+            'div',
+            'li',
+            'ul',
+            'div',
+            'p',
+            'td',
+            'tr',
+            'table',
+            'body',
+            'html'
+    );
+
     /**
      * Verifica se um DomElement é candidato a ser o container
      * de conteúdo
@@ -88,18 +104,45 @@ class SpiderDom
         return $html;
     }
 
+    /**
+     * Transform html to plain text
+     *
+     * @return string $text
+     */
+    public static function htmlToText($html)
+    {
+        $text = static::strip_tags($html);
+        return $text;
+    }
 
 
-    public static function strip_tags($content, $allow)
+    public static function htmlToIntro($html,$length,$end='',$encoding='UTF-8')
+    {
+        $string = static::strip_tags($html);
+        $len = mb_strlen($string,$encoding);
+        if ($len <= $length) {
+            return $string;
+        } else {
+            $return = mb_substr($string,0,$length,$encoding);
+            return (preg_match('/^(.*[^\s])\s+[^\s]*$/', $return, $matches) ? $matches[1] : $return).$end;
+        }
+    }
+
+    public static function strip_tags($content, $allow = null)
     {
 
         $content = str_replace('&nbsp;', '', strip_tags($content, $allow));
         preg_match_all("/<([^>]+)>/i",$allow,$tags,PREG_PATTERN_ORDER);
+
+        if (!$allow) {
+            $allow = static::$stripedTags;
+        }
+
         foreach ($tags[1] as $tag){
             $content = preg_replace("/<".$tag."[^>]*>/i","<".$tag.">",$content);
         }
 
-        return $content;
+        return trim($content);
     }
 
     /**
