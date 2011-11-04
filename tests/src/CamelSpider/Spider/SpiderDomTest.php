@@ -34,7 +34,14 @@ class SpiderDomTest extends \PHPUnit_Framework_TestCase {
     public function providerHtmlStories()
     {
         $a = array();
-        foreach (array('text example', 'Word sample for test', 'floo fly flo fi', 'boot for both') as $t) {
+        foreach (array(
+            'text example',
+            'Word sample for test',
+            'floo fly flo fi',
+            'boot for both',
+            'fail A estrutura de um shopping em construção desabou e atingiu o auditório da Universidade Metodista'
+            )
+            as $t) {
             $a = array_merge($a, $this->makeHtmlElements($t));
         }
         return $a;
