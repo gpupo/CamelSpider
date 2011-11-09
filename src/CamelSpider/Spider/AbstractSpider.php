@@ -137,7 +137,7 @@ EOF;
                 $this->getTimeUsage('total'),
                 $this->cached,
                 $this->success,
-                $this->hyperlinks,
+                (isset($this->hyperlinks)) ? $this->hyperlinks : 0,
                 $this->errors
             );
     }
