@@ -26,10 +26,11 @@ class SpiderAsserts
     public static function isDocumentHref($href)
     {
         if(
-            empty($href)                        ||
-            stripos($href, 'mail') !== false    ||
-            substr($href, 0,10) == 'javascript' ||
-            substr($href, 0, 1) == '#'
+            empty($href)                            ||
+            stripos($href, 'mail') !== false        ||
+            substr($href, 0,10) == 'javascript'     ||
+            substr($href, 0, 1) == '#'              ||
+            stripos($href, 'url=http://') !== false
         ) {
             return false;
         }
