@@ -29,10 +29,14 @@ class SpiderAsserts
             empty($href)                            ||
             stripos($href, 'mail') !== false        ||
             substr($href, 0,10) == 'javascript'     ||
-            substr($href, 0, 1) == '#'              ||
-            stripos($href, 'url=http://') !== false
+            substr($href, 0, 1) == '#'
         ) {
             return false;
+        }
+        foreach (array('%20', '=') as $c) {
+            if (stripos($href, $c . 'http://') !== false) {
+                return false;
+            }
         }
 
         $zendUri = new Uri($href);
