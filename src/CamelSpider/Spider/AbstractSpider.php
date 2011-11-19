@@ -150,11 +150,111 @@ EOF;
 
     protected function performLogin()
     {
-        /**
-         * @todo Verifica se a assinatura precisa login
-         * Usa o Goutte para logar
-         * Verifica o tipo de login requerido
-         */
+        $auth = $this->subscription->getAuthInfo();
+
+        if (empty($auth)) {
+            $this->logger('Subscription without auth');
+
+            return true;
+        }
+
+        $credentials = $this->getAuthCredentials($auth);
+
+        //Try login
+        switch ($credentials['type']) {
+            default:
+                $login = $this->loginForm($credentials);
+        }
+
+        if ($login) {
+
+            return true;
+        }
+
+        //Error
+        return false;
+    }
+    public function loginFormRequirements()
+    {
+        return array('username', 'password', 'button', 'expected', 'password_input', 'username_input');
+    }
+    /**
+     * Execute login on a webform
+     *
+     * @param array $credentials 
+     * @return bool status of login
+     */
+    public function loginForm(array $credentials)
+    {
+
+        foreach ($this->loginFormRequirements() as $r) {
+            if (!array_key_exists($r, $credentials)) {
+                throw new \Exception('Login on web form require ' . $r . ' attribute');
+            }
+        }
+
+        if (!$crawler) {
+            throw new \Exception('Login on web form require a instance of Crawler');
+        }
+
+        //Locate form
+        $form = $crawler->selectButton($credentials['button'])->form();
+        //Fill inputs
+        foreach (array('username', 'password') as $k) {
+            $form[$credentials[$k . '_input']] = $credentials[$k];
+        }
+        // submit the form
+        $crawler = $client->submit($form);
+
+        //Check return
+        if ($crawler->filter('contains("' . $credentials['expected'] . '")')->count() > 0)
+        {
+            //Successful
+            return true;
+        }
+
+        //Failed
+        return false;
+
+    }
+
+    /**
+     * Convert string of auth information into a array
+     *
+     * Sample auth info (one parameter per line):
+     *  "type":"form"
+     *  "button":"button"
+     *  "username":"username"
+     *  "password":"password"
+     *  "expected":"a word finded on sucesseful login"
+     *  "password_input": "field_name"
+     *  "username_input": 'field_name"
+     *
+     * @param string $string
+     * @return array $a
+     */
+    public function getAuthCredentials($string)
+    {
+        $json = '{' . str_replace(PHP_EOL, ',', trim($string)) . '}';
+        $a =  json_decode($json);
+        if (is_null($a)) {
+            throw new \Exception('Invalid credentials syntaxe');
+        }
+
+        $credentials = (array) $a;
+
+        if (count($credentials) < 1) {
+            throw new \Exception('Missing credentials information');
+        }
+
+        $defaults = array('type' => 'form', 'username_input' => 'username', 'password_input' => 'password');
+        foreach ($defaults as $k => $v) {
+            if (!array_key_exists($k, $credentials)) {
+                $credentials[$k] = $v;
+            }
+        }
+
+        return $credentials;
     }
 
     protected function restart()

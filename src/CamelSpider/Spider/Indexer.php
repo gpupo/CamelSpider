@@ -36,7 +36,8 @@ class Indexer extends AbstractSpider
     * @param Monolog $logger Object to write logs (in realtime with low memory usage!)
     * @param array $config Overload of default configurations in the constructor
     **/
-    public function __construct(\Goutte\Client $goutte, InterfaceCache $cache, InterfaceFeedReader $feedReader,  $logger = NULL, array $config = NULL)
+    public function __construct(\Goutte\Client $goutte = null, InterfaceCache $cache = null
+        , InterfaceFeedReader $feedReader = null,  $logger = null, array $config = null)
     {
         $this->setTime('total');
         $this->goutte = $goutte;
@@ -285,19 +286,24 @@ class Indexer extends AbstractSpider
 
         $this->restart();
         $this->subscription = $subscription;
-        $this->performLogin();
-        $this->collect($this->subscription, true);
 
-        $i = 0;
-        while ($i < $this->subscription->getMaxDepth()) {
-            $this->poolCollect(true);
-            $i++;
+        if ($this->performLogin() === false) {
+            throw new \Exception('Login Failed');
+        } else {
+
+            $this->collect($this->subscription, true);
+
+            $i = 0;
+            while ($i < $this->subscription->getMaxDepth()) {
+                $this->poolCollect(true);
+                $i++;
+            }
+
+            $this->poolCollect(); //conclusion
+
+            echo $this->getResume();
+
+            return $this->pool->getPackage();
         }
-
-        $this->poolCollect(); //conclusion
-
-        echo $this->getResume();
-
-        return $this->pool->getPackage();
     }
 }

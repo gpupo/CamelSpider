@@ -73,10 +73,12 @@ class AbstractLauncher extends AbstractSpiderEgg
                 . $subscription->getDomainString()
             );
             try{
-                $this->doSave($this->indexer->run($subscription));
+                $pool = $this->indexer->run($subscription);
+                $this->doSave($pool);
             }
             catch (\Exception $e)
             {
+                echo "\nError: " . $e->getMessage();
                 $this->logger($e->getMessage(), 'err');
             }
         }
