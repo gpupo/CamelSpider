@@ -206,6 +206,25 @@ EOF;
     }
 
 
+    protected function loginButtonLocate($crawler, $credentials)
+    {
+        //try find by button name
+        $button = $credentials['button'];
+
+        if ($b = $this->getClient()->selectButton($button)) {
+            $this->logger('Tradicional button localized', 'info', $this->logger_level);
+            return $b;
+        }
+
+        $elementName = '//input[contains(@src, "login")]';
+        $this->logger('Try locate button by element name ' . $elementName, 'info', $this->logger_level);
+        $item = $crawler->filterXPath($elementName);
+        $this->logger('Itens located: #' . $item->count(), 'info', $this->logger_level);
+
+        return $item;
+    }
+
+
     /**
      * Execute login on a webform
      *
@@ -235,19 +254,33 @@ EOF;
         //Locate form
         $form = $this->loginFormLocate($crawler, $credentials);
 
-
+        $form = $button->form();
         //Fill inputs
+        $values = array();
         foreach (array('username', 'password') as $k) {
             $input = $credentials[$k . '_input'];
             if (!array_key_exists($input, $form)) {
                 $this->debugger($form, 'FORM');
                 throw new \Exception('Input ' . $input . ' not exists');
             }
+            $values[$credentials[$k . '_input']] = $credentials[$k];
             $form[$credentials[$k . '_input']] = $credentials[$k];
         }
         // submit the form
         $this->logger('Login Submit', 'info', $this->logger_level);
-        $crawler = $this->getClient()->submit($form);
+        $button = $this->loginFormLocate($crawler, $credentials);
+
+
+        //$link = $this->getClient()->filter('input:contains("loginButton")');
+        $crawler = $this->getClient()->click($button);
+        //$crawler->selectButton('');
+        //
+        //$this->debugger($form);
+        //$this->getClient()->submit($form, $values);
+
+        $crawler = $this->getClient()->request('GET', $formUri);
+
+        //$crawler = $this->getClient()->submit($form);
 
         //Check return
         if ($crawler->filter('contains("' . $credentials['expected'] . '")')->count() > 0)
