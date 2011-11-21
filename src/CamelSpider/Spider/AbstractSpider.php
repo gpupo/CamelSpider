@@ -252,7 +252,7 @@ EOF;
         }
 
         //Locate form
-        $form = $this->loginFormLocate($crawler, $credentials);
+        $button = $this->loginButtonLocate($crawler, $credentials);
 
         $form = $button->form();
         //Fill inputs
@@ -268,7 +268,7 @@ EOF;
         }
         // submit the form
         $this->logger('Login Submit', 'info', $this->logger_level);
-        $button = $this->loginFormLocate($crawler, $credentials);
+        //$button = $this->loginFormLocate($crawler, $credentials);
 
 
         //$link = $this->getClient()->filter('input:contains("loginButton")');
