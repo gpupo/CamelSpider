@@ -174,10 +174,12 @@ EOF;
         //Error
         return false;
     }
+
     public function loginFormRequirements()
     {
         return array('username', 'password', 'button', 'expected', 'password_input', 'username_input');
     }
+
     /**
      * Execute login on a webform
      *
@@ -192,6 +194,11 @@ EOF;
                 throw new \Exception('Login on web form require ' . $r . ' attribute');
             }
         }
+
+        $formUri = $this->subscription->getUriTarget();
+
+        $this->logger('Get webform for '. $formUri);
+        $crawler = $this->getCrawler($formUri, 'GET');
 
         if (!$crawler) {
             throw new \Exception('Login on web form require a instance of Crawler');
@@ -223,12 +230,17 @@ EOF;
      *
      * Sample auth info (one parameter per line):
      *  "type":"form"
-     *  "button":"button"
-     *  "username":"username"
-     *  "password":"password"
+     *  "button":"log in"
+     *  "username":"gpupo"
+     *  "password":"mypassword"
      *  "expected":"a word finded on sucesseful login"
      *  "password_input": "field_name"
      *  "username_input": 'field_name"
+     *
+     *  or only one line:
+     *  "button":"log in", "username":"gpupo", "password":"mypassword", "expected":"a word finded on sucesseful login"
+     *
+
      *
      * @param string $string
      * @return array $a
@@ -238,7 +250,7 @@ EOF;
         $json = '{' . str_replace(PHP_EOL, ',', trim($string)) . '}';
         $a =  json_decode($json);
         if (is_null($a)) {
-            throw new \Exception('Invalid credentials syntaxe');
+            throw new \Exception('Invalid credentials syntaxe. Received: ' . trim($string) . "\n" . $json);
         }
 
         $credentials = (array) $a;
