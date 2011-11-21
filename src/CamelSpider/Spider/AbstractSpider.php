@@ -3,7 +3,8 @@
 namespace CamelSpider\Spider;
 
 use CamelSpider\Entity\AbstractSpiderEgg,
-    CamelSpider\Entity\Pool;
+    CamelSpider\Entity\Pool,
+    Symfony\Component\DomCrawler\Form;
 
 abstract class AbstractSpider extends AbstractSpiderEgg
 {
@@ -30,6 +31,8 @@ abstract class AbstractSpider extends AbstractSpiderEgg
     protected $goutte;
 
     protected $limitReached = false;
+
+    protected $logger_level = 1;
 
     public function getCrawler($URI, $mode = 'GET', $type =  'html')
     {
@@ -68,6 +71,10 @@ abstract class AbstractSpider extends AbstractSpiderEgg
         return $client;
     }
 
+    protected function getClient()
+    {
+        return $this->goutte;
+    }
 
     protected function getBody()
     {
@@ -183,9 +190,17 @@ EOF;
     protected function loginFormLocate($crawler, $credentials)
     {
         //try find by form name
-        $form = $crawler->filter('form'.$credentials['form'])->first()->form();
-        $this->debugger($crawler);
-        //$form = $crawler->selectButton($credentials['button'])->form();
+        $elementName = 'form:contains("' . $credentials['contains'] . '")';
+        $this->logger('Try locate form by element name ' . $elementName, 'info', $this->logger_level);
+        $item = $crawler->filter($elementName);
+        $this->logger('Itens located: #' . $item->count(), 'info', $this->logger_level);
+        $form = $item->first()->first()->form();
+
+        if (!$form instanceof Form) {
+            throw new \Exception('Não localizou o Form');
+        }
+
+        $this->logger('Form Text: ' . $form->text(), 'info', $this->logger_level);
 
         return $form;
     }
@@ -209,7 +224,9 @@ EOF;
         $formUri = $this->subscription->getUriTarget();
 
         $this->logger('Get webform for '. $formUri);
-        $crawler = $this->getCrawler($formUri, 'GET');
+        //$crawler = $this->getCrawler($formUri, 'GET');
+
+        $crawler = $this->getClient()->request('GET', $formUri);
 
         if (!$crawler) {
             throw new \Exception('Login on web form require a instance of Crawler');
@@ -218,17 +235,25 @@ EOF;
         //Locate form
         $form = $this->loginFormLocate($crawler, $credentials);
 
+
         //Fill inputs
         foreach (array('username', 'password') as $k) {
+            $input = $credentials[$k . '_input'];
+            if (!array_key_exists($input, $form)) {
+                $this->debugger($form, 'FORM');
+                throw new \Exception('Input ' . $input . ' not exists');
+            }
             $form[$credentials[$k . '_input']] = $credentials[$k];
         }
         // submit the form
-        $crawler = $client->submit($form);
+        $this->logger('Login Submit', 'info', $this->logger_level);
+        $crawler = $this->getClient()->submit($form);
 
         //Check return
         if ($crawler->filter('contains("' . $credentials['expected'] . '")')->count() > 0)
         {
             //Successful
+            $this->logger('Login Successful', 'info', $this->logger_level);
             return true;
         }
 

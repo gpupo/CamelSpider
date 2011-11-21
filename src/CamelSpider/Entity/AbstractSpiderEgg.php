@@ -48,9 +48,9 @@ class AbstractSpiderEgg extends ArrayCollection
     /**
      * Debug, like var_dump, but output on log
      */
-    protected function debugger($object)
+    protected function debugger($object, $info = 'DEBUGGER')
     {
-        return $this->logger(var_export($object, true), 'debug', 1);
+        return $this->logger("\n" . $info . ":\n" . var_export($object, true), 'echo', 1);
     }
 
     /**
