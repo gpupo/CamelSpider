@@ -180,6 +180,17 @@ EOF;
         return array('username', 'password', 'button', 'expected', 'password_input', 'username_input');
     }
 
+    protected function loginFormLocate($crawler, $credentials)
+    {
+        //try find by form name
+        $form = $crawler->filter('form'.$credentials['form'])->first()->form();
+        $this->debugger($crawler);
+        //$form = $crawler->selectButton($credentials['button'])->form();
+
+        return $form;
+    }
+
+
     /**
      * Execute login on a webform
      *
@@ -205,7 +216,8 @@ EOF;
         }
 
         //Locate form
-        $form = $crawler->selectButton($credentials['button'])->form();
+        $form = $this->loginFormLocate($crawler, $credentials);
+
         //Fill inputs
         foreach (array('username', 'password') as $k) {
             $form[$credentials[$k . '_input']] = $credentials[$k];

@@ -44,6 +44,14 @@ class AbstractSpiderEgg extends ArrayCollection
         }
         return $defaultValue;
     }
+    
+    /**
+     * Debug, like var_dump, but output on log
+     */
+    protected function debugger($object)
+    {
+        return $this->logger(var_export($object, true), 'debug', 1);
+    }
 
     /**
      * @todo Lidar com níveis da configuração de cada componente
