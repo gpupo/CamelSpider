@@ -304,7 +304,10 @@ class Indexer extends AbstractSpider
 
             echo $this->getResume();
 
-            return $this->pool->getPackage();
+            return array(
+                'log'   =>  $this->getBackendLogger(),
+                'pool'  =>  $this->pool->getPackage()
+            );
         }
     }
 }
