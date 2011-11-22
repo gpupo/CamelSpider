@@ -45,7 +45,7 @@ class IndexerTest extends \PHPUnit_Framework_TestCase {
         $crawler = $client->request('GET', '/tv/noticias/');
        //$headers = $client->getHeaders();
         var_dump($client->getHistory());
-        var_dump($client);
+        var_dump($crawler);
 
     }
 
