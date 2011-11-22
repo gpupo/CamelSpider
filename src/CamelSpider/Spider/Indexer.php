@@ -288,6 +288,7 @@ class Indexer extends AbstractSpider
         $this->subscription = $subscription;
 
         if ($this->performLogin() === false) {
+            $this->addBackendLogger('Login Failed');
             throw new \Exception('Login Failed');
         } else {
 
