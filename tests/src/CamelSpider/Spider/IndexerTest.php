@@ -2,6 +2,8 @@
 
 namespace CamelSpider\Spider;
 
+use Goutte\Client;
+
 class IndexerTest extends \PHPUnit_Framework_TestCase {
 
     /**
@@ -34,6 +36,21 @@ class IndexerTest extends \PHPUnit_Framework_TestCase {
 
     }
 
+    public function testParameters()
+    {
+
+        $client = new Client();
+        $crawler = $client->request('GET', 'http://www.terra.com.br/portal/');
+        $crawler = $client->request('GET', 'http://diversao.terra.com.br/tv/');
+        $crawler = $client->request('GET', '/tv/noticias/');
+       //$headers = $client->getHeaders();
+        var_dump($client->getHistory());
+        var_dump($client);
+
+    }
+
+
+
     public function providerAuth()
     {
         $s = '';
@@ -46,4 +63,6 @@ class IndexerTest extends \PHPUnit_Framework_TestCase {
         }
         return $a;
     }
+
+
 }

@@ -7,7 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection,
 
 class Link extends ArrayCollection implements InterfaceLink
 {
-    public function __construct($node = NULL)
+    public function __construct($node = null, $basedomain = null)
     {
         $link = array();
 

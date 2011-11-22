@@ -239,7 +239,7 @@ class Indexer extends AbstractSpider
         foreach($aCollection as $node)
         {
             if($this->checkLimit()){
-                $link = new Link($node);
+                $link = new Link($node, $basedomain);
                 $this->hyperlinks +=  $this->addLink($link);
             }
         }

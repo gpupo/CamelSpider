@@ -31,23 +31,6 @@ class Pool extends AbstractSpiderEgg
     }
 
     /**
-     * @deprecated
-     */
-    public function old_filterWaiting()
-    {
-        return $this->filter(
-            function ($link) {
-                if ($link instanceof Link) {
-                    return $link->isWaiting();
-                }
-
-                return false;
-            }
-        );
-    }
-
-
-    /**
      * Reduce for only Links waiting process
      *
      * @return array
