@@ -36,20 +36,46 @@ class IndexerTest extends \PHPUnit_Framework_TestCase {
 
     }
 
-    public function testParameters()
+
+    /**
+     * @dataProvider providerNavegation()
+     */
+    public function testParameters($host, $paths)
     {
 
         $client = new Client();
-        $crawler = $client->request('GET', 'http://www.terra.com.br/portal/');
-        $crawler = $client->request('GET', 'http://diversao.terra.com.br/tv/');
-        $crawler = $client->request('GET', '/tv/noticias/');
+
+        //Test with absolute path
+        foreach ($paths as $path) {
+            $crawler = $client->request('GET', 'http://' . $host . $path);
+            $server = $client;
+
+            $this->assertEquals(200, $client->getResponse()->getStatus());
+            var_dump($client->getRequest()->uri);
+  // $this->assertTrue($crawler->statusCode); 
+        }
+
+
+       // $crawler = $client->request('GET', '/tv/noticias/');
        //$headers = $client->getHeaders();
-        var_dump($client->getHistory());
-        var_dump($crawler);
+        //var_dump($crawler);
+        //
+                //var_dump($server['HTTP_REFERER']);
+        //var_dump($client->getHistory());
 
     }
 
+    public function providerNavegation()
+    {
+        $a = array();
 
+        $a[] = array(
+            'host'  =>  'diversao.terra.com.br',
+            'paths' =>  array('/', '/tv/')
+        );
+
+        return $a;
+    }
 
     public function providerAuth()
     {
