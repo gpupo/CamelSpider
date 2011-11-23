@@ -7,7 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection,
 
 class Link extends ArrayCollection implements InterfaceLink
 {
-    public function __construct($node = null, $basedomain = null)
+    public function __construct($node = null)
     {
         $link = array();
 
@@ -17,9 +17,6 @@ class Link extends ArrayCollection implements InterfaceLink
             );
         } elseif (is_string($node)) {
             $link['href'] = $node;
-        }
-        if (!is_null($basedomain)) {
-            //if (false === 
         }
 
         $link['status'] = 0;
@@ -52,10 +49,12 @@ class Link extends ArrayCollection implements InterfaceLink
     {
         return  ($this->get('status') === 1) ? true : false;
     }
-    public function setDocument($response, $subscription, array $dependency = NULL)
+
+    public function setDocument($uri, $response, $subscription, array $dependency = NULL)
     {
-        $this->set('document', new Document($response, $subscription, $dependency));
+        $this->set('document', new Document($uri, $response, $subscription, $dependency));
     }
+
     public function getDocument()
     {
         return $this->get('document');

@@ -132,7 +132,7 @@ class Indexer extends AbstractSpider
             if (!$target instanceof InterfaceSubscription) {
 
                 if(DocumentManager::isFresh($this->getBody(), $target, $this->getSubscription())){
-                    $target->setDocument(clone $crawler, $this->getSubscription(), $this->transferDependency());
+                    $target->setDocument($this->getCurrentUri(), clone $crawler, $this->getSubscription(), $this->transferDependency());
                     $this->logger('document IS fresh', 'info', 3);
                 }
                 else{

@@ -45,7 +45,7 @@ class Document extends AbstractSpiderEgg
      * @param array $dependency Logger, Cache, array Config
      *
      **/
-    public function __construct(Crawler $crawler, InterfaceSubscription $subscription, $dependency = NULL)
+    public function __construct($uri, Crawler $crawler, InterfaceSubscription $subscription, $dependency = NULL)
     {
         $this->crawler = $crawler;
         $this->subscription = $subscription;
@@ -57,8 +57,20 @@ class Document extends AbstractSpiderEgg
             }
         }
         $config = isset($dependency['config']) ? $dependency['config'] : NULL;
-        parent::__construct(array('relevancy'=>0), $config);
+        parent::__construct(array('relevancy'=>0, 'uri' => $uri), $config);
         $this->processResponse();
+    }
+
+    public function setUri($uri)
+    {
+        $this->logger('setting Uri as [' . $uri . ']', 'info', 3);
+
+        return $this->set('uri', $uri);
+    }
+
+    public function getUri()
+    {
+        return $this->get('uri');
     }
 
     protected function setTitle()
@@ -251,6 +263,7 @@ class Document extends AbstractSpiderEgg
     {
          $array = array(
             'relevancy' => $this->getRelevancy(),
+            'uri'       => $this->getUri(),
             'title'     => $this->getTitle(),
             'slug'      => $this->getSlug(),
             'text'      => $this->getText(),
