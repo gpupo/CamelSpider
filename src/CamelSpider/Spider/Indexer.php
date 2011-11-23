@@ -53,8 +53,10 @@ class Indexer extends AbstractSpider
     protected function isDone($URI)
     {
         $link = new Link($URI);
+
         return $this->pool->isDone($link);
     }
+
     protected function addLink(Link $link)
     {
         if (!$this->subscription->insideScope($link)) {
@@ -133,6 +135,7 @@ class Indexer extends AbstractSpider
 
                 if(DocumentManager::isFresh($this->getBody(), $target, $this->getSubscription())){
                     $target->setDocument($this->getCurrentUri(), clone $crawler, $this->getSubscription(), $this->transferDependency());
+                    //$this->addBackendLogger('Leitura de ' . $this->getCurrentUri());
                     $this->logger('document IS fresh', 'info', 3);
                 }
                 else{
@@ -203,7 +206,7 @@ class Indexer extends AbstractSpider
      */
     public function collectLinksWithZendFeedReader(InterfaceFeedReader $reader)
     {
-        $this->logger('Links on this feed:' . $reader->getLinks()->count());
+        $this->addBackendLogger('Links on this feed:' . $reader->getLinks()->count());
 
         foreach($reader->getLinks()->toArray() as $link)
         {
@@ -239,7 +242,7 @@ class Indexer extends AbstractSpider
         foreach($aCollection as $node)
         {
             if($this->checkLimit()){
-                $link = new Link($node, $basedomain);
+                $link = new Link($node);
                 $this->hyperlinks +=  $this->addLink($link);
             }
         }
@@ -255,7 +258,6 @@ class Indexer extends AbstractSpider
 
         foreach ($pool as $link) {
             if (!$link instanceof InterfaceLink) {
-                var_dump($pool);
                 break;
             }
 

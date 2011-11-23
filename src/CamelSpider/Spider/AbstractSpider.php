@@ -74,7 +74,7 @@ abstract class AbstractSpider extends AbstractSpiderEgg
     }
     protected function addBackendLogger($string)
     {
-        $this->backendLogger .= $string . "\n";
+        $this->backendLogger .= $string . ".\n";
         $this->logger($string, 'info', $this->logger_level);
     }
 
@@ -145,6 +145,12 @@ abstract class AbstractSpider extends AbstractSpiderEgg
     - Hyperlinks.............................%s
     - Errors.................................%s
 
+ ======================LOG==========================
+
+%s
+
+ ====================******=========================
+
 EOF;
 
         return $template;
@@ -167,7 +173,8 @@ EOF;
                 $this->cached,
                 $this->success,
                 (isset($this->hyperlinks)) ? $this->hyperlinks : 0,
-                $this->errors
+                $this->errors,
+                $this->getBackendLogger()
             );
     }
 
@@ -247,11 +254,12 @@ EOF;
     {
         //try find by button name
         $button = $credentials['button'];
-        $b = $crawler->selectButton($button);
-        if ($b->count() > 0) {
-            $this->debugger($b->count());
+        $this->addBackendLogger('Localizando botão de formulário que contenha *' . $button . '*');
+        $item = $crawler->selectButton($button);
+        if (method_exists($item, 'count') && $item->count() > 0) {
+            $this->debugger($item->count());
             $this->logger('Tradicional button localized', 'info', $this->logger_level);
-            return $b;
+            goto done;
         }
 
         $elementName = '//input[contains(@src, "login")]';
@@ -259,7 +267,18 @@ EOF;
         $item = $crawler->filterXPath($elementName);
         $this->logger('Itens located: #' . $item->count(), 'info', $this->logger_level);
 
-        return $item;
+        done:
+
+        if ($item) {
+            $this->addBackendLogger('Botão localizado');
+
+            return $item;
+        } else {
+            $this->addBackendLogger('Botão não localizado');
+
+            return false;
+        }
+
     }
 
 
@@ -297,10 +316,6 @@ EOF;
         $values = array();
         foreach (array('username', 'password') as $k) {
             $input = $credentials[$k . '_input'];
-            /*if (!array_key_exists($input, $form)) {
-                $this->debugger($form, 'FORM');
-                throw new \Exception('Input ' . $input . ' not exists');
-            }*/
             $values[$credentials[$k . '_input']] = $credentials[$k];
             $form[$credentials[$k . '_input']] = $credentials[$k];
         }
@@ -309,7 +324,7 @@ EOF;
         $crawler = $this->getClient()->submit($form);
 
         //Check return
-        $this->addBackendLogger('Testando a existência da frase: ' . $credentials['expected'] );
+        $this->addBackendLogger('Testando a existência da frase: *' . $credentials['expected'] . '*');
         if (false !== mb_stripos($crawler->first()->text(), $credentials['expected']))
         {
             //Successful
