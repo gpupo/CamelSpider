@@ -18,6 +18,10 @@ class Link extends ArrayCollection implements InterfaceLink
         } elseif (is_string($node)) {
             $link['href'] = $node;
         }
+        if (!is_null($basedomain)) {
+            //if (false === 
+        }
+
         $link['status'] = 0;
         parent::__construct($link);
     }
