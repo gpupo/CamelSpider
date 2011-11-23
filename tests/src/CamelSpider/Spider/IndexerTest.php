@@ -40,29 +40,35 @@ class IndexerTest extends \PHPUnit_Framework_TestCase {
     /**
      * @dataProvider providerNavegation()
      */
-    public function testParameters($host, $paths)
+    public function testNavegation($host, $paths)
     {
-
         $client = new Client();
-
         //Test with absolute path
         foreach ($paths as $path) {
-            $crawler = $client->request('GET', 'http://' . $host . $path);
-            $server = $client;
-
+            $uri = 'http://' . $host . $path;
+            $crawler = $client->request('GET', $uri);
             $this->assertEquals(200, $client->getResponse()->getStatus());
-            var_dump($client->getRequest()->uri);
-  // $this->assertTrue($crawler->statusCode); 
+            $this->assertEquals($uri, $client->getRequest()->getUri());
         }
+        //Test with relative path and get absolute URI
+        foreach ($paths as $path) {
+            $uri = 'http://' . $host . $path;
+            $crawler = $client->request('GET', $path);
+            $this->assertEquals(200, $client->getResponse()->getStatus());
+            $this->assertEquals($uri, $client->getRequest()->getUri());
+        }
+    }
 
-
-       // $crawler = $client->request('GET', '/tv/noticias/');
-       //$headers = $client->getHeaders();
-        //var_dump($crawler);
-        //
-                //var_dump($server['HTTP_REFERER']);
-        //var_dump($client->getHistory());
-
+    /**
+     * @dataProvider providerNavegation()
+     */
+    public function testWrongNavegation($host, $paths)
+    {
+        $client = new Client();
+        //Test with absolute path
+        $uri = 'http://' . $host . '/some' . rand();
+        $crawler = $client->request('GET', $uri);
+        $this->assertEquals(404, $client->getResponse()->getStatus());
     }
 
     public function providerNavegation()
@@ -72,6 +78,11 @@ class IndexerTest extends \PHPUnit_Framework_TestCase {
         $a[] = array(
             'host'  =>  'diversao.terra.com.br',
             'paths' =>  array('/', '/tv/')
+        );
+
+        $a[] = array(
+            'host'  =>  'www.mozilla.org',
+            'paths' =>  array('/en-US/firefox/new/', '/en-US/firefox/features/', '/en-US/mobile/faq/')
         );
 
         return $a;
