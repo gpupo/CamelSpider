@@ -280,6 +280,14 @@ class Indexer extends AbstractSpider
         }
     }
 
+    protected function getCapture()
+    {
+        echo $this->getResume();
+        return array(
+                'log'   =>  $this->getBackendLogger(),
+                'pool'  =>  $this->pool->getPackage()
+            );
+    }
     /**
      * Método principal que faz indexação
      */
@@ -291,7 +299,8 @@ class Indexer extends AbstractSpider
 
         if ($this->performLogin() === false) {
             $this->addBackendLogger('Login Failed');
-            throw new \Exception('Login Failed');
+
+            return $this->getCapture();
         } else {
 
             $this->collect($this->subscription, true);
@@ -304,12 +313,8 @@ class Indexer extends AbstractSpider
 
             $this->poolCollect(); //conclusion
 
-            echo $this->getResume();
+            return $this->getCapture();
 
-            return array(
-                'log'   =>  $this->getBackendLogger(),
-                'pool'  =>  $this->pool->getPackage()
-            );
         }
     }
 }
