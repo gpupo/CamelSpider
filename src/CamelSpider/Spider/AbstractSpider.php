@@ -231,6 +231,9 @@ EOF;
         return array('username', 'password', 'button', 'expected', 'password_input', 'username_input');
     }
 
+    /**
+     * @deprecated
+     */
     protected function loginFormLocate($crawler, $credentials)
     {
         //try find by form name
@@ -249,7 +252,9 @@ EOF;
         return $form;
     }
 
-
+    /**
+     * Localiza o formulario para login
+     */
     protected function loginButtonLocate($crawler, $credentials)
     {
         //try find by button name
@@ -258,7 +263,7 @@ EOF;
         $item = $crawler->selectButton($button);
         if (method_exists($item, 'count') && $item->count() > 0) {
             $this->debugger($item->count());
-            $this->logger('Tradicional button localized', 'info', $this->logger_level);
+            $this->addBackendLogger('Tradicional button localized');
             goto done;
         }
 
@@ -298,7 +303,7 @@ EOF;
         }
 
         $formUri = $this->subscription->getUriTarget();
-
+        $this->addBackendLogger('Acessando *' . $formUri . '*');
         $this->logger('Get webform for '. $formUri);
 
         $crawler = $this->getClient()->request('GET', $formUri);
@@ -318,23 +323,37 @@ EOF;
             $input = $credentials[$k . '_input'];
             $values[$credentials[$k . '_input']] = $credentials[$k];
             $form[$credentials[$k . '_input']] = $credentials[$k];
+            $this->addBackendLogger('Preenchendo o campo *'
+                . $credentials[$k . '_input']
+                . '* com o valor *'
+                . $credentials[$k]
+                . '*');
+
         }
         // submit the form
         $this->addBackendLogger('Login Submit');
         $crawler = $this->getClient()->submit($form);
 
+        $href = $this->subscription->getHref();
+        $this->addBackendLogger('Acessando *' . $href . '*');
+        $crawler = $this->getClient()->request('GET', $href);
         //Check return
         $this->addBackendLogger('Testando a existência da frase: *' . $credentials['expected'] . '*');
-        if (false !== mb_stripos($crawler->first()->text(), $credentials['expected']))
+        $responseText = $crawler->first()->text();
+
+        //$this->addBackendLogger($responseText);
+        if (false !== mb_stripos($responseText, $credentials['expected']))
         {
             //Successful
             $this->addBackendLogger('Login Successful');
+
             return true;
+        } else {
+            $this->addBackendLogger('Frase não encontrada');
         }
 
         //Failed
         return false;
-
     }
 
     /**

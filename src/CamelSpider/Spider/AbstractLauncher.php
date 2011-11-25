@@ -36,9 +36,8 @@ class AbstractLauncher extends AbstractSpiderEgg
     {
         return FactorySubscription::buildCollectionFromDomain(
             array(
-                //'economia.estadao.com.br', 
                 'noticias.terra.com.br'
-                //,'www.uol.com.br'
+                ,'www.uol.com.br'
             )
         );
     }
@@ -50,7 +49,8 @@ class AbstractLauncher extends AbstractSpiderEgg
                 $link instanceof InterfaceLink &&
                 $link->getRelevancy() >= $this->getConfig('minimal_relevancy', 3)
             ) {
-                var_dump($link);
+
+                //do something with your DB!
             }
         }
 
