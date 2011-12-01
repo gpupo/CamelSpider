@@ -89,6 +89,11 @@ abstract class AbstractSpider extends AbstractSpiderEgg
         return trim($this->backendLogger);
     }
 
+    protected function resetBackendLogger()
+    {
+        $this->backendLogger = '';
+    }
+
     protected function getCurrentUri()
     {
         return $this->getRequest()->getUri();
@@ -410,6 +415,7 @@ EOF;
     protected function restart()
     {
         $this->goutte->restart();
+        $this->resetBackendLogger();
         $this->start();
     }
 
