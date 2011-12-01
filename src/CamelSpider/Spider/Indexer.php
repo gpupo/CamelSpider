@@ -118,6 +118,7 @@ class Indexer extends AbstractSpider
                 $crawler = $this->getCrawler($URI, 'GET', $type);
             }
             catch(\Exception $e){
+                $this->logger('Collect Exception', 'err', 3);
                 $this->logger($e->getMessage(), 'err', 3);
                 if($this->requests === 0){
                     $this->errors++;

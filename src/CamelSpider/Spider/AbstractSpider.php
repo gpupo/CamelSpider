@@ -36,6 +36,9 @@ abstract class AbstractSpider extends AbstractSpiderEgg
 
     protected $logger_level = 1;
 
+    /**
+     * Faz a requisição, seja por Zend Http Client ou Consumindo Feed
+     */
     public function getCrawler($URI, $mode = 'GET', $type =  'html')
     {
 
@@ -48,12 +51,14 @@ abstract class AbstractSpider extends AbstractSpiderEgg
 
         $this->requests++;
         if ($type == 'html') {
-            $this->logger('Create instance of Goutte', 'debug', 3);
             try {
+                $this->logger('Create instance of Goutte', 'debug', 3);
                 $client = $this->goutte->request($mode, $URI);
+                $this->logger('Goutte done', 'debug', 3);
             }
             catch(\Zend\Http\Client\Adapter\Exception\TimeoutException $e)
             {
+                $this->logger('Goutte exception Timeout', 'debug', 3);
                 $this->logger( 'faillure on create a crawler [' . $URI . ']', 'err');
             }
 
@@ -72,6 +77,7 @@ abstract class AbstractSpider extends AbstractSpiderEgg
 
         return $client;
     }
+
     protected function addBackendLogger($string)
     {
         $this->backendLogger .= $string . ".\n";

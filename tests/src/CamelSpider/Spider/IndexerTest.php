@@ -36,6 +36,20 @@ class IndexerTest extends \PHPUnit_Framework_TestCase {
 
     }
 
+    public function testCookiesHell()
+    {
+        $client = new Client();
+        $url = 'http://www.agricultura.gov.br/comunicacao/noticias/';
+        $crawler = $client->request('GET', $url);
+        $request  = $client->getRequest();
+        $response = $client->getResponse();
+        $crawler  = $client->getCrawler();
+        
+        $this->markTestIncomplete(
+          'This test has not been implemented yet.'
+        );
+
+    }
 
     /**
      * @dataProvider providerNavegation()
