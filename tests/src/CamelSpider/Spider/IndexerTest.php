@@ -3,6 +3,9 @@
 namespace CamelSpider\Spider;
 
 use Goutte\Client;
+use Zend\Http\Client as Zend_Http_Client;
+use Zend\Http\Response as Zend_Http_dResponse;
+
 
 class IndexerTest extends \PHPUnit_Framework_TestCase {
 
@@ -36,21 +39,46 @@ class IndexerTest extends \PHPUnit_Framework_TestCase {
 
     }
 
-    public function testCookiesHell()
+
+    /**
+     * @dataProvider providerHellCookies()
+     */
+    public function testZendClient($url)
+    {
+        $client = new Zend_Http_Client();
+        $client->setUri($url);
+        $response = $client->request();
+
+        //var_dump($response);
+        $this->markTestIncomplete(
+            'This test has not been implemented yet.'
+        );
+    }
+
+    /**
+     * @dataProvider providerHellCookies()
+     */
+    public function testCookiesHell($url)
     {
         $client = new Client();
-        $url = 'http://www.agricultura.gov.br/comunicacao/noticias/';
         $crawler = $client->request('GET', $url);
         $request  = $client->getRequest();
         $response = $client->getResponse();
-        $crawler  = $client->getCrawler();
-        
+
+        //var_dump($response);
         $this->markTestIncomplete(
           'This test has not been implemented yet.'
         );
 
     }
 
+    public function ProviderHellCookies()
+    {
+        return array(
+            array('http://www.agricultura.gov.br/comunicacao/noticias/')
+        );
+    }
+    
     /**
      * @dataProvider providerNavegation()
      */

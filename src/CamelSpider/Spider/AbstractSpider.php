@@ -345,15 +345,11 @@ EOF;
         $this->addBackendLogger('Login Submit');
         $crawler = $this->getClient()->submit($form);
 
-        //$href = $this->subscription->getHref();
-        //$this->addBackendLogger('Acessando *' . $href . '*');
-        //$crawler = $this->getClient()->request('GET', $href);
         $crawler = $this->getClient()->request('GET', $formUri);
         //Check return
         $this->addBackendLogger('Testando a existência da frase: *' . $credentials['expected'] . '*');
         $responseText = $crawler->first()->text();
 
-        //$this->addBackendLogger($responseText);
         if (false !== mb_stripos($responseText, $credentials['expected']))
         {
             //Successful
@@ -412,6 +408,9 @@ EOF;
         return $credentials;
     }
 
+    /**
+     * call on every new Subscription
+     */
     protected function restart()
     {
         $this->goutte->restart();
