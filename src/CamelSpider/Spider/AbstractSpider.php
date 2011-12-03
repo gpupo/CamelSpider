@@ -66,7 +66,7 @@ abstract class AbstractSpider extends AbstractSpiderEgg
             $this->logger('Status Code: [' . $this->getResponse()->getStatus() . ']', 'info', 3);
             if($this->getResponse()->getStatus() >= 400){
                 throw new \Exception('Request with error: ' . $this->getResponse()->getStatus() 
-                    . " - " . $client->text()
+                    . " - " . $this->getResponseErrorMessage($client)
                 );
             }
         } else {
@@ -76,6 +76,14 @@ abstract class AbstractSpider extends AbstractSpiderEgg
         }
 
         return $client;
+    }
+
+    /**
+     * @todo Clean html message
+     */
+    protected function getResponseErrorMessage($client)
+    {
+        return '';
     }
 
     protected function addBackendLogger($string)
@@ -215,7 +223,7 @@ EOF;
         $auth = $this->subscription->getAuthInfo();
 
         if (empty($auth)) {
-            $this->addBackendLogger('Subscription without auth');
+            //$this->addBackendLogger('Subscription without auth');
 
             return true;
         }
@@ -450,12 +458,12 @@ EOF;
 
         $this->logger('Current memory usage:' . $this->getMemoryUsage() . 'Mb', 'info', 5);
 
-        if($this->getMemoryUsage() > $this->getConfig('memory_limit', 50)){
+        if($this->getMemoryUsage() > $this->getConfig('memory_limit', 80)){
             $this->logger('Limit of memory reached', 'err');
             $this->limitReached = true;
            return false;
         }
-        if($this->requests >= $this->getConfig('requests_limit', 150)){
+        if($this->requests >= $this->getConfig('requests_limit', 300)){
             //throw new \Exception ('Limit reached');
             $this->limitReached = true;
             $this->logger('Limit of requests reached', 'err');

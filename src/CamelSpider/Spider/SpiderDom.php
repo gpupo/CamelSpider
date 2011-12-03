@@ -106,6 +106,10 @@ class SpiderDom
         return $html;
     }
 
+    public static function toCleanHtml(\DOMNode $node)
+    {
+        return static::removeDirtyAttrs(static::removeTrashBlock(static::toHtml($node)));
+    }
     /**
      * Transform html to plain text
      *
@@ -157,6 +161,69 @@ class SpiderDom
     }
 
     /**
+     * Remove attributes from hell!
+     *
+     * @param string $content is a html
+     * @param array $attrs is a list of attributes to clean
+     */
+    public static function removeDirtyAttrs($content, $attrs = null)
+    {
+        if (is_null($attrs)) {
+            $attrs = array(
+                'oncontextmenu',
+                'ondragstart',
+                'onselectstart',
+                'onselect',
+                'oncopy',
+                'onbeforecopy',
+                'onclick',
+                'onload',
+                'onblur',
+                'onfocus',
+                'onchange',
+                'onsubmit'
+
+            );
+        }
+
+        foreach ($attrs  as $a) {
+            $content = preg_replace("/" . $a . '=\s*"[^\"]*\"/i', '', $content);
+        }
+
+        $i = 0;
+        while ($i < 10) {
+            $content = str_replace('  ', ' ',  $content);
+            $content = str_replace(' >', '>', $content);
+            $content = str_replace(PHP_EOL . '>', '>', $content);
+            $i++;
+        }
+
+        return $content;
+    }
+
+    public static function removeTag($tag, $content)
+    {
+        foreach (array(
+            '/<'. $tag . '.*?<\/' . $tag . '>/is',
+            '/<'. $tag . '.*?\/>/is'
+        ) as $expr) {
+            $content = preg_replace($expr, '', $content);
+        }
+        
+        return $content;
+    }
+
+    public static function removeTrashBlock($content)
+    {
+        foreach (array('iframe', 'script', 'style', 'noscript') as $tag) {
+            $content = static::removeTag($tag, $content);
+        }
+
+        return $content;
+    }
+
+
+    /**
      * Convert HTML to plain text
      * @see http://www.php.net/manual/en/class.domtext.php
      */
@@ -194,7 +261,7 @@ class SpiderDom
         $a = $node->getElementsByTagName($tag);
         return $a->length;
     }
-  
+
 }
 
 

@@ -136,7 +136,6 @@ class Indexer extends AbstractSpider
 
                 if(DocumentManager::isFresh($this->getBody(), $target, $this->getSubscription())){
                     $target->setDocument($this->getCurrentUri(), clone $crawler, $this->getSubscription(), $this->transferDependency());
-                    //$this->addBackendLogger('Leitura de ' . $this->getCurrentUri());
                     $this->logger('document IS fresh', 'info', 3);
                 }
                 else{

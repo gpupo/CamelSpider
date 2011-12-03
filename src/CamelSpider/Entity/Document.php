@@ -195,7 +195,7 @@ class Document extends AbstractSpiderEgg
     public function getHtml()
     {
         if ($this->bigger) {
-            return SpiderDom::toHtml($this->bigger);
+            return SpiderDom::toCleanHtml($this->bigger);
         }
     }
 

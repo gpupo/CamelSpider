@@ -47,7 +47,7 @@ class IndexerTest extends \PHPUnit_Framework_TestCase {
     {
         $client = new Zend_Http_Client();
         $client->setUri($url);
-        $response = $client->request();
+        //$response = $client->request();
 
         //var_dump($response);
         $this->markTestIncomplete(
