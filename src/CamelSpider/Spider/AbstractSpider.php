@@ -455,7 +455,6 @@ EOF;
         if($this->limitReached){
             return false;
         }
-        echo '.';
         $this->logger('Current memory usage:' . $this->getMemoryUsage() . 'Mb', 'info', 5);
 
         if($this->getMemoryUsage() > $this->getConfig('memory_limit', 70)){
