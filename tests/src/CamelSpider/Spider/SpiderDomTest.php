@@ -4,6 +4,29 @@ namespace CamelSpider\Spider;
 
 class SpiderDomTest extends \PHPUnit_Framework_TestCase {
 
+
+
+    /**
+     * @expectedException \Exception
+     * @dataProvider providerWrongHtml
+     */
+    public function testHtmToDomElementFail($wrongHtml)
+    {
+        return SpiderDom::htmlToDomElement($wrongHtml);
+    }
+
+
+    /**
+     * @dataProvider providerHtmlElements
+     */
+    public function testHtmToDomElementSucess($text, $html)
+    {
+        $domElement = SpiderDom::htmlToDomElement($html);
+        $this->AssertTrue($domElement instanceof \DomElement);
+    }
+
+
+
     /**
      * @dataProvider providerDomElements
      */
@@ -17,8 +40,19 @@ class SpiderDomTest extends \PHPUnit_Framework_TestCase {
      */
     public function testToCleanHtml(\DOMNode $node, $html)
     {
-       $this->AssertEquals($html, SpiderDom::toCleanHtml($node));
+        $this->AssertEquals($html, SpiderDom::toCleanHtml($node));
     }
+
+
+    /**
+     * @dataProvider providerDomElementsToText
+     */
+    public function testTextLen(\DOMNode $node, $len)
+    {
+        $this->AssertEquals($len, SpiderDom::textLen($node));
+    }
+
+
 
     /**
      * @dataProvider providerHtmlElements()
@@ -63,7 +97,15 @@ class SpiderDomTest extends \PHPUnit_Framework_TestCase {
         $this->AssertEquals($expected, trim(SpiderDom::removeTrashBlock($block)));
     }
 
-
+    public function providerWrongHtml()
+    {
+        return array(
+            array('</html>wrong'),
+            array('</body>html'),
+            array('</span>to'),
+            array('</div>test')
+        );
+    }
 
     public function providerTrashTags()
     {
@@ -116,6 +158,7 @@ class SpiderDomTest extends \PHPUnit_Framework_TestCase {
             as $t) {
             $a = array_merge($a, $this->makeHtmlElements($t));
         }
+
         return $a;
     }
 
@@ -126,6 +169,7 @@ class SpiderDomTest extends \PHPUnit_Framework_TestCase {
         foreach (array('text example', 'other example', 'some text', 'lets play') as $t) {
             $a = array_merge($a, $this->makeHtmlElements($t));
         }
+
         return $a;
     }
 
@@ -133,10 +177,11 @@ class SpiderDomTest extends \PHPUnit_Framework_TestCase {
     {
         $html = $txt ;
         $a = array();
-        foreach(SpiderDom::$stripedTags as $e) {
+        foreach (SpiderDom::$stripedTags as $e) {
             $html = '<' . $e . '>'. $html . '</' . $e . '>' . "\n";
             $a[] = array($html , $txt);
         }
+
         return $a;
     }
 
@@ -152,17 +197,58 @@ class SpiderDomTest extends \PHPUnit_Framework_TestCase {
                 $array[] = array($doc->documentElement, $expectedHtml);
             }
         }
+
+        return $array;
+    }
+
+
+    public function providerDomElementsToText()
+    {
+        $array = array();
+        foreach (array('some', 'text', 'to', 'test') as $text) {
+
+            $len = mb_strlen($text);
+            $html = <<<EOF
+<html>
+    <head>
+        <title>Camel Spider Spider Dom Test</title>
+    </head>
+    <body>
+    <script type="text/javascript">
+          var _gaq = _gaq || [];
+          _gaq.push(['_setAccount', 'UA-8935ss']);
+          _gaq.push(['_setDomainName', '.gpupo.com']);
+          _gaq.push(['_trackPageview']);
+          (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+          })();
+    </script>
+
+EOF;
+            $html .= $text;
+            $html .= <<<EOF
+  </body>
+</html>
+EOF;
+
+            $doc = $this->getDoc($html);
+            $array[] = array($doc, $len);
+            $array[] = array($doc->documentElement, $len);
+        }
+
         return $array;
     }
 
     public function getHtmlExpected($html)
     {
         foreach (array('body','html') as $tag) {
-
             if (stripos($html, '<' . $tag) === false) {
                 $html = '<' . $tag . '>'. $html . '</'. $tag .'>';
             }
         }
+
         return $html;
     }
 

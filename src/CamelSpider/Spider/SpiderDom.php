@@ -14,6 +14,7 @@ namespace CamelSpider\Spider;
 class SpiderDom
 {
 
+    const rootTag = 'rootTag';
 
     public static $stripedTags = array(
         'b',
@@ -58,7 +59,7 @@ class SpiderDom
         return true;
     }
 
-    public static function getGreater(\DOMElement $a, \DOMElement $b = NULL)
+    public static function getGreater(\DOMElement $a, \DOMElement $b = NULL, $options = array())
     {
 
         if(!$b)
@@ -85,6 +86,33 @@ class SpiderDom
      */
     public static function toHtml(\DOMNode $node)
     {
+        $doc = static::normalizeDocument($node);
+
+        return static::getNodeHtml($doc);
+    }
+
+    /**
+     * Process node and generate his html
+     */
+    public static function getNodeHtml(\DOMDocument $doc)
+    {
+        $html = trim(str_replace('<?xml version="1.0"?>', '', $doc->saveXML()));
+
+        if (stripos($html,'<html') === false) {
+            $html = str_replace(self::rootTag, 'html', $html);
+        } else {
+            $html = str_replace(
+                array('<' . self::rootTag . '>', '</'. self::rootTag . '>'),
+                '',
+                $html
+            );
+        }
+
+        return $html;
+    }
+
+    public static function normalizeDocument(\DOMNode $node)
+    {
         $rootTag = 'rootTag';
 
         if ($node instanceof \DOMDocument) {
@@ -96,18 +124,35 @@ class SpiderDom
         $docNode = $doc->importNode($node, true);
         $doc->documentElement->appendChild($docNode);
 
-        $html = trim(str_replace('<?xml version="1.0"?>', '', $doc->saveXML()));
-        if (stripos($html,'<html>') === false) {
-            $html = str_replace($rootTag, 'html', $html);
-        } else {
-            $html = str_replace(array('<' . $rootTag . '>', '</'. $rootTag . '>'), '', $html);
+        return $doc;
+    }
+
+    protected static function removeChild(\DOMNode $node, $tag)
+    {
+        try {
+            $list =  $node->getElementsByTagname($tag);
+            foreach ($list as $element) {
+                $element->parentNode->removeChild($element);
+            }
+        } catch (\DOMException $e) {
+
+            \error_log('Element <'
+                . $tag
+                . '> not found: '
+                . $e->getMessage()
+                . "\nHTML:"
+                . static::toHtml($node) , 4);
         }
 
-        return $html;
+        return $node;
     }
 
     public static function toCleanHtml(\DOMNode $node)
     {
+        //remove <head>
+        foreach (array('script', 'head') as $tag) {
+            $node = static::removeChild($node, $tag);
+        }
         return static::removeDirtyAttrs(static::removeTrashBlock(static::toHtml($node)));
     }
     /**
@@ -209,7 +254,7 @@ class SpiderDom
         ) as $expr) {
             $content = preg_replace($expr, '', $content);
         }
-        
+
         return $content;
     }
 
@@ -222,19 +267,61 @@ class SpiderDom
         return $content;
     }
 
+    /**
+     * Convert html to DomElement
+     */
+    public static function htmlToDomElement($html)
+    {
+        $doc = new \DOMDocument();
+        $doc->loadHTML($html);
+        $element = $doc->documentElement;
+
+        if (!$element instanceof \DomElement) {
+            throw new \UnexpectedValueException('DomElement expected');
+        }
+
+        return $element;
+    }
 
     /**
      * Convert HTML to plain text
      * @see http://www.php.net/manual/en/class.domtext.php
      */
-    public static function toText(\DOMElement $node)
+    public static function toText(\DOMNode $node, $mode = 'textContent')
     {
-        return trim($node->textContent);
+        if ($mode = 'clean') {
+            $html = static::toCleanHtml($node);
+            $node = static::htmlToDomElement($html);
+        }
+        $text = trim($node->textContent);
+
+        return $text;
     }
 
+    protected static function normalizeDomNode(\DomNode $node)
+    {
+        if ($node instanceof \DomDocument) {
+            $node = $node->documentElement;
+        }
+
+        return $node;
+    }
+
+    /**
+     * Calcula a quantidade de texto que um DomElement possui.
+     *
+     * @param DomElement $node
+     * @return int Minor count
+     */
     public static function textLen($node)
     {
-        return strlen(self::toText($node));
+        $node = static::normalizeDomNode($node);
+
+        $mode_1 = mb_strlen(self::toText($node, 'textContent'));
+
+        $mode_2 = mb_strlen(self::toText($node, 'clean'));
+
+        return ($mode_1 < $mode_2) ? $mode_1 : $mode_2;
     }
 
     public static function substr_count($node, $substring)

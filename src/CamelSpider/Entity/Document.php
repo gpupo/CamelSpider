@@ -143,7 +143,8 @@ class Document extends AbstractSpiderEgg
             $this->logger('ignore Bad keywords filter', 'info' , 5);
         } else {
             //Not Contain?
-            $this->logger('Check for BAD keywords[' . implode($this->subscription->getFilter('notContain')) . ']', 'info', 3);
+            $this->logger('Check for BAD keywords['
+               . implode($this->subscription->getFilter('notContain')) . ']', 'info', 3);
             if(!SpiderAsserts::containKeywords($txt, $this->subscription->getFilter('notContain'), false)) {
                 $this->addRelevancy();
             } else {
@@ -169,7 +170,7 @@ class Document extends AbstractSpiderEgg
         foreach(clone $data as $node)
         {
             if(SpiderDom::containerCandidate($node)){
-                $this->bigger = SpiderDom::getGreater($node, $this->bigger);
+                $this->bigger = SpiderDom::getGreater($node, $this->bigger, array());
             }
         }
     }
