@@ -226,7 +226,9 @@ class SpiderDom
                 'onblur',
                 'onfocus',
                 'onchange',
-                'onsubmit'
+                'onsubmit',
+                'style',
+                'class',
 
             );
         }
