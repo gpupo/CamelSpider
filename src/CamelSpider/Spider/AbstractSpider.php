@@ -452,17 +452,23 @@ EOF;
 
     protected function checkLimit()
     {
-        if($this->limitReached){
+        if ($this->limitReached) {
             return false;
         }
-        $this->logger('Current memory usage:' . $this->getMemoryUsage() . 'Mb', 'info', 5);
 
-        if($this->getMemoryUsage() > $this->getConfig('memory_limit', 90)){
+        $this->logger(
+            'Current memory usage:'
+            . $this->getMemoryUsage()
+            . 'Mb', 'info',
+            5
+        );
+
+        if($this->getMemoryUsage() > $this->getConfig('memory_limit', 75)){
             $this->logger('Limit of memory reached', 'err');
             $this->limitReached = true;
            return false;
         }
-        if($this->requests >= $this->getConfig('requests_limit', 300)){
+        if($this->requests >= $this->getConfig('requests_limit', 200)){
             //throw new \Exception ('Limit reached');
             $this->limitReached = true;
             $this->logger('Limit of requests reached', 'err');
