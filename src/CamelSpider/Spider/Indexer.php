@@ -80,7 +80,7 @@ class Indexer extends AbstractSpider
             return 0;
         }
 
-        $this->logger('Check Cache for id:' . $link->getId('string'), 'info', 3);
+        $this->logger('Check Cache for id:' . $link->getId('string'), 'info', 5);
         //Evita duplicidade
         if ($this->requests > 0 && $this->cache->isObject($link->getId('string'))) {
             $this->logger('cached', 'info', 5);

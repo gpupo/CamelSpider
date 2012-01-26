@@ -120,7 +120,7 @@ class Document extends AbstractSpiderEgg
 
         $txt = $this->getTitle() . "\n"  . $this->getText();
 
-        $this->logger("Text to be verified:\n". $txt . "\n", 'info', 3);
+        $this->logger("Text to be verified:\n". $txt . "\n", 'info', 5);
 
         //diseribles keywords filter
         if (is_null($this->subscription->getFilter('contain'))) {

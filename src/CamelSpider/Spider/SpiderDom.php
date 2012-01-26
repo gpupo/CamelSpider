@@ -275,10 +275,17 @@ class SpiderDom
     public static function htmlToDomElement($html)
     {
         $doc = new \DOMDocument();
+        libxml_use_internal_errors(true);
         $doc->loadHTML($html);
         $element = $doc->documentElement;
 
         if (!$element instanceof \DomElement) {
+            $errors = libxml_get_errors();
+            foreach ($errors as $error) {
+                $this->logger($error, 'err', 3);
+            }
+            libxml_clear_errors();
+
             throw new \UnexpectedValueException('DomElement expected');
         }
 
