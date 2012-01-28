@@ -131,7 +131,7 @@ class Document extends AbstractSpiderEgg
             $this->logger(
                 'Check for keywords['
                 . implode(',', $this->subscription->getFilter('contain'))
-                . ']', 'info', 3
+                . ']', 'info', 4
             );
             $containTest = SpiderAsserts::containKeywords(
                 $txt, (array) $this->subscription->getFilter('contain'), true
@@ -139,7 +139,7 @@ class Document extends AbstractSpiderEgg
             if($containTest) {
                 $this->addRelevancy();
             } else {
-                $this->logger('Document not contain keywords', 'info', 3);
+                $this->logger('Document not contain keywords', 'info', 5);
             }
         }
 
@@ -161,7 +161,7 @@ class Document extends AbstractSpiderEgg
             ) {
                 $this->addRelevancy();
             } else {
-                $this->logger('Document contain BAD keywords', 'info', 3);
+                $this->logger('Document contain BAD keywords', 'info', 5);
             }
         }
     }

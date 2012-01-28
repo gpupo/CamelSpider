@@ -473,7 +473,7 @@ EOF;
             $this->limitReached = true;
            return false;
         }
-        if($this->requests >= $this->getConfig('requests_limit', 200)){
+        if($this->requests >= $this->getConfig('requests_limit', 20)){
             //throw new \Exception ('Limit reached');
             $this->limitReached = true;
             $this->logger('Limit of requests reached', 'err');

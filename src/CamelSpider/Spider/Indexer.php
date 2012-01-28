@@ -184,7 +184,9 @@ class Indexer extends AbstractSpider
      */
     protected function collectLinks($obj, $mode = 'crawler')
     {
-        $this->logger('Coletando links em modo [' . $mode . ']');
+        $this->logger(
+            'Coletando links em modo [' . $mode . ']', 'info', 4
+        );
         switch ($mode) {
             case 'crawler':
             case 'html':
