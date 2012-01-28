@@ -285,7 +285,6 @@ class SpiderDom
                 $this->logger($error, 'err', 3);
             }
             libxml_clear_errors();
-
             throw new \UnexpectedValueException('DomElement expected');
         }
 

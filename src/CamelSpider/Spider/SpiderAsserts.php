@@ -28,6 +28,8 @@ class SpiderAsserts
         if(
             empty($href)                            ||
             stripos($href, 'mail') !== false        ||
+            stripos($href, '.pdf') !== false        ||
+            stripos($href, '.ppt') !== false        ||
             substr($href, 0,10) == 'javascript'     ||
             substr($href, 0, 1) == '#'
         ) {

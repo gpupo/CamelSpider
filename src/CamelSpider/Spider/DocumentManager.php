@@ -17,7 +17,10 @@ class DocumentManager
      * Verifica se o documento é novo
      * @todo implementar get Raw
      */
-    public static function isFresh($body, InterfaceLink $link, InterfaceSubscription $subscription)
+    public static function isFresh(
+        $body, InterfaceLink $link,
+        InterfaceSubscription $subscription
+    )
     {
         if($existent = $subscription->getLink($link->getId()))
         {

@@ -47,14 +47,14 @@ abstract class AbstractSpider extends AbstractSpiderEgg
             ."\n"
             . $URI
             ."\n"
-        ,'info', 3);
+        ,'info', 5);
 
         $this->requests++;
         if ($type == 'html') {
             try {
-                $this->logger('Create instance of Goutte', 'debug', 3);
+                $this->logger('Create instance of Goutte', 'debug', 5);
                 $client = $this->goutte->request($mode, $URI);
-                $this->logger('Goutte done', 'debug', 3);
+                $this->logger('Goutte done', 'debug', 5);
             }
             catch(\Zend\Http\Client\Adapter\Exception\TimeoutException $e)
             {
@@ -63,15 +63,20 @@ abstract class AbstractSpider extends AbstractSpiderEgg
             }
 
             //Error in request
-            $this->logger('Status Code: [' . $this->getResponse()->getStatus() . ']', 'info', 3);
+            $this->logger(
+                'Status Code: [' 
+                . $this->getResponse()->getStatus() . ']', 'info', 4
+            );
             if($this->getResponse()->getStatus() >= 400){
-                throw new \Exception('Request with error: ' . $this->getResponse()->getStatus() 
+                throw new \Exception(
+                    'Request with error: '
+                    . $this->getResponse()->getStatus()
                     . " - " . $this->getResponseErrorMessage($client)
                 );
             }
         } else {
 
-            $this->logger('Create instance of Zend Feed Reader');
+            $this->logger('Create instance of Zend Feed Reader', 'info', 4);
             $client = $this->feedReader->request($URI);
         }
 

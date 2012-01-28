@@ -136,7 +136,7 @@ class Indexer extends AbstractSpider
 
                 if(DocumentManager::isFresh($this->getBody(), $target, $this->getSubscription())){
                     $target->setDocument($this->getCurrentUri(), clone $crawler, $this->getSubscription(), $this->transferDependency());
-                    $this->logger('document IS fresh', 'info', 3);
+                    $this->logger('document IS fresh', 'info', 5);
                 }
                 else{
                     $this->logger('document isnt fresh');
@@ -206,7 +206,7 @@ class Indexer extends AbstractSpider
      */
     public function collectLinksWithZendFeedReader(InterfaceFeedReader $reader)
     {
-        $this->addBackendLogger('Links on this feed:' . $reader->getLinks()->count());
+        //$this->addBackendLogger('Links on this feed:' . $reader->getLinks()->count());
 
         foreach($reader->getLinks()->toArray() as $link)
         {
@@ -237,6 +237,8 @@ class Indexer extends AbstractSpider
             . ':'
             . $aCollection->count()
             . ' with Goutte Crawler'
+            , 'info'
+            , 5
         );
 
         foreach($aCollection as $node)

@@ -113,7 +113,7 @@ class Document extends AbstractSpiderEgg
     {
         if(!$this->bigger)
         {
-            $this->logger('Content too short', 'info', 3);
+            $this->logger('Content too short', 'info', 5);
             return false;
         }
         $this->addRelevancy();//+1 cause text exist
@@ -133,7 +133,9 @@ class Document extends AbstractSpiderEgg
                 . implode(',', $this->subscription->getFilter('contain'))
                 . ']', 'info', 3
             );
-            $containTest = SpiderAsserts::containKeywords($txt, (array) $this->subscription->getFilter('contain'), true);
+            $containTest = SpiderAsserts::containKeywords(
+                $txt, (array) $this->subscription->getFilter('contain'), true
+            );
             if($containTest) {
                 $this->addRelevancy();
             } else {
@@ -150,12 +152,16 @@ class Document extends AbstractSpiderEgg
             $this->logger(
                 'Check for BAD keywords['
                 . implode(',', $this->subscription->getFilter('notContain'))
-                . ']', 'info', 3
+                . ']', 'info', 5
             );
-            if(!SpiderAsserts::containKeywords($txt, $this->subscription->getFilter('notContain'), false)) {
+            if(
+                !SpiderAsserts::containKeywords(
+                    $txt, $this->subscription->getFilter('notContain'), false
+                )
+            ) {
                 $this->addRelevancy();
             } else {
-                $this->logger('Document contain BAD keywords');
+                $this->logger('Document contain BAD keywords', 'info', 3);
             }
         }
     }
@@ -163,7 +169,7 @@ class Document extends AbstractSpiderEgg
     protected function addRelevancy()
     {
         $this->set('relevancy', $this->get('relevancy') + 1);
-        $this->logger('Current relevancy:'. $this->getRelevancy(), 'info', 3);
+        $this->logger('Current relevancy:'. $this->getRelevancy(), 'info', 5);
     }
 
     /**
@@ -188,7 +194,7 @@ class Document extends AbstractSpiderEgg
             $this->searchBiggerInTags($tag);
         }
         if(! $this->bigger instanceof \DOMElement ) {
-            $this->logger('Cannot find bigger', 'info', 3);
+            $this->logger('Cannot find bigger', 'info', 5);
             return false;
         }
     }
@@ -238,7 +244,7 @@ class Document extends AbstractSpiderEgg
 
     protected function processResponse()
     {
-        $this->logger('processing document' ,'info', 3);
+        $this->logger('processing document' ,'info', 5);
         $this->getBiggerTag();
 
         if ($this->getConfig('save_document', false)) {

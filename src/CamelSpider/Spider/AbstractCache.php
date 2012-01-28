@@ -36,10 +36,14 @@ class AbstractCache extends AbstractSpiderEgg implements InterfaceCache
         if (!is_dir($dir)) {
             $this->logger('Creating the directory [' . $dir . ']');
             if (false === @mkdir($dir, 0777, true)) {
-                throw new \RuntimeException(sprintf('Unable to create the %s directory', $dir));
+                throw new \RuntimeException(
+                    sprintf('Unable to create the %s directory', $dir)
+                );
             }
         } elseif (!is_writable($dir)) {
-            throw new \RuntimeException(sprintf('Unable to write in the %s directory', $dir));
+            throw new \RuntimeException(
+                sprintf('Unable to write in the %s directory', $dir)
+            );
         }
     }
 
@@ -54,7 +58,9 @@ class AbstractCache extends AbstractSpiderEgg implements InterfaceCache
         if (is_dir($dir)) {
             $this->logger('Removing the directory [' . $dir . ']');
             if (false === @rmdir($dir)) {
-                throw new \RuntimeException(sprintf('Unable to remove the %s directory', $dir));
+                throw new \RuntimeException(
+                    sprintf('Unable to remove the %s directory', $dir)
+                );
             }
         }
     }
@@ -71,7 +77,7 @@ class AbstractCache extends AbstractSpiderEgg implements InterfaceCache
             $this->logger('Object id Empty!', 'err');
             return false;
         }
-        $this->logger('Saving object', 'info', 3);
+        $this->logger('Saving object', 'info', 5);
 
         return $this->cache->save($data, $id, $tags);
     }
