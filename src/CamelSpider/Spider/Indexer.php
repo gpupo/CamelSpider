@@ -208,8 +208,6 @@ class Indexer extends AbstractSpider
      */
     public function collectLinksWithZendFeedReader(InterfaceFeedReader $reader)
     {
-        //$this->addBackendLogger('Links on this feed:' . $reader->getLinks()->count());
-
         foreach($reader->getLinks()->toArray() as $link)
         {
             if($this->checkLimit()){

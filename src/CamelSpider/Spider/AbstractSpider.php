@@ -468,15 +468,16 @@ EOF;
             5
         );
 
-        if($this->getMemoryUsage() > $this->getConfig('memory_limit', 75)){
+        if (
+            $this->getMemoryUsage() > $this->getConfig('memory_limit', 75)
+        ){
             $this->logger('Limit of memory reached', 'err');
             $this->limitReached = true;
            return false;
         }
-        if($this->requests >= $this->getConfig('requests_limit', 300)){
-            //throw new \Exception ('Limit reached');
+        if($this->requests >= $this->getConfig('requests_limit', 100)){
             $this->limitReached = true;
-            $this->logger('Limit of requests reached', 'err');
+            $this->logger('Limit of requests reached', 'info', 1);
             return false;
         }
         return true;
