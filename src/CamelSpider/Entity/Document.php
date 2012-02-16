@@ -45,7 +45,8 @@ class Document extends AbstractSpiderEgg
      * @param array $dependency Logger, Cache, array Config
      *
      **/
-    public function __construct($uri, Crawler $crawler, InterfaceSubscription $subscription, $dependency = NULL)
+    public function __construct($uri, Crawler $crawler,
+       InterfaceSubscription $subscription, $dependency = null)
     {
         $this->crawler = $crawler;
         $this->subscription = $subscription;
@@ -56,7 +57,7 @@ class Document extends AbstractSpiderEgg
                 }
             }
         }
-        $config = isset($dependency['config']) ? $dependency['config'] : NULL;
+        $config = isset($dependency['config']) ? $dependency['config'] : null;
         parent::__construct(array('relevancy'=>0, 'uri' => $uri), $config);
         $this->processResponse();
     }
@@ -73,10 +74,19 @@ class Document extends AbstractSpiderEgg
         return $this->get('uri');
     }
 
+    protected function preStringProccess($string){
+
+        return utf8_decode(
+            trim(
+                html_entity_decode($string)
+            )
+        );
+    }
+
     protected function setTitle()
     {
         $title = $this->crawler->filter('title')->text();
-        $this->set('title', trim($title));
+        $this->set('title', $this->preStringProccess($title));
         $this->logger('setting Title as [' . $this->getTitle() . ']', 'info', 3);
     }
 
@@ -209,7 +219,9 @@ class Document extends AbstractSpiderEgg
     public function getHtml()
     {
         if ($this->bigger) {
-            return SpiderDom::toCleanHtml($this->bigger);
+            return $this->preStringProccess(
+                SpiderDom::toCleanHtml($this->bigger)
+            );
         }
     }
 
@@ -220,7 +232,11 @@ class Document extends AbstractSpiderEgg
     protected function setText()
     {
         if($this->bigger){
-            $this->set('text', SpiderDom::toText($this->bigger));
+            $this->set('text',
+                $this->preStringProccess(
+                    SpiderDom::toText($this->bigger)
+                )
+            );
         }
         else
         {
