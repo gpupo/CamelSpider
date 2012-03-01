@@ -74,13 +74,19 @@ class Document extends AbstractSpiderEgg
         return $this->get('uri');
     }
 
-    protected function preStringProccess($string){
-
+    /**
+     * Check some sources chars
+     */
+    protected function entityStringProccess($string)
+    {
         return utf8_decode(
-            trim(
-                html_entity_decode($string)
-            )
+            html_entity_decode($string)
         );
+    }
+
+    protected function preStringProccess($string)
+    {
+        return trim($string);
     }
 
     protected function setTitle()
