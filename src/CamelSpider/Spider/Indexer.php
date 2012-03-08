@@ -134,8 +134,18 @@ class Indexer extends AbstractSpider
 
             if (!$target instanceof InterfaceSubscription) {
 
-                if(DocumentManager::isFresh($this->getBody(), $target, $this->getSubscription())){
-                    $target->setDocument($this->getCurrentUri(), clone $crawler, $this->getSubscription(), $this->transferDependency());
+                if(
+                    DocumentManager::isFresh(
+                        $this->getBody(),
+                        $target, $this->getSubscription()
+                    )
+                ){
+                    $target->setDocument(
+                        $this->getCurrentUri(),
+                        clone $crawler,
+                        $this->getSubscription(),
+                        $this->transferDependency()
+                    );
                     $this->logger('document IS fresh', 'info', 5);
                 }
                 else{
@@ -156,7 +166,10 @@ class Indexer extends AbstractSpider
                 }
             }
 
-            $this->logger('saving object on cache, with id:' . $target->getId('string'), 'info', 5);
+            $this->logger(
+                'saving object on cache, with id:'
+                . $target->getId('string'), 'info', 5
+            );
             $this->pool->save($target);
             $this->success++;
 
@@ -268,7 +281,13 @@ class Indexer extends AbstractSpider
                 break;
             }
 
-            $this->logger("\n" . '====== Request number #' . $this->requests . '======', 'info', 5);
+            $this->logger(
+                "\n" 
+                . '====== Request number #' 
+                . $this->requests
+                . '======',
+                'info', 5
+            );
 
             try{
                 $this->collect($link, $withLinks);

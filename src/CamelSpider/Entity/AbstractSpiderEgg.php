@@ -39,18 +39,28 @@ class AbstractSpiderEgg extends ArrayCollection
 
     protected function getConfig($key, $defaultValue = NULL)
     {
-        if($this->config instanceof ArrayCollection && $config = $this->config->get($key)){
+        if(
+            $this->config instanceof ArrayCollection
+            && $config = $this->config->get($key)
+        ){
             return $config;
         }
         return $defaultValue;
     }
-    
+
     /**
      * Debug, like var_dump, but output on log
      */
     protected function debugger($object, $info = 'DEBUGGER')
     {
-        return $this->logger("\n" . $info . ":\n" . var_export($object, true), 'echo', 1);
+        return $this->logger(
+            "\n"
+            . $info
+            . ":\n"
+            . var_export($object, true),
+            'echo',
+            1
+        );
     }
 
     /**
@@ -62,8 +72,13 @@ class AbstractSpiderEgg extends ArrayCollection
             echo $string;
             $type = 'info';
         }
-        if($this->logger && $this->getConfig('log_level', 3) >= $level){
-            return $this->logger->$type('#CamelSpider ' . $this->name . ':'  . $string);
+        if (
+            $this->logger
+            && $this->getConfig('log_level', 3) >= $level
+        ) {
+            return $this->logger->$type(
+                '#CamelSpider ' . $this->name . ':'  . $string
+            );
         }
     }
 

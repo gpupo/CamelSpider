@@ -475,7 +475,12 @@ EOF;
             $this->limitReached = true;
            return false;
         }
-        if($this->requests >= $this->getConfig('requests_limit', 100)){
+        if(
+            $this->requests >= $this->getConfig(
+                'requests_limit',
+                isset($_SERVER['HTTP_HOST']) ? 20 : 100
+            )
+        ){
             $this->limitReached = true;
             $this->logger('Limit of requests reached', 'info', 1);
             return false;
