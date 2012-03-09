@@ -280,7 +280,7 @@ class Indexer extends AbstractSpider
                 $this->pool->errLink($link, 'Limit reached');
                 break;
             }
-
+            echo '. ';
             $this->logger(
                 "\n" 
                 . '====== Request number #' 
