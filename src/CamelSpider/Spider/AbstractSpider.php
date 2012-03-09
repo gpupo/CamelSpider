@@ -455,6 +455,9 @@ EOF;
         return round(microtime(true) - $this->time[$type]);
     }
 
+    /**
+     * Checl if memory or requests is reached
+     */
     protected function checkLimit()
     {
         if ($this->limitReached) {
@@ -478,7 +481,7 @@ EOF;
         if(
             $this->requests >= $this->getConfig(
                 'requests_limit',
-                isset($_SERVER['HTTP_HOST']) ? 20 : 100
+                isset($_SERVER['HTTP_HOST']) ? 15 : 60
             )
         ){
             $this->limitReached = true;
