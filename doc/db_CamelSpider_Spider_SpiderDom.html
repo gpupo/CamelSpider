@@ -113,6 +113,33 @@
          
     </dd>
 </dl>
+<h3>Constants</h3>
+<div>
+<a id="\CamelSpider\Spider\SpiderDom::rootTag" class="anchor"></a><div class="constant publicC">
+<a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/constant.png" alt="Constant"> 
+                <span class="highlight">rootTag</span>
+                = 'rootTag'</code><div class="description"></div>
+<div class="code-tabs"><dl class="constant-info"></dl></div>
+<div class="clear"></div>
+</div>
+</div>
+<h3>Properties</h3>
+<div>
+<a id="\CamelSpider\Spider\SpiderDom::$stripedTags" class="anchor"></a><div class="property public">
+<a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/property.png" alt="Property"><img src="images/icons/visibility_public.png" style="margin-right: 5px" alt="public">
+                 <span class="highlight">$stripedTags</span>= 'array(
+        'b''
+                </code><div class="description"><span class="attribute">static</span></div>
+<div class="code-tabs">
+<strong>Default value</strong><code>array(
+        'b'</code><strong>Details</strong><dl class="property-info">
+<dt>Type</dt>
+<dd></dd>
+</dl>
+</div>
+<div class="clear"></div>
+</div>
+</div>
 <h3>Methods</h3>
 <div>
 <a id="\CamelSpider\Spider\SpiderDom::containerCandidate()" class="anchor"></a><div class="method public">
@@ -183,7 +210,9 @@ de conteúdo</p>
 <a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_public.png" style="margin-right: 5px" alt="public"><span class="highlight">getGreater</span><span class="nb-faded-text">(
            $a,  $b
               =
-              NULL
+              NULL,  $options
+              =
+              array()
           )
         </span>
         :
@@ -204,6 +233,196 @@ de conteúdo</p>
 </tr>
 <tr>
 <th>$b</th>
+<td></td>
+<td><em></em></td>
+</tr>
+<tr>
+<th>$options</th>
+<td></td>
+<td><em></em></td>
+</tr>
+</table>
+</div>
+<div class="clear"></div>
+</div>
+<a id="\CamelSpider\Spider\SpiderDom::getNodeHtml()" class="anchor"></a><div class="method public">
+<a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_public.png" style="margin-right: 5px" alt="public"><span class="highlight">getNodeHtml</span><span class="nb-faded-text">(
+           $doc
+          )
+        </span>
+        :
+          void</code><div class="description">
+<span class="attribute">static</span><p class="short_description">Process node and generate his html</p>
+</div>
+<div class="code-tabs">
+<div class="long-description">
+</div>
+<strong>Parameters</strong><table class="argument-info">
+<thead><tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tr>
+<th>$doc</th>
+<td></td>
+<td><em></em></td>
+</tr>
+</table>
+</div>
+<div class="clear"></div>
+</div>
+<a id="\CamelSpider\Spider\SpiderDom::htmlToDomElement()" class="anchor"></a><div class="method public">
+<a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_public.png" style="margin-right: 5px" alt="public"><span class="highlight">htmlToDomElement</span><span class="nb-faded-text">(
+           $html
+          )
+        </span>
+        :
+          void</code><div class="description">
+<span class="attribute">static</span><p class="short_description">Convert html to DomElement</p>
+</div>
+<div class="code-tabs">
+<div class="long-description">
+</div>
+<strong>Parameters</strong><table class="argument-info">
+<thead><tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tr>
+<th>$html</th>
+<td></td>
+<td><em></em></td>
+</tr>
+</table>
+</div>
+<div class="clear"></div>
+</div>
+<a id="\CamelSpider\Spider\SpiderDom::htmlToIntro()" class="anchor"></a><div class="method public">
+<a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_public.png" style="margin-right: 5px" alt="public"><span class="highlight">htmlToIntro</span><span class="nb-faded-text">(
+           $html,  $length,  $end
+              =
+              '',  $encoding
+              =
+              'UTF-8'
+          )
+        </span>
+        :
+          void</code><div class="description">
+<span class="attribute">static</span><p class="short_description"></p>
+</div>
+<div class="code-tabs">
+<strong>Parameters</strong><table class="argument-info">
+<thead><tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tr>
+<th>$html</th>
+<td></td>
+<td><em></em></td>
+</tr>
+<tr>
+<th>$length</th>
+<td></td>
+<td><em></em></td>
+</tr>
+<tr>
+<th>$end</th>
+<td></td>
+<td><em></em></td>
+</tr>
+<tr>
+<th>$encoding</th>
+<td></td>
+<td><em></em></td>
+</tr>
+</table>
+</div>
+<div class="clear"></div>
+</div>
+<a id="\CamelSpider\Spider\SpiderDom::htmlToText()" class="anchor"></a><div class="method public">
+<a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_public.png" style="margin-right: 5px" alt="public"><span class="highlight">htmlToText</span><span class="nb-faded-text">(
+           $html
+          )
+        </span>
+        :
+          string</code><div class="description">
+<span class="attribute">static</span><p class="short_description">Transform html to plain text</p>
+</div>
+<div class="code-tabs">
+<div class="long-description">
+</div>
+<strong>Parameters</strong><table class="argument-info">
+<thead><tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tr>
+<th>$html</th>
+<td></td>
+<td><em></em></td>
+</tr>
+</table>
+<strong>Returns</strong><table class="argument-info">
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tr>
+<td>string</td>
+<td>$text</td>
+</tr>
+</table>
+</div>
+<div class="clear"></div>
+</div>
+<a id="\CamelSpider\Spider\SpiderDom::normalizeDocument()" class="anchor"></a><div class="method public">
+<a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_public.png" style="margin-right: 5px" alt="public"><span class="highlight">normalizeDocument</span><span class="nb-faded-text">(
+           $node
+          )
+        </span>
+        :
+          void</code><div class="description">
+<span class="attribute">static</span><p class="short_description"></p>
+</div>
+<div class="code-tabs">
+<strong>Parameters</strong><table class="argument-info">
+<thead><tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tr>
+<th>$node</th>
+<td></td>
+<td><em></em></td>
+</tr>
+</table>
+</div>
+<div class="clear"></div>
+</div>
+<a id="\CamelSpider\Spider\SpiderDom::normalizeDomNode()" class="anchor"></a><div class="method protected">
+<a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_protected.png" style="margin-right: 5px" alt="protected"><span class="highlight">normalizeDomNode</span><span class="nb-faded-text">(
+           $node
+          )
+        </span>
+        :
+          void</code><div class="description">
+<span class="attribute">static</span><p class="short_description"></p>
+</div>
+<div class="code-tabs">
+<strong>Parameters</strong><table class="argument-info">
+<thead><tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tr>
+<th>$node</th>
 <td></td>
 <td><em></em></td>
 </tr>
@@ -241,6 +460,125 @@ de conteúdo</p>
          
     </dd>
 </dl>
+</div>
+<div class="clear"></div>
+</div>
+<a id="\CamelSpider\Spider\SpiderDom::removeChild()" class="anchor"></a><div class="method protected">
+<a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_protected.png" style="margin-right: 5px" alt="protected"><span class="highlight">removeChild</span><span class="nb-faded-text">(
+           $node,  $tag
+          )
+        </span>
+        :
+          void</code><div class="description">
+<span class="attribute">static</span><p class="short_description"></p>
+</div>
+<div class="code-tabs">
+<strong>Parameters</strong><table class="argument-info">
+<thead><tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tr>
+<th>$node</th>
+<td></td>
+<td><em></em></td>
+</tr>
+<tr>
+<th>$tag</th>
+<td></td>
+<td><em></em></td>
+</tr>
+</table>
+</div>
+<div class="clear"></div>
+</div>
+<a id="\CamelSpider\Spider\SpiderDom::removeDirtyAttrs()" class="anchor"></a><div class="method public">
+<a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_public.png" style="margin-right: 5px" alt="public"><span class="highlight">removeDirtyAttrs</span><span class="nb-faded-text">(
+          string $content, array $attrs
+              =
+              null
+          )
+        </span>
+        :
+          void</code><div class="description">
+<span class="attribute">static</span><p class="short_description">Remove attributes from hell!</p>
+</div>
+<div class="code-tabs">
+<div class="long-description">
+</div>
+<strong>Parameters</strong><table class="argument-info">
+<thead><tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tr>
+<th>$content</th>
+<td>string</td>
+<td><em><p>is a html</p></em></td>
+</tr>
+<tr>
+<th>$attrs</th>
+<td>array</td>
+<td><em><p>is a list of attributes to clean</p></em></td>
+</tr>
+</table>
+</div>
+<div class="clear"></div>
+</div>
+<a id="\CamelSpider\Spider\SpiderDom::removeTag()" class="anchor"></a><div class="method public">
+<a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_public.png" style="margin-right: 5px" alt="public"><span class="highlight">removeTag</span><span class="nb-faded-text">(
+           $tag,  $content
+          )
+        </span>
+        :
+          void</code><div class="description">
+<span class="attribute">static</span><p class="short_description"></p>
+</div>
+<div class="code-tabs">
+<strong>Parameters</strong><table class="argument-info">
+<thead><tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tr>
+<th>$tag</th>
+<td></td>
+<td><em></em></td>
+</tr>
+<tr>
+<th>$content</th>
+<td></td>
+<td><em></em></td>
+</tr>
+</table>
+</div>
+<div class="clear"></div>
+</div>
+<a id="\CamelSpider\Spider\SpiderDom::removeTrashBlock()" class="anchor"></a><div class="method public">
+<a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_public.png" style="margin-right: 5px" alt="public"><span class="highlight">removeTrashBlock</span><span class="nb-faded-text">(
+           $content
+          )
+        </span>
+        :
+          void</code><div class="description">
+<span class="attribute">static</span><p class="short_description"></p>
+</div>
+<div class="code-tabs">
+<strong>Parameters</strong><table class="argument-info">
+<thead><tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tr>
+<th>$content</th>
+<td></td>
+<td><em></em></td>
+</tr>
+</table>
 </div>
 <div class="clear"></div>
 </div>
@@ -341,6 +679,38 @@ de conteúdo</p>
 </div>
 <div class="clear"></div>
 </div>
+<a id="\CamelSpider\Spider\SpiderDom::strip_tags()" class="anchor"></a><div class="method public">
+<a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_public.png" style="margin-right: 5px" alt="public"><span class="highlight">strip_tags</span><span class="nb-faded-text">(
+           $content,  $allow
+              =
+              null
+          )
+        </span>
+        :
+          void</code><div class="description">
+<span class="attribute">static</span><p class="short_description"></p>
+</div>
+<div class="code-tabs">
+<strong>Parameters</strong><table class="argument-info">
+<thead><tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tr>
+<th>$content</th>
+<td></td>
+<td><em></em></td>
+</tr>
+<tr>
+<th>$allow</th>
+<td></td>
+<td><em></em></td>
+</tr>
+</table>
+</div>
+<div class="clear"></div>
+</div>
 <a id="\CamelSpider\Spider\SpiderDom::substr_count()" class="anchor"></a><div class="method public">
 <a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_public.png" style="margin-right: 5px" alt="public"><span class="highlight">substr_count</span><span class="nb-faded-text">(
            $node,  $substring
@@ -373,6 +743,43 @@ de conteúdo</p>
 </div>
 <a id="\CamelSpider\Spider\SpiderDom::textLen()" class="anchor"></a><div class="method public">
 <a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_public.png" style="margin-right: 5px" alt="public"><span class="highlight">textLen</span><span class="nb-faded-text">(
+          \CamelSpider\Spider\DomElement $node
+          )
+        </span>
+        :
+          int</code><div class="description">
+<span class="attribute">static</span><p class="short_description">Calcula a quantidade de texto que um DomElement possui.</p>
+</div>
+<div class="code-tabs">
+<div class="long-description">
+</div>
+<strong>Parameters</strong><table class="argument-info">
+<thead><tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tr>
+<th>$node</th>
+<td>\CamelSpider\Spider\DomElement</td>
+<td><em></em></td>
+</tr>
+</table>
+<strong>Returns</strong><table class="argument-info">
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tr>
+<td>int</td>
+<td>Minor count</td>
+</tr>
+</table>
+</div>
+<div class="clear"></div>
+</div>
+<a id="\CamelSpider\Spider\SpiderDom::toCleanHtml()" class="anchor"></a><div class="method public">
+<a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_public.png" style="margin-right: 5px" alt="public"><span class="highlight">toCleanHtml</span><span class="nb-faded-text">(
            $node
           )
         </span>
@@ -435,7 +842,9 @@ de conteúdo</p>
 </div>
 <a id="\CamelSpider\Spider\SpiderDom::toText()" class="anchor"></a><div class="method public">
 <a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_public.png" style="margin-right: 5px" alt="public"><span class="highlight">toText</span><span class="nb-faded-text">(
-           $node
+           $node,  $mode
+              =
+              'textContent'
           )
         </span>
         :
@@ -453,6 +862,11 @@ de conteúdo</p>
 </tr></thead>
 <tr>
 <th>$node</th>
+<td></td>
+<td><em></em></td>
+</tr>
+<tr>
+<th>$mode</th>
 <td></td>
 <td><em></em></td>
 </tr>

@@ -78,7 +78,7 @@
       });
 
       
-    </script><h1 xmlns:dbx="http://docblox-project.org/xsl/functions" class="file">CamelSpider/Entity/AbstractSpiderEgg.php</h1>
+    </script><h1 xmlns:dbx="http://docblox-project.org/xsl/functions" class="file">CamelSpider/Spider/FeedReader.php</h1>
 <div xmlns:dbx="http://docblox-project.org/xsl/functions" id="file-nav-box">
 <div id="file-nav-options">
               Show:
@@ -88,7 +88,7 @@
 <ul id="file-nav"><li>
 <a href="#classes"><img src="images/icons/class.png" height="14">
                           Classes
-                      </a><ul><li><a href="#%5CCamelSpider%5CEntity%5CAbstractSpiderEgg">\CamelSpider\Entity\AbstractSpiderEgg</a></li></ul>
+                      </a><ul><li><a href="#%5CCamelSpider%5CSpider%5CFeedReader">\CamelSpider\Spider\FeedReader</a></li></ul>
 </li></ul>
 <div style="clear: left;"></div>
 </div>
@@ -96,42 +96,70 @@
               Table of Contents
           </div>
 </div>
-<a xmlns:dbx="http://docblox-project.org/xsl/functions" name="top" class="anchor"></a><a name="classes" class="anchor"></a><a xmlns:dbx="http://docblox-project.org/xsl/functions" id="\CamelSpider\Entity\AbstractSpiderEgg" class="anchor"></a><h2 xmlns:dbx="http://docblox-project.org/xsl/functions" class="class">\CamelSpider\Entity\AbstractSpiderEgg<div class="to-top"><a href="#top">jump to top</a></div>
+<a xmlns:dbx="http://docblox-project.org/xsl/functions" name="top" class="anchor"></a><a name="classes" class="anchor"></a><a xmlns:dbx="http://docblox-project.org/xsl/functions" id="\CamelSpider\Spider\FeedReader" class="anchor"></a><h2 xmlns:dbx="http://docblox-project.org/xsl/functions" class="class">\CamelSpider\Spider\FeedReader<div class="to-top"><a href="#top">jump to top</a></div>
 </h2>
 <div xmlns:dbx="http://docblox-project.org/xsl/functions" class="class">
-<small class="package"><b>Package: </b>Default</small><p class="short-description">Este é um ovo :)
-Ele abstrai métodos reusáveis entre a maior
-parte dos objetos do projeto</p>
-<div class="long-description">
+<small class="package"><b>Package: </b>Default</small><p class="short-description">Process rss and attom</p>
+<div class="long-description"><p>Using Zend Feed Reader</p>
 </div>
 <dl class="class-info">
+<dt>Implements</dt>
+<dd><a href="db_CamelSpider_Spider_InterfaceFeedReader.html#%5CCamelSpider%5CSpider%5CInterfaceFeedReader">\CamelSpider\Spider\InterfaceFeedReader</a></dd>
 <dt>Parent(s)</dt>
-<dd>\Doctrine\Common\Collections\ArrayCollection</dd>
-<dt>Children</dt>
-<dd><a href="db_CamelSpider_Entity_Document.html#%5CCamelSpider%5CEntity%5CDocument">\CamelSpider\Entity\Document</a></dd>
-<dd><a href="db_CamelSpider_Entity_Pool.html#%5CCamelSpider%5CEntity%5CPool">\CamelSpider\Entity\Pool</a></dd>
-<dd><a href="db_CamelSpider_Spider_AbstractCache.html#%5CCamelSpider%5CSpider%5CAbstractCache">\CamelSpider\Spider\AbstractCache</a></dd>
-<dd><a href="db_CamelSpider_Spider_AbstractLauncher.html#%5CCamelSpider%5CSpider%5CAbstractLauncher">\CamelSpider\Spider\AbstractLauncher</a></dd>
-<dd><a href="db_CamelSpider_Spider_AbstractSpider.html#%5CCamelSpider%5CSpider%5CAbstractSpider">\CamelSpider\Spider\AbstractSpider</a></dd>
-<dd><a href="db_CamelSpider_Spider_FeedReader.html#%5CCamelSpider%5CSpider%5CFeedReader">\CamelSpider\Spider\FeedReader</a></dd>
+<dd>
+<a href="db_CamelSpider_Entity_AbstractSpiderEgg.html#%5CCamelSpider%5CEntity%5CAbstractSpiderEgg">\CamelSpider\Entity\AbstractSpiderEgg</a>
+            &lt;
+            \Doctrine\Common\Collections\ArrayCollection</dd>
+<dt>See</dt>
+<dd>\CamelSpider\Spider\http://framework.zend.com/manual/en/zend.feed.reader.html
+         
+    </dd>
 </dl>
 <h3>Properties</h3>
 <div>
-<a id="\CamelSpider\Entity\AbstractSpiderEgg::$cache" class="anchor"></a><div class="property protected">
+<a id="\CamelSpider\Spider\FeedReader::$cache" class="anchor"></a><div class="property protected inherited_from ">
 <a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/property.png" alt="Property"><img src="images/icons/visibility_protected.png" style="margin-right: 5px" alt="protected">
                  <span class="highlight">$cache</span>= ''
-                </code><div class="description"></div>
+                </code><div class="description">
+<span class="attribute">inherited</span><small>Inherited from:
+                        <a href="db_CamelSpider_Entity_AbstractSpiderEgg.html#%5CCamelSpider%5CEntity%5CAbstractSpiderEgg::%24cache">\CamelSpider\Entity\AbstractSpiderEgg::$cache</a></small>
+</div>
 <div class="code-tabs">
 <strong>Details</strong><dl class="property-info">
 <dt>Type</dt>
 <dd></dd>
+<dt>Inherited_from</dt>
+<dd>
+<a href="db_CamelSpider_Entity_AbstractSpiderEgg.html#%5CCamelSpider%5CEntity%5CAbstractSpiderEgg::%24cache">\CamelSpider\Entity\AbstractSpiderEgg::$cache</a>
+         
+    </dd>
 </dl>
 </div>
 <div class="clear"></div>
 </div>
-<a id="\CamelSpider\Entity\AbstractSpiderEgg::$config" class="anchor"></a><div class="property protected">
+<a id="\CamelSpider\Spider\FeedReader::$config" class="anchor"></a><div class="property protected inherited_from ">
 <a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/property.png" alt="Property"><img src="images/icons/visibility_protected.png" style="margin-right: 5px" alt="protected">
                  <span class="highlight">$config</span>= ''
+                </code><div class="description">
+<span class="attribute">inherited</span><small>Inherited from:
+                        <a href="db_CamelSpider_Entity_AbstractSpiderEgg.html#%5CCamelSpider%5CEntity%5CAbstractSpiderEgg::%24config">\CamelSpider\Entity\AbstractSpiderEgg::$config</a></small>
+</div>
+<div class="code-tabs">
+<strong>Details</strong><dl class="property-info">
+<dt>Type</dt>
+<dd></dd>
+<dt>Inherited_from</dt>
+<dd>
+<a href="db_CamelSpider_Entity_AbstractSpiderEgg.html#%5CCamelSpider%5CEntity%5CAbstractSpiderEgg::%24config">\CamelSpider\Entity\AbstractSpiderEgg::$config</a>
+         
+    </dd>
+</dl>
+</div>
+<div class="clear"></div>
+</div>
+<a id="\CamelSpider\Spider\FeedReader::$feed" class="anchor"></a><div class="property protected">
+<a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/property.png" alt="Property"><img src="images/icons/visibility_protected.png" style="margin-right: 5px" alt="protected">
+                 <span class="highlight">$feed</span>= ''
                 </code><div class="description"></div>
 <div class="code-tabs">
 <strong>Details</strong><dl class="property-info">
@@ -141,21 +169,53 @@ parte dos objetos do projeto</p>
 </div>
 <div class="clear"></div>
 </div>
-<a id="\CamelSpider\Entity\AbstractSpiderEgg::$logger" class="anchor"></a><div class="property protected">
+<a id="\CamelSpider\Spider\FeedReader::$logger" class="anchor"></a><div class="property protected inherited_from ">
 <a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/property.png" alt="Property"><img src="images/icons/visibility_protected.png" style="margin-right: 5px" alt="protected">
                  <span class="highlight">$logger</span>= ''
-                </code><div class="description"></div>
+                </code><div class="description">
+<span class="attribute">inherited</span><small>Inherited from:
+                        <a href="db_CamelSpider_Entity_AbstractSpiderEgg.html#%5CCamelSpider%5CEntity%5CAbstractSpiderEgg::%24logger">\CamelSpider\Entity\AbstractSpiderEgg::$logger</a></small>
+</div>
 <div class="code-tabs">
 <strong>Details</strong><dl class="property-info">
+<dt>Type</dt>
+<dd></dd>
+<dt>Inherited_from</dt>
+<dd>
+<a href="db_CamelSpider_Entity_AbstractSpiderEgg.html#%5CCamelSpider%5CEntity%5CAbstractSpiderEgg::%24logger">\CamelSpider\Entity\AbstractSpiderEgg::$logger</a>
+         
+    </dd>
+</dl>
+</div>
+<div class="clear"></div>
+</div>
+<a id="\CamelSpider\Spider\FeedReader::$logger_level" class="anchor"></a><div class="property private">
+<a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/property.png" alt="Property"><img src="images/icons/visibility_private.png" style="margin-right: 5px" alt="private">
+                 <span class="highlight">$logger_level</span>= '3'
+                </code><div class="description"></div>
+<div class="code-tabs">
+<strong>Default value</strong><code>3</code><strong>Details</strong><dl class="property-info">
 <dt>Type</dt>
 <dd></dd>
 </dl>
 </div>
 <div class="clear"></div>
 </div>
-<a id="\CamelSpider\Entity\AbstractSpiderEgg::$name" class="anchor"></a><div class="property protected">
+<a id="\CamelSpider\Spider\FeedReader::$name" class="anchor"></a><div class="property protected">
 <a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/property.png" alt="Property"><img src="images/icons/visibility_protected.png" style="margin-right: 5px" alt="protected">
-                 <span class="highlight">$name</span>= ''
+                 <span class="highlight">$name</span>= ''Feed Reader''
+                </code><div class="description"></div>
+<div class="code-tabs">
+<strong>Default value</strong><code>'Feed Reader'</code><strong>Details</strong><dl class="property-info">
+<dt>Type</dt>
+<dd></dd>
+</dl>
+</div>
+<div class="clear"></div>
+</div>
+<a id="\CamelSpider\Spider\FeedReader::$uri" class="anchor"></a><div class="property private">
+<a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/property.png" alt="Property"><img src="images/icons/visibility_private.png" style="margin-right: 5px" alt="private">
+                 <span class="highlight">$uri</span>= ''
                 </code><div class="description"></div>
 <div class="code-tabs">
 <strong>Details</strong><dl class="property-info">
@@ -168,9 +228,11 @@ parte dos objetos do projeto</p>
 </div>
 <h3>Methods</h3>
 <div>
-<a id="\CamelSpider\Entity\AbstractSpiderEgg::__construct()" class="anchor"></a><div class="method public">
+<a id="\CamelSpider\Spider\FeedReader::__construct()" class="anchor"></a><div class="method public">
 <a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_public.png" style="margin-right: 5px" alt="public"><span class="highlight">__construct</span><span class="nb-faded-text">(
-           $array,  $config
+           $cache,  $logger
+              =
+              NULL,  $config
               =
               NULL
           )
@@ -185,7 +247,12 @@ parte dos objetos do projeto</p>
 <th>Description</th>
 </tr></thead>
 <tr>
-<th>$array</th>
+<th>$cache</th>
+<td></td>
+<td><em></em></td>
+</tr>
+<tr>
+<th>$logger</th>
 <td></td>
 <td><em></em></td>
 </tr>
@@ -198,7 +265,7 @@ parte dos objetos do projeto</p>
 </div>
 <div class="clear"></div>
 </div>
-<a id="\CamelSpider\Entity\AbstractSpiderEgg::debugger()" class="anchor"></a><div class="method protected">
+<a id="\CamelSpider\Spider\FeedReader::debugger()" class="anchor"></a><div class="method protected inherited_from ">
 <a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_protected.png" style="margin-right: 5px" alt="protected"><span class="highlight">debugger</span><span class="nb-faded-text">(
            $object,  $info
               =
@@ -206,7 +273,11 @@ parte dos objetos do projeto</p>
           )
         </span>
         :
-          void</code><div class="description"><p class="short_description">Debug, like var_dump, but output on log</p></div>
+          void</code><div class="description">
+<span class="attribute">inherited</span><p class="short_description">Debug, like var_dump, but output on log</p>
+<small>Inherited from:
+                    <a href="db_CamelSpider_Entity_AbstractSpiderEgg.html#%5CCamelSpider%5CEntity%5CAbstractSpiderEgg::debugger()">\CamelSpider\Entity\AbstractSpiderEgg::debugger()</a></small>
+</div>
 <div class="code-tabs">
 <div class="long-description">
 </div>
@@ -230,7 +301,7 @@ parte dos objetos do projeto</p>
 </div>
 <div class="clear"></div>
 </div>
-<a id="\CamelSpider\Entity\AbstractSpiderEgg::getConfig()" class="anchor"></a><div class="method protected">
+<a id="\CamelSpider\Spider\FeedReader::getConfig()" class="anchor"></a><div class="method protected inherited_from ">
 <a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_protected.png" style="margin-right: 5px" alt="protected"><span class="highlight">getConfig</span><span class="nb-faded-text">(
            $key,  $defaultValue
               =
@@ -238,7 +309,11 @@ parte dos objetos do projeto</p>
           )
         </span>
         :
-          void</code><div class="description"><p class="short_description"></p></div>
+          void</code><div class="description">
+<span class="attribute">inherited</span><p class="short_description"></p>
+<small>Inherited from:
+                    <a href="db_CamelSpider_Entity_AbstractSpiderEgg.html#%5CCamelSpider%5CEntity%5CAbstractSpiderEgg::getConfig()">\CamelSpider\Entity\AbstractSpiderEgg::getConfig()</a></small>
+</div>
 <div class="code-tabs">
 <strong>Parameters</strong><table class="argument-info">
 <thead><tr>
@@ -260,7 +335,27 @@ parte dos objetos do projeto</p>
 </div>
 <div class="clear"></div>
 </div>
-<a id="\CamelSpider\Entity\AbstractSpiderEgg::logger()" class="anchor"></a><div class="method protected">
+<a id="\CamelSpider\Spider\FeedReader::getLinks()" class="anchor"></a><div class="method public">
+<a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_public.png" style="margin-right: 5px" alt="public"><span class="highlight">getLinks</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+          void</code><div class="description"><p class="short_description"></p></div>
+<div class="code-tabs"></div>
+<div class="clear"></div>
+</div>
+<a id="\CamelSpider\Spider\FeedReader::import()" class="anchor"></a><div class="method public">
+<a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_public.png" style="margin-right: 5px" alt="public"><span class="highlight">import</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+          void</code><div class="description"><p class="short_description"></p></div>
+<div class="code-tabs"></div>
+<div class="clear"></div>
+</div>
+<a id="\CamelSpider\Spider\FeedReader::logger()" class="anchor"></a><div class="method protected inherited_from ">
 <a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_protected.png" style="margin-right: 5px" alt="protected"><span class="highlight">logger</span><span class="nb-faded-text">(
            $string,  $type
               =
@@ -270,7 +365,11 @@ parte dos objetos do projeto</p>
           )
         </span>
         :
-          void</code><div class="description"><p class="short_description"></p></div>
+          void</code><div class="description">
+<span class="attribute">inherited</span><p class="short_description"></p>
+<small>Inherited from:
+                    <a href="db_CamelSpider_Entity_AbstractSpiderEgg.html#%5CCamelSpider%5CEntity%5CAbstractSpiderEgg::logger()">\CamelSpider\Entity\AbstractSpiderEgg::logger()</a></small>
+</div>
 <div class="code-tabs">
 <div class="long-description">
 </div>
@@ -305,13 +404,40 @@ parte dos objetos do projeto</p>
 </div>
 <div class="clear"></div>
 </div>
-<a id="\CamelSpider\Entity\AbstractSpiderEgg::transferDependency()" class="anchor"></a><div class="method protected">
+<a id="\CamelSpider\Spider\FeedReader::request()" class="anchor"></a><div class="method public">
+<a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_public.png" style="margin-right: 5px" alt="public"><span class="highlight">request</span><span class="nb-faded-text">(
+           $uri
+          )
+        </span>
+        :
+          void</code><div class="description"><p class="short_description"></p></div>
+<div class="code-tabs">
+<strong>Parameters</strong><table class="argument-info">
+<thead><tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tr>
+<th>$uri</th>
+<td></td>
+<td><em></em></td>
+</tr>
+</table>
+</div>
+<div class="clear"></div>
+</div>
+<a id="\CamelSpider\Spider\FeedReader::transferDependency()" class="anchor"></a><div class="method protected inherited_from ">
 <a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_protected.png" style="margin-right: 5px" alt="protected"><span class="highlight">transferDependency</span><span class="nb-faded-text">(
           
           )
         </span>
         :
-          void</code><div class="description"><p class="short_description"></p></div>
+          void</code><div class="description">
+<span class="attribute">inherited</span><p class="short_description"></p>
+<small>Inherited from:
+                    <a href="db_CamelSpider_Entity_AbstractSpiderEgg.html#%5CCamelSpider%5CEntity%5CAbstractSpiderEgg::transferDependency()">\CamelSpider\Entity\AbstractSpiderEgg::transferDependency()</a></small>
+</div>
 <div class="code-tabs"></div>
 <div class="clear"></div>
 </div>

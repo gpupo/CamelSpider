@@ -253,9 +253,9 @@
 <div>
 <a id="\CamelSpider\Entity\Document::__construct()" class="anchor"></a><div class="method public">
 <a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_public.png" style="margin-right: 5px" alt="public"><span class="highlight">__construct</span><span class="nb-faded-text">(
-           $crawler,  $subscription, array $dependency
+           $uri,  $crawler,  $subscription, array $dependency
               =
-              NULL
+              null
           )
         </span>
         :
@@ -271,6 +271,11 @@ conteúdo</p></div>
 <th>Type</th>
 <th>Description</th>
 </tr></thead>
+<tr>
+<th>$uri</th>
+<td></td>
+<td><em></em></td>
+</tr>
 <tr>
 <th>$crawler</th>
 <td></td>
@@ -298,6 +303,67 @@ conteúdo</p></div>
         :
           void</code><div class="description"><p class="short_description"></p></div>
 <div class="code-tabs"></div>
+<div class="clear"></div>
+</div>
+<a id="\CamelSpider\Entity\Document::debugger()" class="anchor"></a><div class="method protected inherited_from ">
+<a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_protected.png" style="margin-right: 5px" alt="protected"><span class="highlight">debugger</span><span class="nb-faded-text">(
+           $object,  $info
+              =
+              'DEBUGGER'
+          )
+        </span>
+        :
+          void</code><div class="description">
+<span class="attribute">inherited</span><p class="short_description">Debug, like var_dump, but output on log</p>
+<small>Inherited from:
+                    <a href="db_CamelSpider_Entity_AbstractSpiderEgg.html#%5CCamelSpider%5CEntity%5CAbstractSpiderEgg::debugger()">\CamelSpider\Entity\AbstractSpiderEgg::debugger()</a></small>
+</div>
+<div class="code-tabs">
+<div class="long-description">
+</div>
+<strong>Parameters</strong><table class="argument-info">
+<thead><tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tr>
+<th>$object</th>
+<td></td>
+<td><em></em></td>
+</tr>
+<tr>
+<th>$info</th>
+<td></td>
+<td><em></em></td>
+</tr>
+</table>
+</div>
+<div class="clear"></div>
+</div>
+<a id="\CamelSpider\Entity\Document::entityStringProccess()" class="anchor"></a><div class="method protected">
+<a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_protected.png" style="margin-right: 5px" alt="protected"><span class="highlight">entityStringProccess</span><span class="nb-faded-text">(
+           $string
+          )
+        </span>
+        :
+          void</code><div class="description"><p class="short_description">Check some sources chars</p></div>
+<div class="code-tabs">
+<div class="long-description">
+</div>
+<strong>Parameters</strong><table class="argument-info">
+<thead><tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tr>
+<th>$string</th>
+<td></td>
+<td><em></em></td>
+</tr>
+</table>
+</div>
 <div class="clear"></div>
 </div>
 <a id="\CamelSpider\Entity\Document::getBiggerTag()" class="anchor"></a><div class="method protected">
@@ -386,6 +452,16 @@ Aplicar filtros contidos em $this->subscription</p>
 </div></div>
 <div class="clear"></div>
 </div>
+<a id="\CamelSpider\Entity\Document::getSlug()" class="anchor"></a><div class="method public">
+<a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_public.png" style="margin-right: 5px" alt="public"><span class="highlight">getSlug</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+          void</code><div class="description"><p class="short_description"></p></div>
+<div class="code-tabs"></div>
+<div class="clear"></div>
+</div>
 <a id="\CamelSpider\Entity\Document::getText()" class="anchor"></a><div class="method public">
 <a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_public.png" style="margin-right: 5px" alt="public"><span class="highlight">getText</span><span class="nb-faded-text">(
           
@@ -398,6 +474,16 @@ Aplicar filtros contidos em $this->subscription</p>
 </div>
 <a id="\CamelSpider\Entity\Document::getTitle()" class="anchor"></a><div class="method public">
 <a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_public.png" style="margin-right: 5px" alt="public"><span class="highlight">getTitle</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+          void</code><div class="description"><p class="short_description"></p></div>
+<div class="code-tabs"></div>
+<div class="clear"></div>
+</div>
+<a id="\CamelSpider\Entity\Document::getUri()" class="anchor"></a><div class="method public">
+<a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_public.png" style="margin-right: 5px" alt="public"><span class="highlight">getUri</span><span class="nb-faded-text">(
           
           )
         </span>
@@ -452,6 +538,29 @@ Aplicar filtros contidos em $this->subscription</p>
          
     </dd>
 </dl>
+</div>
+<div class="clear"></div>
+</div>
+<a id="\CamelSpider\Entity\Document::preStringProccess()" class="anchor"></a><div class="method protected">
+<a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_protected.png" style="margin-right: 5px" alt="protected"><span class="highlight">preStringProccess</span><span class="nb-faded-text">(
+           $string
+          )
+        </span>
+        :
+          void</code><div class="description"><p class="short_description"></p></div>
+<div class="code-tabs">
+<strong>Parameters</strong><table class="argument-info">
+<thead><tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tr>
+<th>$string</th>
+<td></td>
+<td><em></em></td>
+</tr>
+</table>
 </div>
 <div class="clear"></div>
 </div>
@@ -551,6 +660,29 @@ ser o container do conteúdo em plain text</p></div>
 <div class="code-tabs"></div>
 <div class="clear"></div>
 </div>
+<a id="\CamelSpider\Entity\Document::setUri()" class="anchor"></a><div class="method public">
+<a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_public.png" style="margin-right: 5px" alt="public"><span class="highlight">setUri</span><span class="nb-faded-text">(
+           $uri
+          )
+        </span>
+        :
+          void</code><div class="description"><p class="short_description"></p></div>
+<div class="code-tabs">
+<strong>Parameters</strong><table class="argument-info">
+<thead><tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tr>
+<th>$uri</th>
+<td></td>
+<td><em></em></td>
+</tr>
+</table>
+</div>
+<div class="clear"></div>
+</div>
 <a id="\CamelSpider\Entity\Document::toArray()" class="anchor"></a><div class="method public">
 <a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_public.png" style="margin-right: 5px" alt="public"><span class="highlight">toArray</span><span class="nb-faded-text">(
           
@@ -569,6 +701,29 @@ ser o container do conteúdo em plain text</p></div>
 <tr>
 <td>array</td>
 <td>$array</td>
+</tr>
+</table>
+</div>
+<div class="clear"></div>
+</div>
+<a id="\CamelSpider\Entity\Document::toPackage()" class="anchor"></a><div class="method public">
+<a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_public.png" style="margin-right: 5px" alt="public"><span class="highlight">toPackage</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+          \CamelSpider\Entity\self</code><div class="description"><p class="short_description">reduce memory usage</p></div>
+<div class="code-tabs">
+<div class="long-description">
+</div>
+<strong>Returns</strong><table class="argument-info">
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tr>
+<td>\CamelSpider\Entity\self</td>
+<td>minimal</td>
 </tr>
 </table>
 </div>
