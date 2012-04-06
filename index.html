@@ -1,0 +1,159 @@
+<!doctype html>
+<!-- The Time Machine GitHub pages theme was designed and developed by Jon Rohan, on Feb 7, 2012. -->
+<!-- Follow him for fun. http://twitter.com/jonrohan. Tail his code on http://github.com/jonrohan -->
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <link rel="stylesheet" href="stylesheets/stylesheet.css" media="screen"/>
+  <link rel="stylesheet" href="stylesheets/pygment_trac.css"/>
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+  <script type="text/javascript" src="javascripts/script.js"></script>
+
+  <title>Camelspider</title>
+  <meta name="description" content="Uma nervosa spiderweb PHP 5.3!">
+
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+</head>
+
+<body>
+
+  <div class="wrapper">
+    <header>
+      <h1 class="title">Camelspider</h1>
+    </header>
+    <div id="container">
+      <p class="tagline">Uma nervosa spiderweb PHP 5.3!</p>
+      <div id="main" role="main">
+        <div class="download-bar">
+        <div class="inner">
+          <a href="https://github.com/gpupo/CamelSpider/tarball/master" class="download-button tar"><span>Download</span></a>
+          <a href="https://github.com/gpupo/CamelSpider/zipball/master" class="download-button zip"><span>Download</span></a>
+          <a href="https://github.com/gpupo/CamelSpider" class="code">fork Camelspider on GitHub</a>
+        </div>
+        <span class="blc"></span><span class="trc"></span>
+        </div>
+        <article class="markdown-body">
+          <p><img src="http://www.camel-spiders.net/images/camel-spider-head.jpg" alt="Camel
+Spider"></p>
+
+<p>CamelSpider é uma <a href="http://www.camel-spiders.net/">aranha</a> (<a href="http://en.wikipedia.org/wiki/Web_spider">Web crawler</a>) que coleta links e conteúdo de sites.</p>
+
+<pre><code>    Exemplo de uso da CamelSpider:
+    Portal de notícias quer coletar novos documentos vindos de
+    fontes conhecidas de notícias, então, a partir de um cadastro destas
+    fontes, CamelSpider coleta estas novas notícias e armazena na base de
+    dados do portal.
+</code></pre>
+
+<p>Um diferencial da CamelSpider, é oferecer um documento tem texto plano
+que reflete o conteúdo principal de cada conteúdo indexado.</p>
+
+<p>Com a CamelSpider, você pode fazer um leitor de Feed para sites que não
+possuem Feed!</p>
+
+<h2>Filtros</h2>
+
+<p>Esse conteúdo é filtrado a partir de palavras chaves.</p>
+
+<p>A spider navega nestes sites, coleta os links que fazem parte do escopo do domínio e faz o processamento interno dessa informação.</p>
+
+<p>De acordo com os filtros, cada documento coletado recebe uma avaliação
+de releância, sendo que esta pontuação pode ser:</p>
+
+<ul>
+<li>0) não contém conteúdo</li>
+<li>1) Possivelmente contém conteúdo</li>
+<li>2) Contém conteúdo e contém uma ou mais palavras chave desejadas pela assinatura ou não contém palavras indesejadas</li>
+<li>3) Contém conteúdo, contém palavras desejadas e não contém palavras indesejadas</li>
+</ul><h2>Estrutura</h2>
+
+<p>A Camel Spider é um componente a ser utilizado por uma aplicação que gerencie a base de assinaturas e receba o retorno do processamento para armazenamento em banco de dados.</p>
+
+<p>A Camel Spider utiliza componentes do Zend Framework 2, Docrine Common e Goutte, e presume que será instânciada dentro de um projeto com o autoloading corretamente configurado conforme a PRS-0.</p>
+
+<p>Queremos que a Camel Spider seja uma Spider Web que supra necessidades de projetos em PHP 5.3.</p>
+
+<p>O <a href="http://github.com/gpupo/CamelSpiderBundle">Camel Spider Bundle</a> integra a Camel Spider ao Symfony 2 e gerencia as assinaturas e o cache de informações e neste projeto complementar você pode visualizar a implementação de componentes que a CamelSpider utiliza como dependency injection mas não os implementa por ser fora de seu escopo.</p>
+
+<h2>Config</h2>
+
+<pre><code>    camelSpider:
+        save_document:  false | true
+        memory_limit:   80 (MB)
+        requests_limit: 300
+        log_level:      1~5
+        minimal_relevancy: 3
+</code></pre>
+
+<h2>Otimização e cache</h2>
+
+<p>A cada requisição é consumido memória.
+Para evitar isso, os objetos são cacheados em disco, portanto é
+necessário informar um objeto cache onde seja possível gravar e
+recuperar informações a partir de um hash.</p>
+
+<p>O objeto gravado é serializado pelo componente <a href="http://framework.zend.com/manual/en/zend.cache.html">Zend Cache</a>.
+Este objeto é passado ao construtor da Camel Spider (Dependency
+injection).</p>
+
+<p>Você pode implementar este serviço de cache mas também pode utilizar o  <a href="http://github.com/gpupo/CamelSpiderBundle">Camel Spider Bundle</a> como referência de implementação.</p>
+
+<p>Os objetos capturados são retornados pelo processamento inicial, e são
+acessados diretamente do cache, pela aplicação que os utiliza.</p>
+
+<h2>Dependências</h2>
+
+<ul>
+<li>Symfony Components: BrowserKit, ClassLoader, CssSelector, DomCrawler, Finder, and Process</li>
+<li>Zend Framework 2 libraries: Cache, Date, Uri, Http, and Validate</li>
+<li>PEAR <a href="http://pear.php.net/package/Text_Diff">Text_Diff -maybe!</a>
+</li>
+<li><a href="http://respect.github.com">Respect\Validation</a></li>
+</ul><h2>Você pode contribuir com o projeto!</h2>
+
+<p>Este README precia de tradução e ainda temos muito trabalho pela frente e gostaríamos da sua ajuda.
+Coisas para fazer:</p>
+
+<pre><code>- Criar sandbox para facilitar os testes
+- Criar testes unitários
+- Melhorar a documentação em Inglês
+- Corrigir coding standards
+</code></pre>
+
+<h2>Documentação</h2>
+
+<p>A documentação dos componentes é feita com o <a href="http://www.docblox-project.org/">DocBlox</a> 
+e é compilada no diretório doc/ utilizando-se do comando
+<code>./bin/generate-documentation</code></p>
+
+<p>Este projeto utiliza idéias e conceitos de projetos existentes, sendo eles:</p>
+
+<ul>
+<li><a href="http://swish-e.org/docs/spider.html">Swish-e - Pearl</a></li>
+</ul><h2>License</h2>
+
+<p>CamelSpider is licensed under the MIT license. </p>
+        </article>
+      </div>
+    </div>
+    <footer>
+      <div class="owner">
+      <p><a href="https://github.com/gpupo" class="avatar"><img src="https://secure.gravatar.com/avatar/2f785428af46ebebeed87e6b433190dc?s=30&amp;d=https://a248.e.akamai.net/assets.github.com%2Fimages%2Fgravatars%2Fgravatar-140.png" width="48" height="48"/></a> <a href="https://github.com/gpupo">gpupo</a> maintains <a href="https://github.com/gpupo/CamelSpider">Camelspider</a></p>
+      </div>
+      <div class="creds">
+        <small>This page generated using <a href="https://pages.github.com/">GitHub Pages</a><br/>theme by <a href="http://twitter.com/jonrohan/">Jon Rohan</a></small>
+      </div>
+    </footer>
+  </div>
+  <div class="current-section">
+    <a href="#top">Scroll to top</a>
+    <a href="https://github.com/gpupo/CamelSpider/tarball/master" class="tar">tar</a><a href="https://github.com/gpupo/CamelSpider/zipball/master" class="zip">zip</a><a href="" class="code">source code</a>
+    <p class="name"></p>
+  </div>
+
+  
+</body>
+</html>
