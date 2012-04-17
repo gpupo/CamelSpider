@@ -7,7 +7,10 @@ class SpiderDomTest extends \PHPUnit_Framework_TestCase {
 
 
     /**
+     * @testdox Fail if wrong html is passed to convert HTML to DomElement
      * @expectedException \Exception
+     * @group helper
+     * @group dom
      * @dataProvider providerWrongHtml
      */
     public function testHtmToDomElementFail($wrongHtml)
@@ -19,7 +22,7 @@ class SpiderDomTest extends \PHPUnit_Framework_TestCase {
     /**
      * @dataProvider providerHtmlElements
      */
-    public function testHtmToDomElementSucess($text, $html)
+    public function testOkIfValidHtmlIsPassed($text, $html)
     {
         $domElement = SpiderDom::htmlToDomElement($html);
         $this->AssertTrue($domElement instanceof \DomElement);
@@ -28,17 +31,20 @@ class SpiderDomTest extends \PHPUnit_Framework_TestCase {
 
 
     /**
+     * @group helper
+     * @group dom
      * @dataProvider providerDomElements
      */
-    public function testToHtml(\DOMNode $node, $html)
+    public function testOkIfDomElementIsConvertedToHtml(\DOMNode $node, $html)
     {
        $this->AssertEquals($html, SpiderDom::toHtml($node));
     }
 
     /**
+     * @group helper
      * @dataProvider providerDomElements
      */
-    public function testToCleanHtml(\DOMNode $node, $html)
+    public function testOkIfCleanHtmlisRigth(\DOMNode $node, $html)
     {
         $this->AssertEquals($html, SpiderDom::toCleanHtml($node));
     }
@@ -47,7 +53,7 @@ class SpiderDomTest extends \PHPUnit_Framework_TestCase {
     /**
      * @dataProvider providerDomElementsToText
      */
-    public function testTextLen(\DOMNode $node, $len)
+    public function testOkIfTextLenIsRight(\DOMNode $node, $len)
     {
         $this->AssertEquals($len, SpiderDom::textLen($node));
     }
