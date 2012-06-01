@@ -74,6 +74,29 @@ acessados diretamente do cache, pela aplicação que os utiliza.
 * PEAR [Text_Diff -maybe!](http://pear.php.net/package/Text_Diff)
 * [Respect\Validation](http://respect.github.com)
 
+## Instalação
+
+### Usando comporser
+
+```
+git clone git://github.com/gpupo/CamelSpider.git;
+
+cd CamelSpider;
+
+curl -s http://getcomposer.org/installer | php;
+
+php composer.phar install;
+
+```
+
+
+Para testar sua instalação, você pode rodar os testes unitários:
+
+
+```
+cd tests/ && phpunit .;
+
+```
 
 ## Você pode contribuir com o projeto!
 
@@ -84,6 +107,13 @@ Coisas para fazer:
     - Criar testes unitários
     - Melhorar a documentação em Inglês
     - Corrigir coding standards
+
+### Desenvolvedores que contribuem com este projeto
+
+* [@gpupo](https://github.com/gpupo)
+* [@rafaelgou](https://github.com/rafaelgou)
+* [@iampersistent](https://github.com/iampersistent)
+
 
 
 ## Documentação
@@ -100,3 +130,8 @@ Este projeto utiliza idéias e conceitos de projetos existentes, sendo eles:
 ## License
 
 CamelSpider is licensed under the MIT license. 
+
+
+## Links
+
+* [CamelSpider on Packagist](http://packagist.org/packages/gpupo/camelspider)
