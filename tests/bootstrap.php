@@ -2,35 +2,13 @@
 
 date_default_timezone_set('UTC');
 
-/**
- * Set include path considering that camelSpider is contained in vendors directory
- *
- */
-set_include_path(
-    '../../doctrine-common/lib/' . PATH_SEPARATOR
-    . '../src' . PATH_SEPARATOR
-    . '../../Symfony/src/'. PATH_SEPARATOR
-    . '../../Goutte/src/'. PATH_SEPARATOR
-    . '../../Respect/Validation/library/'
-    . PATH_SEPARATOR . '../../Zend/library/'
-    . PATH_SEPARATOR  . get_include_path());
+$loader = @include __DIR__ . '/../vendor/autoload.php';
 
-/**
- * Autoloader that implements the PSR-0 spec for interoperability between
- * PHP software.
- */
-spl_autoload_register(
-    function($className) {
-        $fileParts = explode('\\', ltrim($className, '\\'));
-
-        if (false !== strpos(end($fileParts), '_'))
-            array_splice($fileParts, -1, 1, explode('_', current($fileParts)));
-
-        $file = implode(DIRECTORY_SEPARATOR, $fileParts) . '.php';
-
-        foreach (explode(PATH_SEPARATOR, get_include_path()) as $path) {
-            if (file_exists($path = $path . DIRECTORY_SEPARATOR . $file))
-                return require $path;
-        }
-    }
-);
+if (!$loader) {
+    die(<<<'EOT'
+You must set up the project dependencies, run the following commands:
+wget http://getcomposer.org/composer.phar
+php composer.phar install
+EOT
+    );
+}
