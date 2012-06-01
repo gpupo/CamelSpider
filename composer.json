@@ -1,0 +1,32 @@
+{
+    "name": "gpupo/camelspider",
+    "description": "A class to help handle gateways to processing entities.",
+    "authors": [
+        {"name": "Gilmar Pupo", "email": "g@g1mr.com"}
+    ],
+    "keywords": ["Camel Spider", "spider", "crawler"],
+    "require": {
+        "doctrine/common":              "2.3.*",
+        "fabpot/goutte":                "1.0.*",
+        "pear-horde/Horde_Text_Diff":   "*",
+        "php":                          ">=5.3.2",
+        "Respect/Validation":           "0.4.4",
+        "symfony/class-loader":         "2.1.*",
+        "zendframework/zend-cache":     "2.0.*",
+        "zendframework/zend-date":      "2.0.*",
+        "zendframework/zend-http":      "2.0.*",
+        "zendframework/zend-uri":       "2.0.*",
+        "zendframework/zend-validator": "2.0.*"
+    },
+    "repositories": [
+        {
+            "type": "pear",
+            "url":  "http://pear.horde.org"
+        }
+    ],
+    "autoload": {
+        "psr-0": {
+            "CamelSpider": "src/"
+        }
+    }
+}
