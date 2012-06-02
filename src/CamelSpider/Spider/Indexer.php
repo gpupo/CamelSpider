@@ -66,6 +66,9 @@ class Indexer extends AbstractSpider
 
     /**
      * Método principal que faz indexação
+     * Main method for indexing
+     *
+     * @param CamelSpider\Entity\InterfaceSubscription $subscription
      */
     public function run(InterfaceSubscription $subscription)
     {
@@ -109,6 +112,7 @@ class Indexer extends AbstractSpider
         }
 
         //Evita links inválidos
+        //Prevents invalid links
         if (!SpiderAsserts::isDocumentLink($link)) {
             $this->logger('Href refused', 'info', 5);
 
@@ -117,6 +121,7 @@ class Indexer extends AbstractSpider
 
         $this->logger('Check Cache for id:' . $link->getId('string'), 'info', 5);
         //Evita duplicidade
+        //Prevents duplicates
         if ($this->requests > 0 && $this->cache->isObject($link->getId('string'))) {
             $this->logger('cached', 'info', 5);
             $this->cached++;
@@ -145,6 +150,7 @@ class Indexer extends AbstractSpider
                 return false;
             }
             //verifica se já foi processado
+            // verify that this has been processed
             if (!$target instanceof InterfaceSubscription && $this->isDone($URI)) {
                 $this->logger('URI is Done:[' . $URI . ']', 'info', 1);
 
