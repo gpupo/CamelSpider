@@ -289,7 +289,7 @@ class Indexer extends AbstractSpider
 
     protected function getCapture()
     {
-        echo $this->getResume();
+        echo $this->getSummary();
 
         return array(
             'log'   =>  $this->getBackendLogger(),
@@ -336,7 +336,7 @@ class Indexer extends AbstractSpider
                 $this->logger('Can\'t collect:' . $e->getMessage(), 'err');
             }
 
-            $this->logger($this->getResume(), 'info', 5);
+            $this->logger($this->getSummary(), 'info', 5);
         }
     }
 }
