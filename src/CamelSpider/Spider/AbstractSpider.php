@@ -25,7 +25,7 @@ abstract class AbstractSpider extends AbstractSpiderEgg
 
     public function debug()
     {
-        echo $this->getResume();
+        echo $this->getSummary();
 
         echo  $this->getBackendLogger();
     }
@@ -127,14 +127,25 @@ abstract class AbstractSpider extends AbstractSpiderEgg
 
     /**
      * Retorna o resumo de operações até o momento
-     * @return string
+     * para compatibilidade com versões anteriores
      */
     public function getResume()
+    {
+        return $this->getSummary();
+    }
+
+    /**
+     * Retorna o resumo de operações até o momento
+     * Returns a summary of the operations so far
+     *
+     * @return string
+     */
+    public function getSummary()
     {
 
         return "\n\n"
             . sprintf(
-                $this->getResumeTemplate(),
+                $this->getSummaryTemplate(),
                 $this->subscription,
                 $this->getMemoryUsage(),
                 $this->requests,
@@ -145,12 +156,14 @@ abstract class AbstractSpider extends AbstractSpiderEgg
                 $this->errors,
                 $this->getBackendLogger()
             );
-    }     /**
- * Execute login on a webform
- *
- * @param array $credentials
- * @return bool status of login
- */
+    }
+
+    /**
+     * Execute login on a webform
+     *
+     * @param array $credentials
+     * @return bool status of login
+     */
     public function loginForm(array $credentials)
     {
 
@@ -284,10 +297,10 @@ abstract class AbstractSpider extends AbstractSpiderEgg
         );
     }
 
-    protected function getResumeTemplate()
+    protected function getSummaryTemplate()
     {
         $template = <<<EOF
- ====================RESUME=========================
+ ====================SUMMARY========================
     %s
     - Memory usage...........................%s Mb
     - Number of new requests.................%s 
@@ -370,6 +383,7 @@ EOF;
 
     /**
      * Localiza o formulario para login
+     * Find the login form
      */
     protected function loginButtonLocate($crawler, $credentials)
     {
