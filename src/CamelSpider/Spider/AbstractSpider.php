@@ -8,46 +8,88 @@ use CamelSpider\Entity\AbstractSpiderEgg,
 
 abstract class AbstractSpider extends AbstractSpiderEgg
 {
-    protected $name = 'Spider';
-
-    protected $time = array('total' => 0, 'parcial' => 0);
-
-    protected $pool;
-
-    protected $hiperlinks = 0;
-
-    protected $requests = 0;
-
+    protected $backendLogger = '';
     protected $cached = 0;
-
     protected $errors = 0;
-
-    protected $success = 0;
-
+    protected $goutte;
+    protected $hiperlinks = 0;
+    protected $limitReached = false;
+    protected $logger_level = 1;
+    protected $name = 'Spider';
+    protected $time = array('total' => 0, 'parcial' => 0);
+    protected $pool;
+    protected $requests = 0;
     protected $subscription;
-
+    protected $success = 0;
     protected $timeParcial;
 
-    protected $goutte;
+    public function debug()
+    {
+        echo $this->getResume();
 
-    protected $limitReached = false;
+        echo  $this->getBackendLogger();
+    }
 
-    protected $backendLogger = '';
+    /**
+     * Convert string of auth information into a array
+     *
+     * Sample auth info (one parameter per line):
+     *  "type":"form"
+     *  "button":"log in"
+     *  "username":"gpupo"
+     *  "password":"mypassword"
+     *  "expected":"a word finded on sucesseful login"
+     *  "password_input": "field_name"
+     *  "username_input": 'field_name"
+     *
+     *  or only one line:
+     *  "button":"log in", "username":"gpupo", "password":"mypassword", "expected":"a word finded on sucesseful login"
+     *
 
-    protected $logger_level = 1;
+     *
+     * @param string $string
+     * @return array $a
+     */
+    public function getAuthCredentials($string)
+    {
+        $json = '{' . str_replace(PHP_EOL, ',', trim($string)) . '}';
+        $a =  json_decode($json);
+        if (is_null($a)) {
+            throw new \Exception('Invalid credentials syntaxe. Received: ' . trim($string) . "\n" . $json);
+        }
+
+        $credentials = (array) $a;
+
+        if (count($credentials) < 1) {
+            throw new \Exception('Missing credentials information');
+        }
+
+        $defaults = array('type' => 'form', 'username_input' => 'username', 'password_input' => 'password');
+        foreach ($defaults as $k => $v) {
+            if (!array_key_exists($k, $credentials)) {
+                $credentials[$k] = $v;
+            }
+        }
+
+        return $credentials;
+    }
+
+    public function getBackendLogger()
+    {
+        return trim($this->backendLogger);
+    }
 
     /**
      * Faz a requisição, seja por Zend Http Client ou Consumindo Feed
      */
     public function getCrawler($URI, $mode = 'GET', $type =  'html')
     {
-
         $this->logger(
             'created a Crawler for:'
-            ."\n"
-            . $URI
-            ."\n"
-        ,'info', 5);
+                ."\n"
+                . $URI
+                ."\n"
+            ,'info', 5);
 
         $this->requests++;
         if ($type == 'html') {
@@ -64,14 +106,14 @@ abstract class AbstractSpider extends AbstractSpiderEgg
 
             //Error in request
             $this->logger(
-                'Status Code: [' 
-                . $this->getResponse()->getStatus() . ']', 'info', 4
+                'Status Code: ['
+                    . $this->getResponse()->getStatus() . ']', 'info', 4
             );
             if($this->getResponse()->getStatus() >= 400){
                 throw new \Exception(
                     'Request with error: '
-                    . $this->getResponse()->getStatus()
-                    . " - " . $this->getResponseErrorMessage($client)
+                        . $this->getResponse()->getStatus()
+                        . " - " . $this->getResponseErrorMessage($client)
                 );
             }
         } else {
@@ -81,6 +123,97 @@ abstract class AbstractSpider extends AbstractSpiderEgg
         }
 
         return $client;
+    }
+
+    /**
+     * Retorna o resumo de operações até o momento
+     * @return string
+     */
+    public function getResume()
+    {
+
+        return "\n\n"
+            . sprintf(
+                $this->getResumeTemplate(),
+                $this->subscription,
+                $this->getMemoryUsage(),
+                $this->requests,
+                $this->getTimeUsage('total'),
+                $this->cached,
+                $this->success,
+                (isset($this->hyperlinks)) ? $this->hyperlinks : 0,
+                $this->errors,
+                $this->getBackendLogger()
+            );
+    }     /**
+ * Execute login on a webform
+ *
+ * @param array $credentials
+ * @return bool status of login
+ */
+    public function loginForm(array $credentials)
+    {
+
+        foreach ($this->loginFormRequirements() as $r) {
+            if (!array_key_exists($r, $credentials)) {
+                throw new \Exception('Login on web form require ' . $r . ' attribute');
+            }
+        }
+
+        $formUri = $this->subscription->getUriTarget();
+        $this->addBackendLogger('Acessando *' . $formUri . '*');
+        $this->logger('Get webform for '. $formUri);
+
+        $crawler = $this->getClient()->request('GET', $formUri);
+
+        if (!$crawler) {
+            throw new \Exception('Login on web form require a instance of Crawler');
+        }
+
+        //Locate form
+        $button = $this->loginButtonLocate($crawler, $credentials);
+
+        $form = $button->form();
+
+        //Fill inputs
+        $values = array();
+        foreach (array('username', 'password') as $k) {
+            $input = $credentials[$k . '_input'];
+            $values[$credentials[$k . '_input']] = $credentials[$k];
+            $form[$credentials[$k . '_input']] = $credentials[$k];
+            $this->addBackendLogger('Preenchendo o campo *'
+                . $credentials[$k . '_input']
+                . '* com o valor *'
+                . $credentials[$k]
+                . '*');
+
+        }
+        // submit the form
+        $this->addBackendLogger('Login Submit');
+        $crawler = $this->getClient()->submit($form);
+
+        $crawler = $this->getClient()->request('GET', $formUri);
+        //Check return
+        $this->addBackendLogger('Testando a existência da frase: *' . $credentials['expected'] . '*');
+        $responseText = $crawler->first()->text();
+
+        if (false !== mb_stripos($responseText, $credentials['expected']))
+        {
+            //Successful
+            $this->addBackendLogger('Login Successful');
+
+            return true;
+        } else {
+            $this->addBackendLogger('Frase não encontrada');
+        }
+
+        //Failed
+        return false;
+    }
+
+    public function loginFormRequirements()
+    {
+        return array('username', 'password', 'button', 'expected', 'password_input', 'username_input');
     }
 
     /**
@@ -95,11 +228,6 @@ abstract class AbstractSpider extends AbstractSpiderEgg
     {
         $this->backendLogger .= $string . ".\n";
         $this->logger($string, 'info', $this->logger_level);
-    }
-
-    public function getBackendLogger()
-    {
-        return trim($this->backendLogger);
     }
 
     protected function resetBackendLogger()
@@ -180,37 +308,6 @@ EOF;
         return $template;
     }
 
-    /**
-     * Retorna o resumo de operações até o momento
-     * @return string
-     */
-    public function getResume()
-    {
-
-        return "\n\n"
-            . sprintf(
-                $this->getResumeTemplate(),
-                $this->subscription,
-                $this->getMemoryUsage(),
-                $this->requests,
-                $this->getTimeUsage('total'),
-                $this->cached,
-                $this->success,
-                (isset($this->hyperlinks)) ? $this->hyperlinks : 0,
-                $this->errors,
-                $this->getBackendLogger()
-            );
-    }
-
-
-    public function debug()
-    {
-        echo $this->getResume();
-
-        echo  $this->getBackendLogger();
-    }
-
-
     protected function getCookies($uri = null)
     {
         return $this->getClient()->getCookieJar()->allValues($uri);
@@ -248,11 +345,6 @@ EOF;
 
         //Error
         return false;
-    }
-
-    public function loginFormRequirements()
-    {
-        return array('username', 'password', 'button', 'expected', 'password_input', 'username_input');
     }
 
     /**
@@ -307,118 +399,6 @@ EOF;
 
             return false;
         }
-
-    }
-
-
-    /**
-     * Execute login on a webform
-     *
-     * @param array $credentials 
-     * @return bool status of login
-     */
-    public function loginForm(array $credentials)
-    {
-
-        foreach ($this->loginFormRequirements() as $r) {
-            if (!array_key_exists($r, $credentials)) {
-                throw new \Exception('Login on web form require ' . $r . ' attribute');
-            }
-        }
-
-        $formUri = $this->subscription->getUriTarget();
-        $this->addBackendLogger('Acessando *' . $formUri . '*');
-        $this->logger('Get webform for '. $formUri);
-
-        $crawler = $this->getClient()->request('GET', $formUri);
-
-        if (!$crawler) {
-            throw new \Exception('Login on web form require a instance of Crawler');
-        }
-
-        //Locate form
-        $button = $this->loginButtonLocate($crawler, $credentials);
-
-        $form = $button->form();
-
-        //Fill inputs
-        $values = array();
-        foreach (array('username', 'password') as $k) {
-            $input = $credentials[$k . '_input'];
-            $values[$credentials[$k . '_input']] = $credentials[$k];
-            $form[$credentials[$k . '_input']] = $credentials[$k];
-            $this->addBackendLogger('Preenchendo o campo *'
-                . $credentials[$k . '_input']
-                . '* com o valor *'
-                . $credentials[$k]
-                . '*');
-
-        }
-        // submit the form
-        $this->addBackendLogger('Login Submit');
-        $crawler = $this->getClient()->submit($form);
-
-        $crawler = $this->getClient()->request('GET', $formUri);
-        //Check return
-        $this->addBackendLogger('Testando a existência da frase: *' . $credentials['expected'] . '*');
-        $responseText = $crawler->first()->text();
-
-        if (false !== mb_stripos($responseText, $credentials['expected']))
-        {
-            //Successful
-            $this->addBackendLogger('Login Successful');
-
-            return true;
-        } else {
-            $this->addBackendLogger('Frase não encontrada');
-        }
-
-        //Failed
-        return false;
-    }
-
-    /**
-     * Convert string of auth information into a array
-     *
-     * Sample auth info (one parameter per line):
-     *  "type":"form"
-     *  "button":"log in"
-     *  "username":"gpupo"
-     *  "password":"mypassword"
-     *  "expected":"a word finded on sucesseful login"
-     *  "password_input": "field_name"
-     *  "username_input": 'field_name"
-     *
-     *  or only one line:
-     *  "button":"log in", "username":"gpupo", "password":"mypassword", "expected":"a word finded on sucesseful login"
-     *
-
-     *
-     * @param string $string
-     * @return array $a
-     */
-    public function getAuthCredentials($string)
-    {
-        $json = '{' . str_replace(PHP_EOL, ',', trim($string)) . '}';
-        $a =  json_decode($json);
-        if (is_null($a)) {
-            throw new \Exception('Invalid credentials syntaxe. Received: ' . trim($string) . "\n" . $json);
-        }
-
-        $credentials = (array) $a;
-
-        if (count($credentials) < 1) {
-            throw new \Exception('Missing credentials information');
-        }
-
-        $defaults = array('type' => 'form', 'username_input' => 'username', 'password_input' => 'password');
-        foreach ($defaults as $k => $v) {
-            if (!array_key_exists($k, $credentials)) {
-                $credentials[$k] = $v;
-            }
-        }
-
-        return $credentials;
     }
 
     /**

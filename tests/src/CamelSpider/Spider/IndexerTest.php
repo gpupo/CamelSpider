@@ -6,9 +6,8 @@ use Goutte\Client;
 use Zend\Http\Client as Zend_Http_Client;
 use Zend\Http\Response as Zend_Http_dResponse;
 
-
-class IndexerTest extends \PHPUnit_Framework_TestCase {
-
+class IndexerTest extends \PHPUnit_Framework_TestCase
+{
     /**
      * @dataProvider providerAuth()
      */
@@ -18,7 +17,6 @@ class IndexerTest extends \PHPUnit_Framework_TestCase {
         $auto = 3;
         $this->AssertEquals($len + $auto, count($spider->getAuthCredentials($auth)));
     }
-
 
     /**
      * @dataProvider providerAuth()
@@ -36,9 +34,7 @@ class IndexerTest extends \PHPUnit_Framework_TestCase {
                 $spider->loginForm($credentials);
             }
         }
-
     }
-
 
     /**
      * @dataProvider providerHellCookies()
@@ -69,7 +65,6 @@ class IndexerTest extends \PHPUnit_Framework_TestCase {
         $this->markTestIncomplete(
           'This test has not been implemented yet.'
         );
-
     }
 
     public function ProviderHellCookies()
@@ -80,9 +75,9 @@ class IndexerTest extends \PHPUnit_Framework_TestCase {
     }
     
     /**
-     * @dataProvider providerNavegation()
+     * @dataProvider providerNavigation()
      */
-    public function testNavegation($host, $paths)
+    public function testNavigation($host, $paths)
     {
         $client = new Client();
         //Test with absolute path
@@ -102,9 +97,9 @@ class IndexerTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @dataProvider providerNavegation()
+     * @dataProvider providerNavigation()
      */
-    public function testWrongNavegation($host, $paths)
+    public function testWrongNavigation($host, $paths)
     {
         $client = new Client();
         //Test with absolute path
@@ -113,7 +108,7 @@ class IndexerTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(404, $client->getResponse()->getStatus());
     }
 
-    public function providerNavegation()
+    public function providerNavigation()
     {
         $a = array();
 
@@ -140,8 +135,7 @@ class IndexerTest extends \PHPUnit_Framework_TestCase {
             $i++;
             $a[] = array($s, $i);
         }
+
         return $a;
     }
-
-
 }

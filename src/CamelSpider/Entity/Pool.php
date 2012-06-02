@@ -79,6 +79,7 @@ class Pool extends AbstractSpiderEgg
             return false;
         }
         $this->logger('Pool count:' . count($pool), 'info', 1);
+
         return $pool;
     }
 
@@ -130,6 +131,4 @@ class Pool extends AbstractSpiderEgg
             ."\n");
         $this->errors++;
     }
-
-
 }

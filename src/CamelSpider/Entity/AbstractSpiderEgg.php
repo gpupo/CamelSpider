@@ -1,8 +1,8 @@
 <?php
 
 namespace CamelSpider\Entity;
-use Doctrine\Common\Collections\ArrayCollection;
 
+use Doctrine\Common\Collections\ArrayCollection;
 
 /** 
  * Este é um ovo :)
@@ -10,18 +10,16 @@ use Doctrine\Common\Collections\ArrayCollection;
  * parte dos objetos do projeto
  */
 
-
 class AbstractSpiderEgg extends ArrayCollection
 {
+    protected $cache;
     protected $config;
     protected $logger;
-    protected $cache;
     protected $name;
 
     public function __construct(array $array, array $config = NULL)
     {
-        if($config)
-        {
+        if($config) {
             $this->set('config', new DoctineArrayCollection($config));
         }
 
@@ -45,6 +43,7 @@ class AbstractSpiderEgg extends ArrayCollection
         ){
             return $config;
         }
+
         return $defaultValue;
     }
 
@@ -81,6 +80,4 @@ class AbstractSpiderEgg extends ArrayCollection
             );
         }
     }
-
 }
-

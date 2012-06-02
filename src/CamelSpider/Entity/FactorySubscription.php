@@ -4,14 +4,13 @@ namespace CamelSpider\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 
-
 class FactorySubscription
 {
-
     public static function build(array $array)
     {
         return new Subscription($array);
     }
+
     public static function buildFromDomain($domain)
     {
         $array = array(
@@ -34,6 +33,4 @@ class FactorySubscription
         }
         return $collection;
     }
-
 }
-
