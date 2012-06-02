@@ -81,6 +81,7 @@ abstract class AbstractSpider extends AbstractSpiderEgg
 
     /**
      * Faz a requisição, seja por Zend Http Client ou Consumindo Feed
+     * Makes the request, either by Zend Http Client or consuming Feed
      */
     public function getCrawler($URI, $mode = 'GET', $type =  'html')
     {
