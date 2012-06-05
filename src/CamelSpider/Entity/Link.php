@@ -23,9 +23,9 @@ class Link extends ArrayCollection implements InterfaceLink
         parent::__construct($link);
     }
 
-    public function setStatus($x)
+    public function getHref()
     {
-        return $this->set('status', $x);
+        return $this->get('href');
     }
 
     /**
@@ -36,18 +36,14 @@ class Link extends ArrayCollection implements InterfaceLink
         return sha1($this->get('href'));
     }
 
-    public function getHref()
+    public function isDone()
     {
-        return $this->get('href');
+        return  ($this->get('status') === 1) ? true : false;
     }
 
     public function isWaiting()
     {
         return  ($this->get('status') === 0) ? true : false;
-    }
-    public function isDone()
-    {
-        return  ($this->get('status') === 1) ? true : false;
     }
 
     public function setDocument($uri, $response,
@@ -62,6 +58,11 @@ class Link extends ArrayCollection implements InterfaceLink
     public function getDocument()
     {
         return $this->get('document');
+    }
+
+    public function setStatus($x)
+    {
+        return $this->set('status', $x);
     }
 
     /**
@@ -85,10 +86,8 @@ class Link extends ArrayCollection implements InterfaceLink
         return $this;
     }
 
-
     public function toArray()
     {
         return $this->toMinimal()->toArray();
     }
-
 }

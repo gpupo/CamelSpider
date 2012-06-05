@@ -1,7 +1,8 @@
 <?php
+
 namespace CamelSpider\Entity;
 
-
-class Subscription extends AbstractSubscription {
+class Subscription extends AbstractSubscription
+{
 
 }

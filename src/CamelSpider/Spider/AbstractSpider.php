@@ -8,46 +8,89 @@ use CamelSpider\Entity\AbstractSpiderEgg,
 
 abstract class AbstractSpider extends AbstractSpiderEgg
 {
-    protected $name = 'Spider';
-
-    protected $time = array('total' => 0, 'parcial' => 0);
-
-    protected $pool;
-
-    protected $hiperlinks = 0;
-
-    protected $requests = 0;
-
+    protected $backendLogger = '';
     protected $cached = 0;
-
     protected $errors = 0;
-
-    protected $success = 0;
-
+    protected $goutte;
+    protected $hiperlinks = 0;
+    protected $limitReached = false;
+    protected $logger_level = 1;
+    protected $name = 'Spider';
+    protected $time = array('total' => 0, 'parcial' => 0);
+    protected $pool;
+    protected $requests = 0;
     protected $subscription;
-
+    protected $success = 0;
     protected $timeParcial;
 
-    protected $goutte;
+    public function debug()
+    {
+        echo $this->getSummary();
 
-    protected $limitReached = false;
+        echo  $this->getBackendLogger();
+    }
 
-    protected $backendLogger = '';
+    /**
+     * Convert string of auth information into a array
+     *
+     * Sample auth info (one parameter per line):
+     *  "type":"form"
+     *  "button":"log in"
+     *  "username":"gpupo"
+     *  "password":"mypassword"
+     *  "expected":"a word finded on sucesseful login"
+     *  "password_input": "field_name"
+     *  "username_input": 'field_name"
+     *
+     *  or only one line:
+     *  "button":"log in", "username":"gpupo", "password":"mypassword", "expected":"a word finded on sucesseful login"
+     *
 
-    protected $logger_level = 1;
+     *
+     * @param string $string
+     * @return array $a
+     */
+    public function getAuthCredentials($string)
+    {
+        $json = '{' . str_replace(PHP_EOL, ',', trim($string)) . '}';
+        $a =  json_decode($json);
+        if (is_null($a)) {
+            throw new \Exception('Invalid credentials syntaxe. Received: ' . trim($string) . "\n" . $json);
+        }
+
+        $credentials = (array) $a;
+
+        if (count($credentials) < 1) {
+            throw new \Exception('Missing credentials information');
+        }
+
+        $defaults = array('type' => 'form', 'username_input' => 'username', 'password_input' => 'password');
+        foreach ($defaults as $k => $v) {
+            if (!array_key_exists($k, $credentials)) {
+                $credentials[$k] = $v;
+            }
+        }
+
+        return $credentials;
+    }
+
+    public function getBackendLogger()
+    {
+        return trim($this->backendLogger);
+    }
 
     /**
      * Faz a requisição, seja por Zend Http Client ou Consumindo Feed
+     * Makes the request, either by Zend Http Client or consuming Feed
      */
     public function getCrawler($URI, $mode = 'GET', $type =  'html')
     {
-
         $this->logger(
             'created a Crawler for:'
-            ."\n"
-            . $URI
-            ."\n"
-        ,'info', 5);
+                ."\n"
+                . $URI
+                ."\n"
+            ,'info', 5);
 
         $this->requests++;
         if ($type == 'html') {
@@ -64,14 +107,14 @@ abstract class AbstractSpider extends AbstractSpiderEgg
 
             //Error in request
             $this->logger(
-                'Status Code: [' 
-                . $this->getResponse()->getStatus() . ']', 'info', 4
+                'Status Code: ['
+                    . $this->getResponse()->getStatus() . ']', 'info', 4
             );
             if($this->getResponse()->getStatus() >= 400){
                 throw new \Exception(
                     'Request with error: '
-                    . $this->getResponse()->getStatus()
-                    . " - " . $this->getResponseErrorMessage($client)
+                        . $this->getResponse()->getStatus()
+                        . " - " . $this->getResponseErrorMessage($client)
                 );
             }
         } else {
@@ -84,112 +127,26 @@ abstract class AbstractSpider extends AbstractSpiderEgg
     }
 
     /**
-     * @todo Clean html message
+     * Retorna o resumo de operações até o momento
+     * para compatibilidade com versões anteriores
      */
-    protected function getResponseErrorMessage($client)
+    public function getResume()
     {
-        return '';
-    }
-
-    protected function addBackendLogger($string)
-    {
-        $this->backendLogger .= $string . ".\n";
-        $this->logger($string, 'info', $this->logger_level);
-    }
-
-    public function getBackendLogger()
-    {
-        return trim($this->backendLogger);
-    }
-
-    protected function resetBackendLogger()
-    {
-        $this->backendLogger = '';
-    }
-
-    protected function getCurrentUri()
-    {
-        return $this->getRequest()->getUri();
-    }
-
-    protected function getClient()
-    {
-        return $this->goutte;
-    }
-
-    protected function getBodyText()
-    {
-        return $this->getBody()->first()->text();
-    }
-
-    protected function getBody()
-    {
-        return $this->getResponse()->getContent();
-    }
-
-    protected function getRequest()
-    {
-        return $this->goutte->getRequest();
-    }
-
-    protected function getResponse()
-    {
-        return $this->goutte->getResponse();
-    }
-
-    protected function getSubscription()
-    {
-        return $this->subscription;
-    }
-
-   protected function getDomain()
-    {
-        return $this->getSubscription()->get('domain');
-    }
-
-    protected function getLinkTags()
-    {
-        return array(
-            'subscription_' . $this->subscription['id'],
-            'crawler',
-            'processor'
-        );
-    }
-
-    protected function getResumeTemplate()
-    {
-        $template = <<<EOF
- ====================RESUME=========================
-    %s
-    - Memory usage...........................%s Mb
-    - Number of new requests.................%s 
-    - Time total.............................%s Seg
-    - Objects in cache.......................%s
-    - Success................................%s
-    - Hyperlinks.............................%s
-    - Errors.................................%s
-
- ======================LOG==========================
-
-%s
-
- ====================******=========================
-
-EOF;
-
-        return $template;
+        return $this->getSummary();
     }
 
     /**
      * Retorna o resumo de operações até o momento
+     * Returns a summary of the operations so far
+     *
      * @return string
      */
-    public function getResume()
+    public function getSummary()
     {
 
         return "\n\n"
             . sprintf(
-                $this->getResumeTemplate(),
+                $this->getSummaryTemplate(),
                 $this->subscription,
                 $this->getMemoryUsage(),
                 $this->requests,
@@ -202,119 +159,10 @@ EOF;
             );
     }
 
-
-    public function debug()
-    {
-        echo $this->getResume();
-
-        echo  $this->getBackendLogger();
-    }
-
-
-    protected function getCookies($uri = null)
-    {
-        return $this->getClient()->getCookieJar()->allValues($uri);
-    }
-
-    protected function getCookie($uri, $key)
-    {
-        $cookies = $this->getCookies($uri);
-
-        return array_key_exists($key, $cookies) ? $cookies[$key] : null;
-    }
-
-    protected function performLogin()
-    {
-        $auth = $this->subscription->getAuthInfo();
-
-        if (empty($auth)) {
-            //$this->addBackendLogger('Subscription without auth');
-
-            return true;
-        }
-
-        $credentials = $this->getAuthCredentials($auth);
-
-        //Try login
-        switch ($credentials['type']) {
-            default:
-                $login = $this->loginForm($credentials);
-        }
-
-        if ($login) {
-
-            return true;
-        }
-
-        //Error
-        return false;
-    }
-
-    public function loginFormRequirements()
-    {
-        return array('username', 'password', 'button', 'expected', 'password_input', 'username_input');
-    }
-
-    /**
-     * @deprecated
-     */
-    protected function loginFormLocate($crawler, $credentials)
-    {
-        //try find by form name
-        $elementName = 'form:contains("' . $credentials['contains'] . '")';
-        $this->logger('Try locate form by element name ' . $elementName, 'info', $this->logger_level);
-        $item = $crawler->filter($elementName);
-        $this->logger('Itens located: #' . $item->count(), 'info', $this->logger_level);
-        $form = $item->first()->first()->form();
-
-        if (!$form instanceof Form) {
-            throw new \Exception('Não localizou o Form');
-        }
-
-        $this->logger('Form Text: ' . $form->text(), 'info', $this->logger_level);
-
-        return $form;
-    }
-
-    /**
-     * Localiza o formulario para login
-     */
-    protected function loginButtonLocate($crawler, $credentials)
-    {
-        //try find by button name
-        $button = $credentials['button'];
-        $this->addBackendLogger('Localizando botão de formulário que contenha *' . $button . '*');
-        $item = $crawler->selectButton($button);
-        if (method_exists($item, 'count') && $item->count() > 0) {
-            $this->debugger($item->count());
-            $this->addBackendLogger('Tradicional button localized');
-            goto done;
-        }
-
-        $elementName = '//input[contains(@src, "login")]';
-        $this->logger('Try locate button by element name ' . $elementName, 'info', $this->logger_level);
-        $item = $crawler->filterXPath($elementName);
-        $this->logger('Itens located: #' . $item->count(), 'info', $this->logger_level);
-
-        done:
-
-        if ($item) {
-            $this->addBackendLogger('Botão localizado');
-
-            return $item;
-        } else {
-            $this->addBackendLogger('Botão não localizado');
-
-            return false;
-        }
-
-    }
-
-
     /**
      * Execute login on a webform
      *
-     * @param array $credentials 
+     * @param array $credentials
      * @return bool status of login
      */
     public function loginForm(array $credentials)
@@ -377,48 +225,195 @@ EOF;
         return false;
     }
 
-    /**
-     * Convert string of auth information into a array
-     *
-     * Sample auth info (one parameter per line):
-     *  "type":"form"
-     *  "button":"log in"
-     *  "username":"gpupo"
-     *  "password":"mypassword"
-     *  "expected":"a word finded on sucesseful login"
-     *  "password_input": "field_name"
-     *  "username_input": 'field_name"
-     *
-     *  or only one line:
-     *  "button":"log in", "username":"gpupo", "password":"mypassword", "expected":"a word finded on sucesseful login"
-     *
-
-     *
-     * @param string $string
-     * @return array $a
-     */
-    public function getAuthCredentials($string)
+    public function loginFormRequirements()
     {
-        $json = '{' . str_replace(PHP_EOL, ',', trim($string)) . '}';
-        $a =  json_decode($json);
-        if (is_null($a)) {
-            throw new \Exception('Invalid credentials syntaxe. Received: ' . trim($string) . "\n" . $json);
+        return array('username', 'password', 'button', 'expected', 'password_input', 'username_input');
+    }
+
+    /**
+     * @todo Clean html message
+     */
+    protected function getResponseErrorMessage($client)
+    {
+        return '';
+    }
+
+    protected function addBackendLogger($string)
+    {
+        $this->backendLogger .= $string . ".\n";
+        $this->logger($string, 'info', $this->logger_level);
+    }
+
+    protected function resetBackendLogger()
+    {
+        $this->backendLogger = '';
+    }
+
+    protected function getCurrentUri()
+    {
+        return $this->getRequest()->getUri();
+    }
+
+    protected function getClient()
+    {
+        return $this->goutte;
+    }
+
+    protected function getBodyText()
+    {
+        return $this->getBody()->first()->text();
+    }
+
+    protected function getBody()
+    {
+        return $this->getResponse()->getContent();
+    }
+
+    protected function getRequest()
+    {
+        return $this->goutte->getRequest();
+    }
+
+    protected function getResponse()
+    {
+        return $this->goutte->getResponse();
+    }
+
+    protected function getSubscription()
+    {
+        return $this->subscription;
+    }
+
+   protected function getDomain()
+    {
+        return $this->getSubscription()->get('domain');
+    }
+
+    protected function getLinkTags()
+    {
+        return array(
+            'subscription_' . $this->subscription['id'],
+            'crawler',
+            'processor'
+        );
+    }
+
+    protected function getSummaryTemplate()
+    {
+        $template = <<<EOF
+ ====================SUMMARY========================
+    %s
+    - Memory usage...........................%s Mb
+    - Number of new requests.................%s 
+    - Time total.............................%s Seg
+    - Objects in cache.......................%s
+    - Success................................%s
+    - Hyperlinks.............................%s
+    - Errors.................................%s
+
+ ======================LOG==========================
+
+%s
+
+ ====================******=========================
+
+EOF;
+
+        return $template;
+    }
+
+    protected function getCookies($uri = null)
+    {
+        return $this->getClient()->getCookieJar()->allValues($uri);
+    }
+
+    protected function getCookie($uri, $key)
+    {
+        $cookies = $this->getCookies($uri);
+
+        return array_key_exists($key, $cookies) ? $cookies[$key] : null;
+    }
+
+    protected function performLogin()
+    {
+        $auth = $this->subscription->getAuthInfo();
+
+        if (empty($auth)) {
+            //$this->addBackendLogger('Subscription without auth');
+
+            return true;
         }
 
-        $credentials = (array) $a;
+        $credentials = $this->getAuthCredentials($auth);
 
-        if (count($credentials) < 1) {
-            throw new \Exception('Missing credentials information');
+        //Try login
+        switch ($credentials['type']) {
+            default:
+                $login = $this->loginForm($credentials);
         }
 
-        $defaults = array('type' => 'form', 'username_input' => 'username', 'password_input' => 'password');
-        foreach ($defaults as $k => $v) {
-            if (!array_key_exists($k, $credentials)) {
-                $credentials[$k] = $v;
-            }
+        if ($login) {
+
+            return true;
         }
 
-        return $credentials;
+        //Error
+        return false;
+    }
+
+    /**
+     * @deprecated
+     */
+    protected function loginFormLocate($crawler, $credentials)
+    {
+        //try find by form name
+        $elementName = 'form:contains("' . $credentials['contains'] . '")';
+        $this->logger('Try locate form by element name ' . $elementName, 'info', $this->logger_level);
+        $item = $crawler->filter($elementName);
+        $this->logger('Itens located: #' . $item->count(), 'info', $this->logger_level);
+        $form = $item->first()->first()->form();
+
+        if (!$form instanceof Form) {
+            throw new \Exception('Não localizou o Form');
+        }
+
+        $this->logger('Form Text: ' . $form->text(), 'info', $this->logger_level);
+
+        return $form;
+    }
+
+    /**
+     * Localiza o formulario para login
+     * Find the login form
+     */
+    protected function loginButtonLocate($crawler, $credentials)
+    {
+        //try find by button name
+        $button = $credentials['button'];
+        $this->addBackendLogger('Localizando botão de formulário que contenha *' . $button . '*');
+        $item = $crawler->selectButton($button);
+        if (method_exists($item, 'count') && $item->count() > 0) {
+            $this->debugger($item->count());
+            $this->addBackendLogger('Tradicional button localized');
+            goto done;
+        }
+
+        $elementName = '//input[contains(@src, "login")]';
+        $this->logger('Try locate button by element name ' . $elementName, 'info', $this->logger_level);
+        $item = $crawler->filterXPath($elementName);
+        $this->logger('Itens located: #' . $item->count(), 'info', $this->logger_level);
+
+        done:
+
+        if ($item) {
+            $this->addBackendLogger('Botão localizado');
+
+            return $item;
+        } else {
+            $this->addBackendLogger('Botão não localizado');
+
+            return false;
+        }
     }
 
     /**

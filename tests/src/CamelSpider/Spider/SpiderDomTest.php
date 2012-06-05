@@ -2,10 +2,8 @@
 
 namespace CamelSpider\Spider;
 
-class SpiderDomTest extends \PHPUnit_Framework_TestCase {
-
-
-
+class SpiderDomTest extends \PHPUnit_Framework_TestCase
+{
     /**
      * @testdox Fail if wrong html is passed to convert HTML to DomElement
      * @expectedException \Exception
@@ -18,7 +16,6 @@ class SpiderDomTest extends \PHPUnit_Framework_TestCase {
         return SpiderDom::htmlToDomElement($wrongHtml);
     }
 
-
     /**
      * @dataProvider providerHtmlElements
      */
@@ -27,8 +24,6 @@ class SpiderDomTest extends \PHPUnit_Framework_TestCase {
         $domElement = SpiderDom::htmlToDomElement($html);
         $this->AssertTrue($domElement instanceof \DomElement);
     }
-
-
 
     /**
      * @group helper
@@ -44,11 +39,10 @@ class SpiderDomTest extends \PHPUnit_Framework_TestCase {
      * @group helper
      * @dataProvider providerDomElements
      */
-    public function testOkIfCleanHtmlisRigth(\DOMNode $node, $html)
+    public function testOkIfCleanHtmlIsRight(\DOMNode $node, $html)
     {
         $this->AssertEquals($html, SpiderDom::toCleanHtml($node));
     }
-
 
     /**
      * @dataProvider providerDomElementsToText
@@ -57,8 +51,6 @@ class SpiderDomTest extends \PHPUnit_Framework_TestCase {
     {
         $this->AssertEquals($len, SpiderDom::textLen($node));
     }
-
-
 
     /**
      * @dataProvider providerHtmlElements()
@@ -125,13 +117,11 @@ class SpiderDomTest extends \PHPUnit_Framework_TestCase {
                 0pt;" width="1" scrolling="no" frameborder="0" height="1"/>', 'Some'),
             array('Text<style type="text/css">.fake{}</style>', 'Text'),
             array('Text<noscript>Trash</noscript>', 'Text')
-
         );
     }
 
     public function providerDirtyTags()
     {
-
         return array(
             array('<div class="Newstime" 
                 oncontextmenu="return false"
@@ -143,6 +133,7 @@ class SpiderDomTest extends \PHPUnit_Framework_TestCase {
             array('<div onclick="something">Some</div>', '<div>Some</div>')
         );
     }
+
     public function providerCleanTags()
     {
         return array(
@@ -167,7 +158,6 @@ class SpiderDomTest extends \PHPUnit_Framework_TestCase {
 
         return $a;
     }
-
 
     public function providerHtmlElements()
     {
@@ -206,7 +196,6 @@ class SpiderDomTest extends \PHPUnit_Framework_TestCase {
 
         return $array;
     }
-
 
     public function providerDomElementsToText()
     {
@@ -273,7 +262,8 @@ EOF
         );
     }
 
-    public function getDoc($html){
+    public function getDoc($html)
+    {
         $doc = new \DOMDocument();
         $doc->loadHTML($html);
 

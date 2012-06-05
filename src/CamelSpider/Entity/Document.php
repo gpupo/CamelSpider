@@ -19,19 +19,13 @@ use CamelSpider\Entity\AbstractSpiderEgg,
  *
  */
 
-
 class Document extends AbstractSpiderEgg
 {
     protected $name = 'Document';
-
     private $crawler;
-
     private $response;
-
     private $subscription;
-
     private $asserts;
-
     private $bigger = NULL;
 
     /**
@@ -62,6 +56,40 @@ class Document extends AbstractSpiderEgg
         $this->processResponse();
     }
 
+    public function getHtml()
+    {
+        if ($this->bigger) {
+            return $this->preStringProccess(
+                SpiderDom::toCleanHtml($this->bigger)
+            );
+        }
+    }
+
+    /**
+     * Verificar data container se link já foi catalogado.
+     * Se sim, fazer idiff e rejeitar se a diferença for inferior a x%
+     * Aplicar filtros contidos em $this->subscription
+     **/
+    public function getRelevancy()
+    {
+        return $this->get('relevancy');
+    }
+
+    public function getSlug()
+    {
+        return $this->get('slug');
+    }
+
+    public function getText()
+    {
+        return $this->get('text');
+    }
+
+    public function getTitle()
+    {
+        return $this->get('title');
+    }
+
     public function setUri($uri)
     {
         $this->logger('setting Uri as [' . $uri . ']', 'info', 3);
@@ -72,6 +100,71 @@ class Document extends AbstractSpiderEgg
     public function getUri()
     {
         return $this->get('uri');
+    }
+
+    /**
+     * @return array $array
+     */
+    public function toArray()
+    {
+        $array = array(
+            'relevancy' => $this->getRelevancy(),
+            'title'     => $this->getTitle(),
+        );
+
+        return $array;
+    }
+
+    /**
+     * reduce memory usage
+     *
+     * @return self minimal
+     */
+    public function toPackage()
+    {
+        $array = array(
+            'relevancy' => $this->getRelevancy(),
+            'uri'       => $this->getUri(),
+            'title'     => $this->getTitle(),
+            'slug'      => $this->getSlug(),
+            'text'      => $this->getText(),
+            'html'      => $this->getHtml(),
+            'raw'       => $this->getRaw()
+        );
+
+        return $array;
+    }
+
+    protected function addRelevancy()
+    {
+        $this->set('relevancy', $this->get('relevancy') + 1);
+        $this->logger('Current relevancy:'. $this->getRelevancy(), 'info', 5);
+    }
+
+    protected function getBody()
+    {
+        return $this->crawler->filter('body');
+    }
+
+    protected function getBiggerTag()
+    {
+        foreach(array('div', 'td', 'span') as $tag){
+            $this->searchBiggerInTags($tag);
+        }
+        if(! $this->bigger instanceof \DOMElement ) {
+            $this->logger('Cannot find bigger', 'info', 5);
+
+            return false;
+        }
+    }
+
+    protected function getRaw()
+    {
+        if ($this->getBody() instanceof DOMElement) {
+            return SpiderDom::toHtml($this->getBody());
+        } else {
+            return 'SpiderDom toHtml with problems!';
+        }
     }
 
     /**
@@ -89,29 +182,41 @@ class Document extends AbstractSpiderEgg
         return trim($string);
     }
 
-    protected function setTitle()
+    protected function processResponse()
     {
-        $title = $this->crawler->filter('title')->text();
-        $this->set('title', $this->preStringProccess($title));
-        $this->logger('setting Title as [' . $this->getTitle() . ']', 'info', 3);
+        $this->logger('processing document' ,'info', 5);
+        $this->getBiggerTag();
+
+        if ($this->getConfig('save_document', false)) {
+            $this->saveBiggerToFile();
+        }
+
+        $this->setText();
+        $this->setRelevancy();
+        $this->setTitle();
+        $this->setSlug();
     }
 
-    public function getTitle()
+    protected function saveBiggerToFile()
     {
-        return $this->get('title');
+        $title = '# '. $this->getTitle() . "\n\n";
+        $this->cache->saveToHtmlFile($this->getHtml(), $this->get('slug'));
+        $this->cache->saveDomToTxtFile($this->bigger, $this->get('slug'), $title);
     }
 
-    protected function getBody()
+    /**
+     * localiza a tag filha de body que possui maior
+     * quantidade de texto
+     */
+    protected function searchBiggerInTags($tag)
     {
-        return $this->crawler->filter('body');
-    }
+        $data = $this->crawler->filter($tag);
 
-    protected function getRaw()
-    {
-        if ($this->getBody() instanceof DOMElement) {
-            return SpiderDom::toHtml($this->getBody());
-        } else {
-            return 'SpiderDom toHtml with problems!';
+        foreach(clone $data as $node)
+        {
+            if(SpiderDom::containerCandidate($node)){
+                $this->bigger = SpiderDom::getGreater($node, $this->bigger, array());
+            }
         }
     }
 
@@ -182,53 +287,9 @@ class Document extends AbstractSpiderEgg
         }
     }
 
-    protected function addRelevancy()
+    protected function setSlug()
     {
-        $this->set('relevancy', $this->get('relevancy') + 1);
-        $this->logger('Current relevancy:'. $this->getRelevancy(), 'info', 5);
-    }
-
-    /**
-     * localiza a tag filha de body que possui maior
-     * quantidade de texto
-     */
-    protected function searchBiggerInTags($tag)
-    {
-        $data = $this->crawler->filter($tag);
-
-        foreach(clone $data as $node)
-        {
-            if(SpiderDom::containerCandidate($node)){
-                $this->bigger = SpiderDom::getGreater($node, $this->bigger, array());
-            }
-        }
-    }
-
-    protected function getBiggerTag()
-    {
-        foreach(array('div', 'td', 'span') as $tag){
-            $this->searchBiggerInTags($tag);
-        }
-        if(! $this->bigger instanceof \DOMElement ) {
-            $this->logger('Cannot find bigger', 'info', 5);
-            return false;
-        }
-    }
-
-    protected function saveBiggerToFile()
-    {
-        $title = '# '. $this->getTitle() . "\n\n";
-        $this->cache->saveToHtmlFile($this->getHtml(), $this->get('slug'));
-        $this->cache->saveDomToTxtFile($this->bigger, $this->get('slug'), $title);
-    }
-
-    public function getHtml()
-    {
-        if ($this->bigger) {
-            return $this->preStringProccess(
-                SpiderDom::toCleanHtml($this->bigger)
-            );
-        }
+        $this->set('slug', substr(Urlizer::urlize($this->get('title')), 0, 30));
     }
 
     /**
@@ -250,76 +311,10 @@ class Document extends AbstractSpiderEgg
         }
     }
 
-    public function getText()
+    protected function setTitle()
     {
-        return $this->get('text');
-    }
-
-    protected function setSlug()
-    {
-        $this->set('slug', substr(Urlizer::urlize($this->get('title')), 0, 30));
-    }
-
-    public function getSlug(){
-        return $this->get('slug');
-    }
-
-    protected function processResponse()
-    {
-        $this->logger('processing document' ,'info', 5);
-        $this->getBiggerTag();
-
-        if ($this->getConfig('save_document', false)) {
-            $this->saveBiggerToFile();
-        }
-
-        $this->setText();
-        $this->setRelevancy();
-        $this->setTitle();
-        $this->setSlug();
-    }
-
-    /**
-    * Verificar data container se link já foi catalogado.
-    * Se sim, fazer idiff e rejeitar se a diferença for inferior a x%
-    * Aplicar filtros contidos em $this->subscription
-    **/
-    public function getRelevancy()
-    {
-        return $this->get('relevancy');
-    }
-
-
-    /**
-     * reduce memory usage
-     *
-     * @return self minimal
-     */
-    public function toPackage()
-    {
-         $array = array(
-            'relevancy' => $this->getRelevancy(),
-            'uri'       => $this->getUri(),
-            'title'     => $this->getTitle(),
-            'slug'      => $this->getSlug(),
-            'text'      => $this->getText(),
-            'html'      => $this->getHtml(),
-            'raw'       => $this->getRaw()
-        );
-
-        return $array;
-    }
-
-    /**
-     * @return array $array
-     */
-    public function toArray()
-    {
-        $array = array(
-            'relevancy' => $this->getRelevancy(),
-            'title'     => $this->getTitle(),
-        );
-
-        return $array;
+        $title = $this->crawler->filter('title')->text();
+        $this->set('title', $this->preStringProccess($title));
+        $this->logger('setting Title as [' . $this->getTitle() . ']', 'info', 3);
     }
 }

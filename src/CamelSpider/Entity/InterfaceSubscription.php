@@ -2,7 +2,8 @@
 
 namespace CamelSpider\Entity;
 
-interface InterfaceSubscription extends InterfaceLink{
+interface InterfaceSubscription extends InterfaceLink
+{
 
     public function getDomain();
     public function getHref();

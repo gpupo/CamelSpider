@@ -21,12 +21,11 @@ use CamelSpider\Entity\Link,
 /**
  * Process every subscription
  *
- * @author      Gilmar Pupo <g@g1mr.com>
+ * @author Gilmar Pupo <g@g1mr.com>
  *
 */
 class Indexer extends AbstractSpider
 {
-
     protected $name = 'Indexer';
 
     /**
@@ -49,12 +48,50 @@ class Indexer extends AbstractSpider
         return $this;
     }
 
-
-    protected function isDone($URI)
+    /**
+     * Collect links in rss and atom feed
+     *
+     * @return int
+     */
+    public function collectLinksWithZendFeedReader(InterfaceFeedReader $reader)
     {
-        $link = new Link($URI);
+        foreach($reader->getLinks()->toArray() as $link) {
+            if($this->checkLimit()){
+                $this->hyperlinks +=  $this->addLink($link);
+            }
+        }
 
-        return $this->pool->isDone($link);
+        return $reader->getLinks()->count();
+    }
+
+    /**
+     * Método principal que faz indexação
+     * Main method for indexing
+     *
+     * @param CamelSpider\Entity\InterfaceSubscription $subscription
+     */
+    public function run(InterfaceSubscription $subscription)
+    {
+        $this->restart();
+        $this->subscription = $subscription;
+
+        if ($this->performLogin() === false) {
+            $this->addBackendLogger('Login Failed');
+
+            return $this->getCapture();
+        } else {
+            $this->collect($this->subscription, true);
+
+            $i = 0;
+            while ($i < $this->subscription->getMaxDepth()) {
+                $this->poolCollect(true);
+                $i++;
+            }
+
+            $this->poolCollect(); //conclusion
+
+            return $this->getCapture();
+        }
     }
 
     protected function addLink(Link $link)
@@ -63,28 +100,32 @@ class Indexer extends AbstractSpider
 
             $this->logger(
                 'outside the scope'
-                . "\n"
-                . '['
-                . $this->subscription->getDomainString()
-                . "]\n["
-                . $link->get('href')
-                . ']'
-            ,'info', 5);
+                    . "\n"
+                    . '['
+                    . $this->subscription->getDomainString()
+                    . "]\n["
+                    . $link->get('href')
+                    . ']'
+                ,'info', 5);
 
             return 0;
         }
 
         //Evita links inválidos
+        //Prevents invalid links
         if (!SpiderAsserts::isDocumentLink($link)) {
             $this->logger('Href refused', 'info', 5);
+
             return 0;
         }
 
         $this->logger('Check Cache for id:' . $link->getId('string'), 'info', 5);
         //Evita duplicidade
+        //Prevents duplicates
         if ($this->requests > 0 && $this->cache->isObject($link->getId('string'))) {
             $this->logger('cached', 'info', 5);
             $this->cached++;
+
             return 0;
         }
         $this->pool->save($link);
@@ -96,8 +137,7 @@ class Indexer extends AbstractSpider
     {
         $URI = $target->getHref();
         $type = 'html';
-        if($target instanceof InterfaceSubscription)
-        {
+        if($target instanceof InterfaceSubscription) {
             $this->logger("Subscription Type: " . $target->getSourceType());
             $type = $target->getSourceType();
         }
@@ -106,11 +146,14 @@ class Indexer extends AbstractSpider
             if(!SpiderAsserts::isDocumentHref($URI)){
                 $this->logger('URI wrong:[' . $URI . ']', 'err', 3);
                 $this->pool->errLink($target, 'invalid URL');
+
                 return false;
             }
             //verifica se já foi processado
+            // verify that this has been processed
             if (!$target instanceof InterfaceSubscription && $this->isDone($URI)) {
                 $this->logger('URI is Done:[' . $URI . ']', 'info', 1);
+
                 return false;
             }
 
@@ -129,11 +172,11 @@ class Indexer extends AbstractSpider
             if (!isset($crawler)) {
                 $this->logger('Crawler broken', 'err');
                 $this->pool->errLink($target, 'impossible crawler');
+
                 return false;
             }
 
             if (!$target instanceof InterfaceSubscription) {
-
                 if(
                     DocumentManager::isFresh(
                         $this->getBody(),
@@ -147,8 +190,7 @@ class Indexer extends AbstractSpider
                         $this->transferDependency()
                     );
                     $this->logger('document IS fresh', 'info', 5);
-                }
-                else{
+                } else {
                     $this->logger('document isnt fresh');
                 }
             }
@@ -159,8 +201,7 @@ class Indexer extends AbstractSpider
                 $this->logger('go to the scan more links!', 'info', 5);
                 try {
                     $target->set('hyperlinks', $this->collectLinks($crawler, $type));
-                }
-                catch(\Exception $e) {
+                } catch(\Exception $e) {
                     $this->logger($e->getMessage(), 'err');
                     $this->errors++;
                 }
@@ -168,7 +209,7 @@ class Indexer extends AbstractSpider
 
             $this->logger(
                 'saving object on cache, with id:'
-                . $target->getId('string'), 'info', 5
+                    . $target->getId('string'), 'info', 5
             );
             $this->pool->save($target);
             $this->success++;
@@ -185,9 +226,9 @@ class Indexer extends AbstractSpider
             $this->logger( 'Http Client Runtime error on  [' . $URI . ']', 'err');
             $this->pool->errLink($target, 'Runtime error on Http Client Adaper');
             $this->errors++;
+
             return false;
         }
-
     }
 
     /**
@@ -213,24 +254,6 @@ class Indexer extends AbstractSpider
         }
     }
 
-
-    /**
-     * Collect links in rss and atom feed
-     *
-     * @return int
-     */
-    public function collectLinksWithZendFeedReader(InterfaceFeedReader $reader)
-    {
-        foreach($reader->getLinks()->toArray() as $link)
-        {
-            if($this->checkLimit()){
-                $this->hyperlinks +=  $this->addLink($link);
-            }
-        }
-
-        return $reader->getLinks()->count();
-    }
-
     /**
      * Collect links in simple HTML
      *
@@ -246,23 +269,39 @@ class Indexer extends AbstractSpider
 
         $this->logger(
             'Number of links founded in request #'
-            . $this->requests
-            . ':'
-            . $aCollection->count()
-            . ' with Goutte Crawler'
+                . $this->requests
+                . ':'
+                . $aCollection->count()
+                . ' with Goutte Crawler'
             , 'info'
             , 5
         );
 
-        foreach($aCollection as $node)
-        {
-            if($this->checkLimit()){
+        foreach($aCollection as $node) {
+            if($this->checkLimit()) {
                 $link = new Link($node);
                 $this->hyperlinks +=  $this->addLink($link);
             }
         }
 
         return $aCollection->count();
+    }
+
+    protected function getCapture()
+    {
+        echo $this->getSummary();
+
+        return array(
+            'log'   =>  $this->getBackendLogger(),
+            'pool'  =>  $this->pool->getPackage()
+        );
+    }
+
+    protected function isDone($URI)
+    {
+        $link = new Link($URI);
+
+        return $this->pool->isDone($link);
     }
 
     protected function poolCollect($withLinks = false)
@@ -282,10 +321,10 @@ class Indexer extends AbstractSpider
             }
             echo '. ';
             $this->logger(
-                "\n" 
-                . '====== Request number #' 
-                . $this->requests
-                . '======',
+                "\n"
+                    . '====== Request number #'
+                    . $this->requests
+                    . '======',
                 'info', 5
             );
 
@@ -297,45 +336,7 @@ class Indexer extends AbstractSpider
                 $this->logger('Can\'t collect:' . $e->getMessage(), 'err');
             }
 
-            $this->logger($this->getResume(), 'info', 5);
-        }
-    }
-
-    protected function getCapture()
-    {
-        echo $this->getResume();
-        return array(
-                'log'   =>  $this->getBackendLogger(),
-                'pool'  =>  $this->pool->getPackage()
-            );
-    }
-    /**
-     * Método principal que faz indexação
-     */
-    public function run(InterfaceSubscription $subscription)
-    {
-
-        $this->restart();
-        $this->subscription = $subscription;
-
-        if ($this->performLogin() === false) {
-            $this->addBackendLogger('Login Failed');
-
-            return $this->getCapture();
-        } else {
-
-            $this->collect($this->subscription, true);
-
-            $i = 0;
-            while ($i < $this->subscription->getMaxDepth()) {
-                $this->poolCollect(true);
-                $i++;
-            }
-
-            $this->poolCollect(); //conclusion
-
-            return $this->getCapture();
-
+            $this->logger($this->getSummary(), 'info', 5);
         }
     }
 }
