@@ -14,6 +14,7 @@ class Link extends ArrayCollection implements InterfaceLink
         if (!is_null($node) && $node instanceof \DOMElement) {
             $link = array(
                 'href' => $node->getAttribute('href'),
+                'rel'  => $node->getAttribute('rel'),
             );
         } elseif (is_string($node)) {
             $link['href'] = $node;
@@ -26,6 +27,11 @@ class Link extends ArrayCollection implements InterfaceLink
     public function getHref()
     {
         return $this->get('href');
+    }
+
+    public function getRel()
+    {
+        return $this->get('rel');
     }
 
     /**

@@ -6,9 +6,12 @@ $loader = @include __DIR__ . '/../vendor/autoload.php';
 
 if (!$loader) {
     die(<<<'EOT'
-You must set up the project dependencies, run the following commands:
-wget http://getcomposer.org/composer.phar
-php composer.phar install
+Before you run your tests, you need set up the project dependencies.
+Run the following commands (in the project root):
+
+    wget http://getcomposer.org/composer.phar;
+    php composer.phar install;
+
 EOT
     );
 }
