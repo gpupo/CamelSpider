@@ -265,24 +265,25 @@ class Indexer extends AbstractSpider
     {
         $aCollection = $crawler->filter('a');
 
-        if ($aCollection->count() < 1 && $this->requests === 0) {
+        if ($aCollection->count() < 1
+                && $this->requests === 0) {
             throw new \Exception('Error on collect links in the index');
         }
 
         $this->logger(
             'Number of links founded in request #'
-                . $this->requests
-                . ':'
-                . $aCollection->count()
-                . ' with Goutte Crawler'
-            , 'info'
-            , 5
+            . $this->requests
+            . ':'
+            . $aCollection->count()
+            . ' with Goutte Crawler',
+            'info',
+            5
         );
 
-        foreach($aCollection as $node) {
-            if($this->checkLimit()) {
+        foreach ($aCollection as $node) {
+            if ($this->checkLimit()) {
                 $link = new Link($node);
-                $this->hyperlinks +=  $this->addLink($link);
+                $this->hyperlinks += $this->addLink($link);
             }
         }
 
@@ -294,8 +295,8 @@ class Indexer extends AbstractSpider
         echo $this->getSummary();
 
         return array(
-            'log'   =>  $this->getBackendLogger(),
-            'pool'  =>  $this->pool->getPackage(),
+            'log'  => $this->getBackendLogger(),
+            'pool' => $this->pool->getPackage(),
         );
     }
 
@@ -331,10 +332,11 @@ class Indexer extends AbstractSpider
             $this->ongoingProcessOutput();
             $this->logger(
                 "\n"
-                    . '====== Request number #'
-                    . $this->requests
-                    . '======',
-                'info', 5
+                . '====== Request number #'
+                . $this->requests
+                . '======',
+                'info',
+                5
             );
 
             try{
