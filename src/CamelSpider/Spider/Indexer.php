@@ -20,9 +20,6 @@ use CamelSpider\Entity\Link,
 
 /**
  * Process every subscription
- *
- * @author Gilmar Pupo <g@g1mr.com>
- *
 */
 class Indexer extends AbstractSpider
 {
@@ -35,8 +32,13 @@ class Indexer extends AbstractSpider
     * @param Monolog $logger Object to write logs (in realtime with low memory usage!)
     * @param array $config Overload of default configurations in the constructor
     **/
-    public function __construct(\Goutte\Client $goutte = null, InterfaceCache $cache = null
-        , InterfaceFeedReader $feedReader = null,  $logger = null, array $config = null)
+    public function __construct(
+        \Goutte\Client $goutte = null,
+        InterfaceCache $cache = null,
+        InterfaceFeedReader $feedReader = null,
+        $logger = null,
+        array $config = null
+    )
     {
         $this->setTime('total');
         $this->goutte = $goutte;
@@ -111,7 +113,6 @@ class Indexer extends AbstractSpider
             return 0;
         }
 
-        //Evita links inválidos
         //Prevents invalid links
         if (!SpiderAsserts::isDocumentLink($link)) {
             $this->logger('Href refused', 'info', 5);
@@ -120,7 +121,7 @@ class Indexer extends AbstractSpider
         }
 
         $this->logger('Check Cache for id:' . $link->getId('string'), 'info', 5);
-        //Evita duplicidade
+
         //Prevents duplicates
         if ($this->requests > 0 && $this->cache->isObject($link->getId('string'))) {
             $this->logger('cached', 'info', 5);
@@ -128,6 +129,7 @@ class Indexer extends AbstractSpider
 
             return 0;
         }
+
         $this->pool->save($link);
 
         return 1;
@@ -149,7 +151,7 @@ class Indexer extends AbstractSpider
 
                 return false;
             }
-            //verifica se já foi processado
+
             // verify that this has been processed
             if (!$target instanceof InterfaceSubscription && $this->isDone($URI)) {
                 $this->logger('URI is Done:[' . $URI . ']', 'info', 1);
@@ -232,7 +234,7 @@ class Indexer extends AbstractSpider
     }
 
     /**
-     * Factory
+     * Factory method of a client mode
      *
      * @return int
      */
@@ -257,7 +259,7 @@ class Indexer extends AbstractSpider
     /**
      * Collect links in simple HTML
      *
-     * @return int count of links
+     * @return int Count of links inside the document
      */
     protected function collectLinksWithCrawler($crawler)
     {
@@ -293,7 +295,7 @@ class Indexer extends AbstractSpider
 
         return array(
             'log'   =>  $this->getBackendLogger(),
-            'pool'  =>  $this->pool->getPackage()
+            'pool'  =>  $this->pool->getPackage(),
         );
     }
 
@@ -302,6 +304,12 @@ class Indexer extends AbstractSpider
         $link = new Link($URI);
 
         return $this->pool->isDone($link);
+    }
+
+
+    protected function ongoingProcessOutput()
+    {
+        echo '. ';
     }
 
     protected function poolCollect($withLinks = false)
@@ -319,7 +327,8 @@ class Indexer extends AbstractSpider
                 $this->pool->errLink($link, 'Limit reached');
                 break;
             }
-            echo '. ';
+
+            $this->ongoingProcessOutput();
             $this->logger(
                 "\n"
                     . '====== Request number #'
