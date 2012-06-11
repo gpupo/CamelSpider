@@ -4,6 +4,9 @@ namespace CamelSpider\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 
+/**
+ * Used to create fake Subscriptions quickly, for testing
+ */
 class FactorySubscription
 {
     public static function build(array $array)
@@ -11,13 +14,16 @@ class FactorySubscription
         return new Subscription($array);
     }
 
-    public static function buildFromDomain($domain)
+    public static function buildFromDomain($domain, array $filters = null)
     {
+        if (is_null($filters))
+            $filters = array('contain' => 'rock', 'notContain' => 'polca');
+
         $array = array(
             'domain'      =>   $domain,
             'href'        =>   'http://'. $domain . '/',
             'max_depth'   =>   2,
-            'filters'     =>   array('contain' => 'ministro', 'notContain' => 'agrícola'),
+            'filters'     =>   $filters,
             'id'          =>   sha1($domain)
         );
 

@@ -35,12 +35,15 @@ class AbstractLauncher extends AbstractSpiderEgg
     {
         return FactorySubscription::buildCollectionFromDomain(
             array(
-                'noticias.terra.com.br'
-                ,'www.uol.com.br'
+                'noticias.terra.com.br',
+                'www.uol.com.br',
             )
         );
     }
 
+    /**
+     * This method should be overloaded in your Launcher
+     */
     protected function doSave(Pool $pool)
     {
         foreach ($pool->toArray() as $link) {
@@ -48,7 +51,6 @@ class AbstractLauncher extends AbstractSpiderEgg
                 $link instanceof InterfaceLink &&
                 $link->getRelevancy() >= $this->getConfig('minimal_relevancy', 3)
             ) {
-
                 //do something with your DB!
             }
         }
