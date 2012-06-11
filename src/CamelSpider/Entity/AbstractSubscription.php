@@ -6,7 +6,8 @@ use Doctrine\Common\Collections\ArrayCollection,
     CamelSpider\Entity\InterfaceLink,
     CamelSpider\Entity\Link;
 
-abstract class AbstractSubscription extends ArrayCollection implements InterfaceSubscription
+abstract class AbstractSubscription extends ArrayCollection implements
+    InterfaceSubscription
 {
     public function getDomain()
     {
@@ -46,6 +47,16 @@ abstract class AbstractSubscription extends ArrayCollection implements Interface
     {
         //make somethin cool with your DB!
         return false;
+    }
+
+    public function getAuthInfo()
+    {
+        return '';
+    }
+
+    public function getSourceType()
+    {
+        return 'html';
     }
 
     public function getMaxDepth()

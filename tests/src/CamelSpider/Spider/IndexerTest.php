@@ -73,7 +73,7 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
             array('http://www.agricultura.gov.br/comunicacao/noticias/')
         );
     }
-    
+
     /**
      * @dataProvider providerNavigation()
      */

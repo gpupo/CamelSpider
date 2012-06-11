@@ -40,6 +40,9 @@ class Indexer extends AbstractSpider
         array $config = null
     )
     {
+        if (is_null($goutte))
+            $goutte = new \Goutte\Client;
+
         $this->setTime('total');
         $this->goutte = $goutte;
         $this->logger = $logger;
