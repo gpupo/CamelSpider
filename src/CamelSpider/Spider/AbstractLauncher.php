@@ -9,7 +9,6 @@
 * file that was distributed with this source code.
 */
 
-
 namespace CamelSpider\Spider;
 
 use CamelSpider\Entity\AbstractSpiderEgg,
@@ -24,7 +23,7 @@ class AbstractLauncher extends AbstractSpiderEgg
 {
     protected $name = 'launcher';
 
-    protected $indexer; 
+    protected $indexer;
 
     public function __construct(Indexer $indexer, $logger)
     {
