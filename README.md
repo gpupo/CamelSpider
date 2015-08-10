@@ -10,7 +10,7 @@ CamelSpider é uma [aranha](http://www.camel-spiders.net/) ([Web crawler](http:/
         dados do portal.
 
 
-Um diferencial da CamelSpider, é oferecer um documento tem texto plano
+Um diferencial da CamelSpider, é oferecer um documento em texto plano
 que reflete o conteúdo principal de cada conteúdo indexado.
 
 Com a CamelSpider, você pode fazer um leitor de Feed para sites que não
@@ -23,7 +23,7 @@ Esse conteúdo é filtrado a partir de palavras chaves.
 A spider navega nestes sites, coleta os links que fazem parte do escopo do domínio e faz o processamento interno dessa informação.
 
 De acordo com os filtros, cada documento coletado recebe uma avaliação
-de releância, sendo que esta pontuação pode ser:
+de relevância, sendo que esta pontuação pode ser:
 
  * 0) não contém conteúdo
  * 1) Possivelmente contém conteúdo
@@ -34,7 +34,7 @@ de releância, sendo que esta pontuação pode ser:
 
 A Camel Spider é um componente a ser utilizado por uma aplicação que gerencie a base de assinaturas e receba o retorno do processamento para armazenamento em banco de dados.
 
-A Camel Spider utiliza componentes do Zend Framework 2, Docrine Common e Goutte, e presume que será instânciada dentro de um projeto com o autoloading corretamente configurado conforme a PRS-0.
+A Camel Spider utiliza componentes do Zend Framework 2, Doctrine Common e Goutte, e presume que será instânciada dentro de um projeto com o autoloading corretamente configurado conforme a PRS-0.
 
 Queremos que a Camel Spider seja uma Spider Web que supra necessidades de projetos em PHP 5.3.
 
@@ -76,7 +76,7 @@ acessados diretamente do cache, pela aplicação que os utiliza.
 
 ## Instalação
 
-### Usando comporser
+### Usando composer
 
 ```
 git clone git://github.com/gpupo/CamelSpider.git;
@@ -100,7 +100,7 @@ cd tests/ && phpunit .;
 
 ## Você pode contribuir com o projeto!
 
-Este README precia de tradução e ainda temos muito trabalho pela frente e gostaríamos da sua ajuda.
+Este README precisa de tradução e ainda temos muito trabalho pela frente e gostaríamos da sua ajuda.
 Coisas para fazer:
 
     - Criar sandbox para facilitar os testes
